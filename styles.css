@@ -612,3 +612,69 @@ body.is-scrolled .site-header::before { opacity: 1; border-color: var(--line-lig
   .reveal { opacity: 1; transform: none; transition: none; }
   .site-nav, .site-nav a, .nav-desk-button { transition: none !important; }
 }
+
+/* Motion visibility pass: the intro and hero motion begin after the loader, not underneath it. */
+.site-loader { grid-template-columns: minmax(260px, 420px); justify-items: stretch; gap: 14px; padding: 32px; }
+.loader-brandline, .loader-status { display: flex; justify-content: space-between; gap: 18px; color: var(--muted); font: 9px var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+.loader-brandline { margin-bottom: 11px; color: var(--copper-light); animation: loader-line-in .8s .1s both cubic-bezier(.2,.8,.2,1); }
+.loader-title { display: block; color: var(--paper); font-size: clamp(42px, 8vw, 78px); line-height: .88; letter-spacing: -.08em; animation: loader-title-in 1s .22s both cubic-bezier(.2,.8,.2,1); }
+.loader-status { margin-top: 11px; color: rgba(243,239,229,.56); animation: loader-line-in .8s .38s both cubic-bezier(.2,.8,.2,1); }
+.loader-status b { color: var(--paper); font-weight: 400; }
+.loader-progress { height: 2px; overflow: hidden; background: rgba(243,239,229,.14); animation: loader-line-in .8s .48s both cubic-bezier(.2,.8,.2,1); }
+.loader-progress span { display: block; width: 100%; height: 100%; transform-origin: left; background: linear-gradient(90deg, var(--copper), var(--wheat)); animation: loader-progress-run 1.15s .12s both cubic-bezier(.2,.8,.2,1); }
+.site-loader p { margin-top: 18px; }
+@keyframes loader-line-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes loader-title-in { from { opacity: 0; transform: translateY(24px); letter-spacing: .08em; } to { opacity: 1; transform: translateY(0); letter-spacing: -.08em; } }
+@keyframes loader-progress-run { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+body.is-ready .hero-copy { animation: intro-copy-in .95s .04s both cubic-bezier(.2,.8,.2,1); }
+body.is-ready .hero-copy h1 { animation: intro-rise-in .9s .16s both cubic-bezier(.2,.8,.2,1); }
+body.is-ready .hero-copy .hero-lede { animation: intro-rise-in .8s .3s both cubic-bezier(.2,.8,.2,1); }
+body.is-ready .hero-copy .hero-actions { animation: intro-rise-in .8s .42s both cubic-bezier(.2,.8,.2,1); }
+body.is-ready .hero-copy .hero-proof { animation: intro-rise-in .8s .54s both cubic-bezier(.2,.8,.2,1); }
+body.is-ready .hero-showcase { animation: intro-showcase-in 1.35s .08s both cubic-bezier(.2,.8,.2,1); }
+@keyframes intro-copy-in { from { opacity: 0; transform: translateY(38px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes intro-rise-in { from { opacity: 0; transform: translateY(24px); filter: blur(5px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes intro-showcase-in { from { opacity: 0; filter: blur(8px); clip-path: inset(9% 5% 4% 10%); } to { opacity: 1; filter: blur(0); clip-path: inset(0); } }
+.hero-showcase { transform: perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); transform-style: preserve-3d; transition: transform .22s cubic-bezier(.2,.8,.2,1); }
+.showcase-card-main { transform: translateZ(24px) rotate(4deg) rotateY(-12deg); }
+.showcase-card-secondary { transform: translateZ(68px) rotate(6deg); }
+.showcase-card-mini { transform: translateZ(82px) rotate(-3deg); }
+.showcase-card-stamp { transform: translateZ(44px) rotate(-8deg); }
+.showcase-orbit { animation: orbit-breathe 8s ease-in-out infinite; }
+.orbit-two { animation-delay: -2.5s; }
+@keyframes orbit-breathe { 0%, 100% { opacity: .5; transform: rotateX(68deg) rotateZ(-12deg) scale(.96); } 50% { opacity: 1; transform: rotateX(68deg) rotateZ(-12deg) scale(1.04); } }
+.showcase-card-main img { animation: machine-float 6.5s ease-in-out infinite; }
+.site-nav::before { content: 'FIELDCRAFT / MOBILE OPERATIONS'; position: absolute; top: 69px; left: 26px; color: var(--copper-light); font: 8px var(--mono); letter-spacing: .16em; opacity: 0; transform: translateX(18px); transition: opacity .45s .04s ease, transform .55s .04s cubic-bezier(.2,.8,.2,1); }
+.site-nav.is-open::before { opacity: 1; transform: translateX(0); }
+@media (max-width: 800px) {
+  .hero-showcase { transform: perspective(850px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) !important; }
+  .site-nav { clip-path: inset(0 0 0 100%); transition: clip-path .65s cubic-bezier(.2,.8,.2,1), transform .65s cubic-bezier(.2,.8,.2,1), visibility 0s linear .65s; }
+  .site-nav.is-open { clip-path: inset(0); transition-delay: 0s, 0s, 0s; }
+  .site-nav::after { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, transparent, var(--copper), transparent); opacity: 0; transform: scaleY(.2); transform-origin: center; transition: opacity .45s .12s ease, transform .65s .12s cubic-bezier(.2,.8,.2,1); }
+  .site-nav.is-open::after { opacity: 1; transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader-brandline, .loader-title, .loader-status, .loader-progress, .loader-progress span, body.is-ready .hero-copy, body.is-ready .hero-copy h1, body.is-ready .hero-copy .hero-lede, body.is-ready .hero-copy .hero-actions, body.is-ready .hero-copy .hero-proof, body.is-ready .hero-showcase, .showcase-orbit { animation: none !important; }
+  .hero-showcase { transform: none !important; }
+}
+
+/* Keep motion perceivable when the platform requests reduced motion: lower the
+   intensity and remove the most aggressive loops, rather than making the
+   product experience look completely static. */
+@media (prefers-reduced-motion: reduce) {
+  .site-loader::before { animation: loader-sweep 8s linear infinite !important; animation-duration: 8s !important; animation-iteration-count: infinite !important; }
+  .site-loader p, .loader-brandline, .loader-title, .loader-status, .loader-progress { animation-duration: .7s !important; animation-iteration-count: 1 !important; }
+  .loader-progress span { animation: loader-progress-run 1.1s .12s both cubic-bezier(.2,.8,.2,1) !important; animation-duration: 1.1s !important; animation-iteration-count: 1 !important; }
+  body.is-ready .hero-copy, body.is-ready .hero-copy h1, body.is-ready .hero-copy .hero-lede, body.is-ready .hero-copy .hero-actions, body.is-ready .hero-copy .hero-proof, body.is-ready .hero-showcase { animation-duration: .7s !important; animation-iteration-count: 1 !important; }
+  .hero-showcase { transform: perspective(1050px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) !important; transition-duration: .35s !important; }
+  .showcase-card-main img { animation: machine-float 10s ease-in-out infinite !important; animation-duration: 10s !important; animation-iteration-count: infinite !important; }
+  .showcase-orbit { animation: orbit-breathe 12s ease-in-out infinite !important; animation-duration: 12s !important; animation-iteration-count: infinite !important; }
+  .reveal { opacity: 0 !important; transform: translate3d(0, 16px, 0) scale(.99) !important; transition: opacity .6s ease, transform .6s ease !important; transition-duration: .6s !important; }
+  .reveal.is-visible { opacity: 1 !important; transform: translate3d(0, 0, 0) scale(1) !important; }
+  .site-nav, .site-nav a, .nav-desk-button, .site-nav::before, .site-nav::after, .site-header, .site-header::before, .scroll-progress span, .hero-backdrop { transition-duration: .45s !important; }
+}
+
+/* Final cascade guard: a visible reveal must not remain hidden behind a
+   platform accessibility override. The hero keeps its live perspective tilt. */
+.reveal.is-visible { opacity: 1 !important; transform: translate3d(0, 0, 0) scale(1) !important; }
+.hero-showcase.reveal.is-visible { transform: perspective(1050px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) !important; }

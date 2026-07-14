@@ -279,9 +279,30 @@ function setupMobileNav() {
 }
 
 function setupReveal() {
-  if (!('IntersectionObserver' in window)) { $$('.reveal').forEach((item) => item.classList.add('is-visible')); return; }
-  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .12, rootMargin: '0px 0px -8% 0px' });
-  $$('.reveal').forEach((item, index) => { item.style.setProperty('--reveal-delay', `${Math.min(index % 5, 4) * 75}ms`); observer.observe(item); });
+  const items = $$('.reveal');
+  const showInView = () => {
+    const viewportBottom = window.innerHeight * .95;
+    items.forEach((item) => {
+      const rect = item.getBoundingClientRect();
+      if (rect.top < viewportBottom && rect.bottom > -40) item.classList.add('is-visible');
+    });
+  };
+  let started = false;
+  const start = () => {
+    if (started) { showInView(); return; }
+    started = true;
+    showInView();
+    if (typeof window.IntersectionObserver !== 'function') {
+      window.addEventListener('scroll', showInView, { passive: true });
+      window.addEventListener('resize', showInView, { passive: true });
+      return;
+    }
+    const observer = new window.IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .12, rootMargin: '0px 0px -8% 0px' });
+    items.forEach((item, index) => { item.style.setProperty('--reveal-delay', `${Math.min(index % 5, 4) * 75}ms`); observer.observe(item); });
+  };
+  if (document.body.classList.contains('is-ready')) start();
+  else document.addEventListener('fieldcraft:ready', start, { once: true });
+  window.setTimeout(() => { start(); showInView(); }, 1450);
 }
 
 function setupScrollPolish() {
@@ -304,14 +325,35 @@ function setupScrollPolish() {
 
 function setupParallax() {
   const showcase = $('#heroShowcase');
-  if (!showcase || window.matchMedia('(prefers-reduced-motion: reduce)').matches || window.innerWidth < 801) return;
-  showcase.addEventListener('pointermove', (event) => { const rect = showcase.getBoundingClientRect(); const x = (event.clientX - rect.left) / rect.width - .5; const y = (event.clientY - rect.top) / rect.height - .5; showcase.style.transform = `rotateX(${y * -4}deg) rotateY(${x * 5}deg)`; });
-  showcase.addEventListener('pointerleave', () => { showcase.style.transform = ''; });
+  if (!showcase) return;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tiltAmplitude = reducedMotion ? .95 : 2.4;
+  const depthAmplitude = reducedMotion ? .7 : 1.8;
+  let pointerActive = false;
+  let phase = 0;
+  let frame = 0;
+  const setTilt = (x, y) => { showcase.style.setProperty('--tilt-x', `${y}deg`); showcase.style.setProperty('--tilt-y', `${x}deg`); };
+  const tick = () => {
+    if (!pointerActive) {
+      phase += .012;
+      setTilt(Math.sin(phase) * tiltAmplitude, Math.cos(phase * .82) * depthAmplitude);
+    }
+    frame = requestAnimationFrame(tick);
+  };
+  showcase.addEventListener('pointermove', (event) => { pointerActive = true; const rect = showcase.getBoundingClientRect(); const x = (event.clientX - rect.left) / rect.width - .5; const y = (event.clientY - rect.top) / rect.height - .5; setTilt(y * -5, x * 7); });
+  showcase.addEventListener('pointerleave', () => { pointerActive = false; });
+  tick();
+  window.addEventListener('pagehide', () => cancelAnimationFrame(frame), { once: true });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   $('#year').textContent = new Date().getFullYear();
-  setTimeout(() => { $('#siteLoader')?.classList.add('is-hidden'); document.body.classList.add('is-ready'); }, 850);
+  setTimeout(() => {
+    $('#siteLoader')?.classList.add('is-hidden');
+    document.body.classList.add('is-ready');
+    if (typeof window.IntersectionObserver !== 'function') $$('.reveal').forEach((item) => item.classList.add('is-visible'));
+    document.dispatchEvent(new Event('fieldcraft:ready'));
+  }, 1250);
   setModel(currentModel); setupMobileNav(); setupReveal(); setupScrollPolish(); setupParallax(); setupVisitorGate(); setupDesk(); applyCustomAssets();
   trackEvent('page_view');
   $$('.fleet-tab').forEach((tab) => tab.addEventListener('click', () => setModel(tab.dataset.modelTab)));
