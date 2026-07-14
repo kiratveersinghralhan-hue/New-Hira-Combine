@@ -12,6 +12,7 @@ This is a GitHub-ready static booking website for Ram Chand & Sons / New Hira co
 - CSV export for the local booking board.
 - Visitor registration gate for callback leads.
 - `assets/field-dusk.png`, an original cinematic field backdrop, plus the four supplied brochure photographs.
+- Clean product-render cutouts for both New Hira 985 and New Hira 785, with no chroma-key background shipped.
 
 ## Important static-site behavior
 

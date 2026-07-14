@@ -1,11 +1,11 @@
 const MODELS = {
   985: {
-    id: '985', number: '01', name: 'New Hira 985', eyebrow: 'The high-capacity workhorse', image: 'assets/brochure-985-spread.jpg', caption: 'New Hira 985 / front profile',
+    id: '985', number: '01', name: 'New Hira 985', eyebrow: 'The high-capacity workhorse', image: 'assets/machine-985-cutout.png', caption: 'New Hira 985 / product profile',
     copy: 'Maximum yield in the shortest time — built for farmers who want more field covered, with less grain loss and low fuel consumption.', width: '4.4', tank: '1,800', walkers: '5', crops: 'Wheat · Paddy · Soyabean · Gram · Sunflower · Pulses',
     specs: [['Effective cutter', '4.28 m'], ['Threshing drum', '1,258 mm'], ['Grain tank', '1,800 kg'], ['Fuel tank', '350 litre'], ['Working width', '5,900 mm'], ['Ground clearance', '250 mm']]
   },
   785: {
-    id: '785', number: '02', name: 'New Hira 785', eyebrow: 'The agile field finisher', image: 'assets/brochure-785-spread.jpg', caption: 'New Hira 785 / front profile',
+    id: '785', number: '02', name: 'New Hira 785', eyebrow: 'The agile field finisher', image: 'assets/machine-785-cutout.png', caption: 'New Hira 785 / product profile',
     copy: 'A compact, capable multicrop combine for smooth field access, small turning radius and a dependable finish across changing conditions.', width: '3.7', tank: '1,600', walkers: '4', crops: 'Wheat · Paddy · Soyabean · Gram · Sunflower · Pulses',
     specs: [['Effective cutter', '3.6 m'], ['Threshing drum', '1,015 mm'], ['Grain tank', '1,600 kg'], ['Fuel tank', '350 litre'], ['Working width', '5,290 mm'], ['Ground clearance', '250 mm']]
   }
@@ -109,8 +109,21 @@ function setModel(modelId) {
   const image = $('#machineImage');
   if (image) {
     image.classList.add('is-switching');
-    setTimeout(() => { image.src = model.image; image.alt = `${model.name} combine harvester brochure`; image.classList.remove('is-switching'); }, 160);
+    setTimeout(() => { image.src = model.image; image.alt = `${model.name} combine harvester product render`; image.classList.remove('is-switching'); }, 180);
   }
+  const heroImage = $('#heroMachineImage');
+  if (heroImage) {
+    heroImage.classList.add('is-switching');
+    setTimeout(() => { heroImage.src = model.image; heroImage.alt = `${model.name} combine harvester product render`; heroImage.classList.remove('is-switching'); }, 180);
+  }
+  const heroModelTag = $('#heroModelTag');
+  if (heroModelTag) heroModelTag.textContent = model.id;
+  const heroCutter = $('.showcase-card-mini strong');
+  if (heroCutter) heroCutter.textContent = `${model.width} m`;
+  const heroCutterNote = $('.showcase-card-mini small');
+  if (heroCutterNote) heroCutterNote.textContent = `${model.name} working width`;
+  const heroBottomline = $('.showcase-bottomline span:last-child');
+  if (heroBottomline) heroBottomline.textContent = `${model.number} / 02`;
   $('#machineNumber').textContent = model.number;
   $('#machineCaption').textContent = model.caption;
   $('#machineEyebrow').textContent = model.eyebrow;
@@ -259,13 +272,34 @@ function saveBrandSettings(event) {
 
 function setupMobileNav() {
   const toggle = $('#menuToggle'); const nav = $('#siteNav');
-  toggle?.addEventListener('click', () => { const open = toggle.classList.toggle('is-open'); nav.classList.toggle('is-open', open); toggle.setAttribute('aria-expanded', String(open)); });
-  $$('#siteNav a, #siteNav button').forEach((item) => item.addEventListener('click', () => { toggle?.classList.remove('is-open'); nav?.classList.remove('is-open'); toggle?.setAttribute('aria-expanded', 'false'); }));
+  const close = () => { toggle?.classList.remove('is-open'); nav?.classList.remove('is-open'); toggle?.setAttribute('aria-expanded', 'false'); document.body.classList.remove('nav-open'); };
+  toggle?.addEventListener('click', () => { const open = !nav.classList.contains('is-open'); toggle.classList.toggle('is-open', open); nav.classList.toggle('is-open', open); toggle.setAttribute('aria-expanded', String(open)); document.body.classList.toggle('nav-open', open); });
+  $$('#siteNav a, #siteNav button').forEach((item) => item.addEventListener('click', close));
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
 }
 
 function setupReveal() {
-  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .12 });
-  $$('.reveal').forEach((item) => observer.observe(item));
+  if (!('IntersectionObserver' in window)) { $$('.reveal').forEach((item) => item.classList.add('is-visible')); return; }
+  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .12, rootMargin: '0px 0px -8% 0px' });
+  $$('.reveal').forEach((item, index) => { item.style.setProperty('--reveal-delay', `${Math.min(index % 5, 4) * 75}ms`); observer.observe(item); });
+}
+
+function setupScrollPolish() {
+  const root = document.documentElement;
+  let frame = 0;
+  const update = () => {
+    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const progress = Math.min(100, Math.max(0, (window.scrollY / max) * 100));
+    root.style.setProperty('--scroll-progress', `${progress}%`);
+    document.body.classList.toggle('is-scrolled', window.scrollY > 28);
+    const backdrop = $('.hero-backdrop');
+    if (backdrop) backdrop.style.setProperty('--hero-shift', `${Math.min(window.scrollY * .12, 72)}px`);
+    frame = 0;
+  };
+  const requestUpdate = () => { if (!frame) frame = requestAnimationFrame(update); };
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate, { passive: true });
+  update();
 }
 
 function setupParallax() {
@@ -277,8 +311,8 @@ function setupParallax() {
 
 document.addEventListener('DOMContentLoaded', () => {
   $('#year').textContent = new Date().getFullYear();
-  setTimeout(() => $('#siteLoader')?.classList.add('is-hidden'), 850);
-  setModel(currentModel); setupMobileNav(); setupReveal(); setupParallax(); setupVisitorGate(); setupDesk(); applyCustomAssets();
+  setTimeout(() => { $('#siteLoader')?.classList.add('is-hidden'); document.body.classList.add('is-ready'); }, 850);
+  setModel(currentModel); setupMobileNav(); setupReveal(); setupScrollPolish(); setupParallax(); setupVisitorGate(); setupDesk(); applyCustomAssets();
   trackEvent('page_view');
   $$('.fleet-tab').forEach((tab) => tab.addEventListener('click', () => setModel(tab.dataset.modelTab)));
   $('#bookingForm')?.addEventListener('submit', handleBookingSubmit);

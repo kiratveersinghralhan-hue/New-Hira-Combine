@@ -17,6 +17,7 @@
       <div class="loader-mark"><span></span><span></span><span></span></div>
       <p>FIELDCRAFT / RAM CHAND &amp; SONS</p>
     </div>
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
 
     <div class="site-shell">
       <header class="site-header" id="top">
@@ -57,12 +58,17 @@
               </div>
             </div>
 
-            <div class="hero-showcase reveal reveal-delay" id="heroShowcase" aria-label="New Hira 985 combine preview">
+            <div class="hero-showcase reveal reveal-delay" id="heroShowcase" aria-label="New Hira combine preview">
               <div class="showcase-orbit orbit-one"></div>
               <div class="showcase-orbit orbit-two"></div>
               <div class="showcase-card showcase-card-main">
-                <div class="showcase-tag">NEW HIRA <b>985</b></div>
-                <img src="assets/brochure-985-spread.jpg" alt="New Hira 985 combine harvester from brochure" />
+                <div class="showcase-tag">NEW HIRA <b id="heroModelTag">985</b></div>
+                <div class="showcase-kicker">PRECISION FIELD SYSTEM / 01</div>
+                <img id="heroMachineImage" src="assets/machine-985-cutout.png" alt="New Hira 985 combine harvester product render" />
+              </div>
+              <div class="showcase-card showcase-card-secondary">
+                <span>NEW HIRA <b>785</b></span>
+                <img src="assets/machine-785-cutout.png" alt="New Hira 785 combine harvester product render" />
               </div>
               <div class="showcase-card showcase-card-mini">
                 <span class="mini-label">CUTTER BAR</span>
@@ -103,14 +109,20 @@
             </div>
 
             <div class="fleet-switcher reveal" role="tablist" aria-label="Choose combine model">
-              <button class="fleet-tab is-active" type="button" data-model-tab="985" role="tab" aria-selected="true"><span>01</span><b>New Hira 985</b><small>4.4m cutter bar</small></button>
-              <button class="fleet-tab" type="button" data-model-tab="785" role="tab" aria-selected="false"><span>02</span><b>New Hira 785</b><small>3.7m cutter bar</small></button>
+              <button class="fleet-tab is-active" type="button" data-model-tab="985" role="tab" aria-selected="true">
+                <span class="fleet-tab-visual"><span class="fleet-tab-index">01</span><img src="assets/machine-985-cutout.png" alt="New Hira 985 combine harvester" /></span>
+                <span class="fleet-tab-copy"><b>New Hira 985</b><small>4.4m cutter bar · 1,800kg grain tank</small></span>
+              </button>
+              <button class="fleet-tab" type="button" data-model-tab="785" role="tab" aria-selected="false">
+                <span class="fleet-tab-visual"><span class="fleet-tab-index">02</span><img src="assets/machine-785-cutout.png" alt="New Hira 785 combine harvester" /></span>
+                <span class="fleet-tab-copy"><b>New Hira 785</b><small>3.7m cutter bar · 1,600kg grain tank</small></span>
+              </button>
             </div>
 
             <div class="machine-detail reveal" id="machineDetail">
               <div class="machine-visual">
                 <div class="machine-number">0<span id="machineNumber">1</span></div>
-                <div class="machine-image-wrap"><img id="machineImage" src="assets/brochure-985-spread.jpg" alt="New Hira 985 combine harvester brochure" /></div>
+                <div class="machine-image-wrap"><span class="machine-image-label">FIELDCRAFT / PRODUCT VIEW</span><img id="machineImage" src="assets/machine-985-cutout.png" alt="New Hira 985 combine harvester product render" /></div>
                 <div class="machine-caption"><span id="machineCaption">New Hira 985 / front profile</span><span>Fieldcraft archive</span></div>
               </div>
               <div class="machine-info">
