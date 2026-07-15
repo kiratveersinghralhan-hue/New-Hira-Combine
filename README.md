@@ -12,7 +12,7 @@ This is a GitHub-ready static booking website for Ram Chand & Sons / New Hira co
 - CSV export for the local booking board.
 - Visitor registration gate for callback leads.
 - `assets/field-dusk.png`, an original cinematic field backdrop, plus the four supplied brochure photographs used as the exact 985/785 product archive.
-- An autoplay field gallery prepared for eight real New Hira 985 photographs: `new-hira-985-field.jpg`, `new-hira-985-front.jpg`, `new-hira-985-row-crop.jpg`, `new-hira-985-row-crop-alt.jpg`, `new-hira-985-three-quarter.jpg`, `new-hira-985-road.jpg`, `new-hira-985-side.jpg`, and `new-hira-985-detail.jpg`.
+- A working autoplay photo carousel using the exact brochure images that are included in the ZIP.
 
 ## Important static-site behavior
 
@@ -57,7 +57,7 @@ Open **Owner desk** from the header or footer and enter `985785`. Change this PI
 
 For a change that every visitor should see, replace the file in the GitHub `assets/` folder and push the update. The admin media library is designed for local browser previews and quick temporary swaps; its files do not automatically become new GitHub files.
 
-The brochure spreads are intentionally kept untouched so the New Hira stickers, markings and printed details remain authentic. The field gallery will use the eight filenames above when they are placed in `assets/`; if one is missing, the page safely falls back to the exact 985 brochure spread instead of showing a broken image.
+The brochure spreads are intentionally kept untouched so the New Hira stickers, markings and printed details remain authentic. Public image changes should be made by replacing or adding files inside `assets/`, then updating the image paths in `index.html`.
 
 ## Optional Cloudflare Worker
 

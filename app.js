@@ -25,6 +25,7 @@ const CONFIG = { analyticsEndpoint: '' };
 const OWNER_PIN = '985785';
 let currentModel = '985';
 let toastTimer;
+let fleetCarouselTimer;
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -110,12 +111,12 @@ function setModel(modelId) {
   const image = $('#machineImage');
   if (image) {
     image.classList.add('is-switching');
-    setTimeout(() => { image.src = model.image; image.alt = `${model.name} combine harvester product render`; image.classList.remove('is-switching'); }, 180);
+    setTimeout(() => { image.src = model.image; image.alt = `${model.name} exact brochure image`; image.classList.remove('is-switching'); }, 180);
   }
   const heroImage = $('#heroMachineImage');
   if (heroImage) {
     heroImage.classList.add('is-switching');
-    setTimeout(() => { heroImage.src = model.image; heroImage.alt = `${model.name} combine harvester product render`; heroImage.classList.remove('is-switching'); }, 180);
+    setTimeout(() => { heroImage.src = model.image; heroImage.alt = `${model.name} exact brochure image`; heroImage.classList.remove('is-switching'); }, 180);
   }
   const heroModelTag = $('#heroModelTag');
   if (heroModelTag) heroModelTag.textContent = model.id;
@@ -356,6 +357,31 @@ function setupParallax() {
   window.addEventListener('pagehide', () => cancelAnimationFrame(frame), { once: true });
 }
 
+function setupFleetCarousel() {
+  const tabs = $$('.fleet-tab');
+  if (!tabs.length) return;
+  const sequence = ['985', '785'];
+  const pauseTargets = [$('#heroShowcase'), $('#machineDetail')].filter(Boolean);
+  const rotate = () => {
+    const index = sequence.indexOf(currentModel);
+    setModel(sequence[(index + 1) % sequence.length]);
+  };
+  const start = () => {
+    window.clearInterval(fleetCarouselTimer);
+    fleetCarouselTimer = window.setInterval(rotate, 5200);
+  };
+  const pause = () => window.clearInterval(fleetCarouselTimer);
+  tabs.forEach((tab) => tab.addEventListener('click', start));
+  pauseTargets.forEach((target) => {
+    target.addEventListener('mouseenter', pause);
+    target.addEventListener('mouseleave', start);
+    target.addEventListener('focusin', pause);
+    target.addEventListener('focusout', (event) => { if (!target.contains(event.relatedTarget)) start(); });
+  });
+  start();
+  window.addEventListener('pagehide', () => window.clearInterval(fleetCarouselTimer), { once: true });
+}
+
 function setupFieldGallery() {
   const gallery = $('#fieldGallery');
   if (!gallery) return;
@@ -443,6 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setModel(currentModel); setupMobileNav(); setupReveal(); setupScrollPolish(); setupParallax(); setupFieldGallery(); setupVisitorGate(); setupDesk(); applyCustomAssets();
   trackEvent('page_view');
   $$('.fleet-tab').forEach((tab) => tab.addEventListener('click', () => setModel(tab.dataset.modelTab)));
+  setupFleetCarousel();
   $('#bookingForm')?.addEventListener('submit', handleBookingSubmit);
   $('#quickBookingForm')?.addEventListener('submit', handleQuickBooking);
   $('#newBookingButton')?.addEventListener('click', () => { $('#bookingSuccess').hidden = true; $('#bookingForm').hidden = false; $('#bookingForm').reset(); });
