@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260715-motion-v10" />
-    <script defer src="app.js?v=20260715-motion-v10"></script>
+    <link rel="stylesheet" href="styles.css?v=20260716-visitor-v12" />
+    <script defer src="app.js?v=20260716-visitor-v12"></script>
   </head>
   <body>
     <div class="site-loader" id="siteLoader" aria-label="Loading Fieldcraft">
@@ -68,11 +68,11 @@
               <div class="showcase-card showcase-card-main">
                 <div class="showcase-tag">NEW HIRA <b id="heroModelTag">985</b></div>
                 <div class="showcase-kicker">PRECISION FIELD SYSTEM / 01</div>
-                <img id="heroMachineImage" src="assets/machine-985-cutout.png" alt="New Hira 985 combine harvester product render" />
+                <img id="heroMachineImage" src="assets/brochure-985-spread.jpg" alt="New Hira 985 combine harvester brochure image" />
               </div>
               <div class="showcase-card showcase-card-secondary">
                 <span>NEW HIRA <b>785</b></span>
-                <img src="assets/machine-785-cutout.png" alt="New Hira 785 combine harvester product render" />
+                <img src="assets/brochure-785-spread.jpg" alt="New Hira 785 combine harvester brochure image" />
               </div>
               <div class="showcase-card showcase-card-mini">
                 <span class="mini-label">CUTTER BAR</span>
@@ -114,11 +114,11 @@
 
             <div class="fleet-switcher reveal" role="tablist" aria-label="Choose combine model">
               <button class="fleet-tab is-active" type="button" data-model-tab="985" role="tab" aria-selected="true">
-                <span class="fleet-tab-visual"><span class="fleet-tab-index">01</span><img src="assets/machine-985-cutout.png" alt="New Hira 985 combine harvester" /></span>
+                <span class="fleet-tab-visual"><span class="fleet-tab-index">01</span><img src="assets/brochure-985-spread.jpg" alt="New Hira 985 combine harvester brochure image" /></span>
                 <span class="fleet-tab-copy"><b>New Hira 985</b><small>4.4m cutter bar · 1,800kg grain tank</small></span>
               </button>
               <button class="fleet-tab" type="button" data-model-tab="785" role="tab" aria-selected="false">
-                <span class="fleet-tab-visual"><span class="fleet-tab-index">02</span><img src="assets/machine-785-cutout.png" alt="New Hira 785 combine harvester" /></span>
+                <span class="fleet-tab-visual"><span class="fleet-tab-index">02</span><img src="assets/brochure-785-spread.jpg" alt="New Hira 785 combine harvester brochure image" /></span>
                 <span class="fleet-tab-copy"><b>New Hira 785</b><small>3.7m cutter bar · 1,600kg grain tank</small></span>
               </button>
             </div>
@@ -126,7 +126,7 @@
             <div class="machine-detail reveal" id="machineDetail">
               <div class="machine-visual">
                 <div class="machine-number">0<span id="machineNumber">1</span></div>
-                <div class="machine-image-wrap"><span class="machine-image-label">FIELDCRAFT / PRODUCT VIEW</span><img id="machineImage" src="assets/machine-985-cutout.png" alt="New Hira 985 combine harvester product render" /></div>
+                <div class="machine-image-wrap"><span class="machine-image-label">NEW HIRA / BROCHURE ARCHIVE</span><img id="machineImage" src="assets/brochure-985-spread.jpg" alt="New Hira 985 combine harvester brochure image" /></div>
                 <div class="machine-caption"><span id="machineCaption">New Hira 985 / front profile</span><span>Fieldcraft archive</span></div>
               </div>
               <div class="machine-info">
@@ -161,11 +161,32 @@
         <section class="section field-fit-section">
           <div class="container field-fit-grid">
             <div class="field-fit-copy reveal"><div class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span> Crop intelligence</div><h2>Made to move<br /><em>with the season.</em></h2><p>Good harvesting is a timing game. Tell us your crop and field location; we’ll help you choose the right capacity and plan the route.</p><a href="#booking" class="text-link dark-link">Plan your harvest <span>↗</span></a></div>
-            <div class="crop-cards reveal">
-              <article class="crop-card crop-wheat"><span>01 / 06</span><strong>Wheat</strong><small>Clean finish</small></article>
-              <article class="crop-card crop-paddy"><span>02 / 06</span><strong>Paddy</strong><small>High moisture ready</small></article>
-              <article class="crop-card crop-sunflower"><span>03 / 06</span><strong>Sunflower</strong><small>Gentle handling</small></article>
-              <article class="crop-card crop-soya"><span>04 / 06</span><strong>Soyabean</strong><small>Flexible crop setup</small></article>
+            <div class="field-gallery reveal" id="fieldGallery" aria-label="New Hira 985 field gallery">
+              <div class="gallery-stage" aria-live="polite">
+                <div class="gallery-meta"><span class="micro-label">FIELD ARCHIVE / NEW HIRA 985</span><span id="galleryCounter">01 / 08</span></div>
+                <div class="gallery-slides" id="gallerySlides">
+                  <figure class="gallery-slide is-active" data-gallery-index="0"><img src="assets/new-hira-985-field.jpg" alt="New Hira 985 harvesting in a wheat field" /><figcaption><span>01 / FIELD OPERATIONS</span><strong>Harvest in motion</strong><small>Real machine photography from the field.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="1"><img src="assets/new-hira-985-front.jpg" alt="Front view of the New Hira 985 combine harvester" /><figcaption><span>02 / POWERED HEADER</span><strong>Front profile</strong><small>New Hira 985 with its original markings.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="2"><img src="assets/new-hira-985-row-crop.jpg" alt="New Hira 985 combine harvester with row-crop attachment" /><figcaption><span>03 / CROP SETUP</span><strong>Row-crop header</strong><small>Configured for demanding multicrop work.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="3"><img src="assets/new-hira-985-row-crop-alt.jpg" alt="Front working view of the New Hira 985 combine harvester" /><figcaption><span>04 / MULTICROP READY</span><strong>Working view</strong><small>Engineering details, kept exactly as photographed.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="4"><img src="assets/new-hira-985-three-quarter.jpg" alt="Three-quarter view of the New Hira 985 combine harvester" /><figcaption><span>05 / NEW HIRA 985</span><strong>Three-quarter profile</strong><small>Built for access, reach and steady field rhythm.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="5"><img src="assets/new-hira-985-road.jpg" alt="New Hira 985 combine harvester beside a road" /><figcaption><span>06 / FIELDCRAFT FLEET</span><strong>Road-ready profile</strong><small>The machine between fields and harvest windows.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="6"><img src="assets/new-hira-985-side.jpg" alt="Side profile of the New Hira 985 combine harvester" /><figcaption><span>07 / HARVEST SEASON</span><strong>Side profile</strong><small>Full machine proportions and original decals.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="7"><img src="assets/new-hira-985-detail.jpg" alt="Close-up detail of the New Hira 985 combine harvester" /><figcaption><span>08 / NEW HIRA MARKINGS</span><strong>Machine details</strong><small>Closer to the engineering that does the work.</small></figcaption></figure>
+                </div>
+                <div class="gallery-controls"><button class="gallery-arrow" type="button" data-gallery-prev aria-label="Previous field photo">←</button><div class="gallery-dots" id="galleryDots"></div><button class="gallery-arrow" type="button" data-gallery-next aria-label="Next field photo">→</button></div>
+                <div class="gallery-progress"><span id="galleryProgress"></span></div>
+              </div>
+              <div class="gallery-rail" id="galleryRail" aria-label="Choose field photo">
+                <button type="button" class="gallery-thumb is-active" data-gallery-thumb="0" aria-label="Show field photo 1"><img src="assets/new-hira-985-field.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="1" aria-label="Show field photo 2"><img src="assets/new-hira-985-front.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="2" aria-label="Show field photo 3"><img src="assets/new-hira-985-row-crop.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="3" aria-label="Show field photo 4"><img src="assets/new-hira-985-row-crop-alt.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="4" aria-label="Show field photo 5"><img src="assets/new-hira-985-three-quarter.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="5" aria-label="Show field photo 6"><img src="assets/new-hira-985-road.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="6" aria-label="Show field photo 7"><img src="assets/new-hira-985-side.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="7" aria-label="Show field photo 8"><img src="assets/new-hira-985-detail.jpg" alt="" /></button>
+              </div>
             </div>
           </div>
         </section>

@@ -678,3 +678,98 @@ body.is-ready .hero-showcase { animation: intro-showcase-in 1.35s .08s both cubi
    platform accessibility override. The hero keeps its live perspective tilt. */
 .reveal.is-visible { opacity: 1 !important; transform: translate3d(0, 0, 0) scale(1) !important; }
 .hero-showcase.reveal.is-visible { transform: perspective(1050px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) !important; }
+
+/* Exact brochure presentation + real field gallery. */
+.showcase-card-main img,
+.showcase-card-secondary img,
+.fleet-tab-visual img,
+.machine-image-wrap img { image-rendering: auto; }
+.showcase-card-main img { object-fit: contain; object-position: center; filter: drop-shadow(0 26px 22px rgba(0,0,0,.36)); }
+.showcase-card-secondary img { object-fit: contain; object-position: center; }
+.fleet-tab-visual { background: #e6e2d7; }
+.fleet-tab-visual img { object-fit: cover; object-position: center; }
+.machine-image-wrap { background: #e6e2d7; }
+.machine-image-wrap img { object-fit: contain; object-position: center; filter: drop-shadow(0 24px 18px rgba(13,20,15,.22)); }
+
+.field-gallery { min-width: 0; display: grid; gap: 16px; }
+.gallery-stage { position: relative; min-height: 560px; overflow: hidden; padding: 18px; border: 1px solid rgba(16,23,19,.13); border-radius: 26px; background: linear-gradient(145deg, #e4e1d5, #c9cfc0); box-shadow: 0 30px 65px rgba(13,20,15,.14); isolation: isolate; }
+.gallery-stage::before { content: ''; position: absolute; z-index: -1; inset: 0; background: radial-gradient(circle at 82% 15%, rgba(199,120,67,.2), transparent 25%), radial-gradient(circle at 20% 72%, rgba(126,149,65,.25), transparent 28%), linear-gradient(125deg, rgba(255,255,255,.32), transparent 45%); pointer-events: none; }
+.gallery-meta { position: absolute; z-index: 4; top: 23px; right: 23px; left: 23px; display: flex; justify-content: space-between; gap: 16px; color: rgba(16,23,19,.62); font: 9px var(--mono); letter-spacing: .13em; }
+.gallery-meta .micro-label { color: var(--copper); }
+.gallery-slides { position: relative; min-height: 500px; height: 100%; perspective: 1100px; }
+.gallery-slide { position: absolute; inset: 0; display: grid; grid-template-rows: 1fr auto; margin: 0; opacity: 0; visibility: hidden; transform: translate3d(34px, 0, -70px) rotateY(-7deg) scale(.97); transition: opacity .72s ease, transform .9s cubic-bezier(.2,.8,.2,1), visibility 0s linear .9s; }
+.gallery-slide.is-active { opacity: 1; visibility: visible; transform: translate3d(0, 0, 0) rotateY(0) scale(1); transition-delay: 0s; }
+.gallery-slide img { display: block; width: 100%; height: 420px; object-fit: cover; object-position: center; border-radius: 18px; box-shadow: 0 28px 46px rgba(13,20,15,.2); filter: saturate(.92) contrast(1.03); }
+.gallery-slide figcaption { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 5px 24px; padding: 15px 3px 3px; color: var(--ink); }
+.gallery-slide figcaption span { grid-column: 1 / -1; color: var(--copper); font: 9px var(--mono); letter-spacing: .13em; }
+.gallery-slide figcaption strong { font-size: clamp(22px, 2.7vw, 32px); line-height: 1; letter-spacing: -.06em; }
+.gallery-slide figcaption small { max-width: 190px; color: var(--muted-dark); font-size: 10px; line-height: 1.45; text-align: right; }
+.gallery-controls { position: absolute; z-index: 5; right: 23px; bottom: 23px; left: 23px; display: flex; align-items: center; gap: 12px; }
+.gallery-arrow { display: grid; place-items: center; width: 36px; height: 36px; flex: 0 0 36px; border: 1px solid rgba(16,23,19,.18); border-radius: 50%; color: var(--ink); background: rgba(243,239,229,.65); font: 16px var(--mono); transition: transform .35s ease, background .35s ease, border-color .35s ease; }
+.gallery-arrow:hover { transform: translateY(-3px); border-color: var(--copper); background: var(--paper); }
+.gallery-dots { display: flex; flex: 1; justify-content: center; gap: 6px; }
+.gallery-dot { width: 20px; height: 3px; padding: 0; border: 0; border-radius: 99px; background: rgba(16,23,19,.18); transition: width .45s ease, background .45s ease; }
+.gallery-dot.is-active { width: 38px; background: var(--copper); }
+.gallery-progress { position: absolute; z-index: 5; right: 23px; bottom: 11px; left: 23px; height: 2px; overflow: hidden; background: rgba(16,23,19,.12); }
+.gallery-progress span { display: block; width: 100%; height: 100%; transform-origin: left; background: var(--copper); animation: gallery-progress 4.8s linear forwards; }
+@keyframes gallery-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.gallery-rail { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 8px; }
+.gallery-thumb { position: relative; aspect-ratio: 1.28; overflow: hidden; padding: 0; border: 1px solid rgba(16,23,19,.13); border-radius: 12px; background: #d6d8cb; opacity: .58; transition: opacity .35s ease, transform .35s ease, border-color .35s ease, box-shadow .35s ease; }
+.gallery-thumb:hover, .gallery-thumb.is-active { opacity: 1; transform: translateY(-3px); border-color: var(--copper); box-shadow: 0 10px 22px rgba(13,20,15,.1); }
+.gallery-thumb.is-active::after { content: ''; position: absolute; inset: auto 7px 6px; height: 2px; background: var(--copper); }
+.gallery-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.field-gallery.is-updating .gallery-stage { box-shadow: 0 34px 72px rgba(13,20,15,.18); }
+
+@media (max-width: 1050px) {
+  .gallery-stage { min-height: 500px; }
+  .gallery-slides { min-height: 440px; }
+  .gallery-slide img { height: 360px; }
+}
+@media (max-width: 800px) {
+  .gallery-stage { min-height: 500px; padding: 14px; border-radius: 20px; }
+  .gallery-slides { min-height: 450px; }
+  .gallery-slide img { height: 360px; border-radius: 14px; }
+  .gallery-slide figcaption { gap: 5px 12px; }
+  .gallery-slide figcaption strong { font-size: 25px; }
+  .gallery-slide figcaption small { max-width: 150px; }
+  .gallery-meta { top: 18px; right: 18px; left: 18px; font-size: 8px; }
+  .gallery-controls { right: 18px; bottom: 18px; left: 18px; }
+  .gallery-progress { right: 18px; bottom: 8px; left: 18px; }
+  .gallery-rail { display: flex; overflow-x: auto; padding: 3px 2px 5px; scrollbar-width: thin; }
+  .gallery-thumb { width: 88px; min-width: 88px; }
+}
+@media (max-width: 540px) {
+  .gallery-stage { min-height: 420px; }
+  .gallery-slides { min-height: 366px; }
+  .gallery-slide img { height: 270px; }
+  .gallery-slide figcaption { grid-template-columns: 1fr; padding-top: 12px; }
+  .gallery-slide figcaption strong { font-size: 23px; }
+  .gallery-slide figcaption small { max-width: none; text-align: left; }
+  .gallery-arrow { width: 32px; height: 32px; flex-basis: 32px; font-size: 14px; }
+  .gallery-dot { width: 12px; }
+  .gallery-dot.is-active { width: 25px; }
+  .gallery-dots { gap: 4px; }
+  .gallery-thumb { width: 76px; min-width: 76px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-slide, .gallery-thumb, .gallery-dot, .gallery-arrow { transition-duration: .01ms !important; }
+  .gallery-progress span { animation-duration: .01ms !important; }
+}
+
+/* Visitor registration gate: visible above the mobile drawer and safe on short screens. */
+.visitor-modal-backdrop { z-index: 1100; }
+.visitor-modal-backdrop:not([hidden]) .visitor-modal { animation: visitor-modal-in .65s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes visitor-modal-in { from { opacity: 0; transform: translateY(22px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@media (max-width: 540px) {
+  .visitor-modal-backdrop { align-items: start; padding: max(14px, env(safe-area-inset-top)) 12px max(14px, env(safe-area-inset-bottom)); }
+  .visitor-modal { width: min(100%, 390px); max-height: calc(100dvh - 28px); overflow-y: auto; margin: auto; }
+  .visitor-modal-visual { min-height: 158px; padding: 18px; }
+  .visitor-modal-visual strong { font-size: 29px; }
+  .visitor-modal-form { padding: 24px 17px 19px; }
+  .visitor-modal-form p { margin-bottom: 17px; }
+  .visitor-modal-form form { gap: 10px; }
+  .visitor-modal .modal-close { top: 10px; right: 10px; width: 30px; height: 30px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .visitor-modal-backdrop:not([hidden]) .visitor-modal { animation: none; }
+}

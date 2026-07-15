@@ -1,11 +1,11 @@
 const MODELS = {
   985: {
-    id: '985', number: '01', name: 'New Hira 985', eyebrow: 'The high-capacity workhorse', image: 'assets/machine-985-cutout.png', caption: 'New Hira 985 / product profile',
+    id: '985', number: '01', name: 'New Hira 985', eyebrow: 'The high-capacity workhorse', image: 'assets/brochure-985-spread.jpg', caption: 'New Hira 985 / exact brochure spread',
     copy: 'Maximum yield in the shortest time — built for farmers who want more field covered, with less grain loss and low fuel consumption.', width: '4.4', tank: '1,800', walkers: '5', crops: 'Wheat · Paddy · Soyabean · Gram · Sunflower · Pulses',
     specs: [['Effective cutter', '4.28 m'], ['Threshing drum', '1,258 mm'], ['Grain tank', '1,800 kg'], ['Fuel tank', '350 litre'], ['Working width', '5,900 mm'], ['Ground clearance', '250 mm']]
   },
   785: {
-    id: '785', number: '02', name: 'New Hira 785', eyebrow: 'The agile field finisher', image: 'assets/machine-785-cutout.png', caption: 'New Hira 785 / product profile',
+    id: '785', number: '02', name: 'New Hira 785', eyebrow: 'The agile field finisher', image: 'assets/brochure-785-spread.jpg', caption: 'New Hira 785 / exact brochure spread',
     copy: 'A compact, capable multicrop combine for smooth field access, small turning radius and a dependable finish across changing conditions.', width: '3.7', tank: '1,600', walkers: '4', crops: 'Wheat · Paddy · Soyabean · Gram · Sunflower · Pulses',
     specs: [['Effective cutter', '3.6 m'], ['Threshing drum', '1,015 mm'], ['Grain tank', '1,600 kg'], ['Fuel tank', '350 litre'], ['Working width', '5,290 mm'], ['Ground clearance', '250 mm']]
   }
@@ -18,6 +18,7 @@ const STORAGE = {
   assets: 'fieldcraft_assets_v1',
   settings: 'fieldcraft_settings_v1'
 };
+const VISITOR_GATE_KEY = 'fieldcraft_visitor_seen_v2';
 
 // Optional cross-device endpoint. Leave blank for GitHub Pages-only mode.
 const CONFIG = { analyticsEndpoint: '' };
@@ -162,18 +163,27 @@ function handleQuickBooking(event) {
 
 function setupVisitorGate() {
   const modal = $('#visitorModal');
-  if (!modal || localStorage.getItem('fieldcraft_visitor_seen') === 'yes') return;
-  setTimeout(() => {
+  if (!modal || localStorage.getItem(VISITOR_GATE_KEY) === 'yes') return;
+  const closeGate = (eventName = '') => {
+    localStorage.setItem(VISITOR_GATE_KEY, 'yes');
+    modal.hidden = true;
+    document.body.classList.remove('modal-open');
+    if (eventName) trackEvent(eventName);
+  };
+  const showGate = () => {
     modal.hidden = false;
+    document.body.classList.add('modal-open');
     trackEvent('visitor_gate_shown');
-  }, 2600);
-  $('#skipVisitorGate')?.addEventListener('click', () => { localStorage.setItem('fieldcraft_visitor_seen', 'yes'); modal.hidden = true; trackEvent('visitor_gate_skipped'); });
-  $('#visitorModalClose')?.addEventListener('click', () => { localStorage.setItem('fieldcraft_visitor_seen', 'yes'); modal.hidden = true; });
+    window.setTimeout(() => $('#leadCaptureForm input[name="name"]')?.focus(), 80);
+  };
+  window.setTimeout(showGate, 1850);
+  $('#skipVisitorGate')?.addEventListener('click', () => closeGate('visitor_gate_skipped'));
+  $('#visitorModalClose')?.addEventListener('click', () => closeGate());
+  modal.addEventListener('click', (event) => { if (event.target === modal) closeGate('visitor_gate_dismissed'); });
   $('#leadCaptureForm')?.addEventListener('submit', (event) => {
     event.preventDefault();
     const lead = storeLead(new FormData(event.currentTarget));
-    localStorage.setItem('fieldcraft_visitor_seen', 'yes');
-    modal.hidden = true;
+    closeGate();
     showToast(`Thanks ${lead.name.split(' ')[0] || ''} — we’ll keep your field in mind.`);
   });
 }
@@ -346,6 +356,82 @@ function setupParallax() {
   window.addEventListener('pagehide', () => cancelAnimationFrame(frame), { once: true });
 }
 
+function setupFieldGallery() {
+  const gallery = $('#fieldGallery');
+  if (!gallery) return;
+  const slides = $$('.gallery-slide', gallery);
+  const thumbs = $$('.gallery-thumb', gallery);
+  const dots = $('#galleryDots');
+  const counter = $('#galleryCounter');
+  const progress = $('#galleryProgress');
+  const fallback = 'assets/brochure-985-spread.jpg';
+  let active = 0;
+  let timer;
+  let progressTimer;
+
+  gallery.querySelectorAll('img').forEach((image) => {
+    image.addEventListener('error', () => {
+      if (image.dataset.fallbackApplied) return;
+      image.dataset.fallbackApplied = 'true';
+      image.src = fallback;
+    });
+  });
+
+  if (dots) {
+    dots.innerHTML = slides.map((_, index) => `<button type="button" class="gallery-dot${index === 0 ? ' is-active' : ''}" data-gallery-dot="${index}" aria-label="Show field photo ${index + 1}" aria-pressed="${index === 0}"></button>`).join('');
+  }
+
+  const restartProgress = () => {
+    if (!progress) return;
+    progress.style.animation = 'none';
+    progress.offsetHeight;
+    progress.style.animation = 'gallery-progress 4.8s linear forwards';
+  };
+
+  const update = (next, announce = true) => {
+    active = (next + slides.length) % slides.length;
+    slides.forEach((slide, index) => {
+      const current = index === active;
+      slide.classList.toggle('is-active', current);
+      slide.setAttribute('aria-hidden', String(!current));
+    });
+    thumbs.forEach((thumb, index) => {
+      const current = index === active;
+      thumb.classList.toggle('is-active', current);
+      thumb.setAttribute('aria-current', current ? 'true' : 'false');
+    });
+    $$('.gallery-dot', gallery).forEach((dot, index) => {
+      const current = index === active;
+      dot.classList.toggle('is-active', current);
+      dot.setAttribute('aria-pressed', String(current));
+    });
+    if (counter) counter.textContent = `${String(active + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+    if (announce) gallery.classList.add('is-updating');
+    window.setTimeout(() => gallery.classList.remove('is-updating'), 420);
+    restartProgress();
+  };
+
+  const restart = () => {
+    window.clearInterval(timer);
+    timer = window.setInterval(() => update(active + 1), 4800);
+  };
+  const go = (index) => { update(index); restart(); };
+
+  thumbs.forEach((thumb, index) => thumb.addEventListener('click', () => go(index)));
+  $$('.gallery-dot', gallery).forEach((dot, index) => dot.addEventListener('click', () => go(index)));
+  $('[data-gallery-prev]', gallery)?.addEventListener('click', () => go(active - 1));
+  $('[data-gallery-next]', gallery)?.addEventListener('click', () => go(active + 1));
+  gallery.addEventListener('mouseenter', () => { window.clearInterval(timer); if (progress) progress.style.animationPlayState = 'paused'; });
+  gallery.addEventListener('mouseleave', () => { restart(); if (progress) progress.style.animationPlayState = 'running'; });
+  gallery.addEventListener('focusin', () => { window.clearInterval(timer); if (progress) progress.style.animationPlayState = 'paused'; });
+  gallery.addEventListener('focusout', (event) => { if (!gallery.contains(event.relatedTarget)) { restart(); if (progress) progress.style.animationPlayState = 'running'; } });
+  gallery.addEventListener('touchstart', () => { window.clearInterval(timer); if (progress) progress.style.animationPlayState = 'paused'; }, { passive: true });
+  gallery.addEventListener('touchend', () => { restart(); if (progress) progress.style.animationPlayState = 'running'; }, { passive: true });
+  update(0, false);
+  restart();
+  window.addEventListener('pagehide', () => { window.clearInterval(timer); window.clearTimeout(progressTimer); }, { once: true });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   $('#year').textContent = new Date().getFullYear();
   setTimeout(() => {
@@ -354,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof window.IntersectionObserver !== 'function') $$('.reveal').forEach((item) => item.classList.add('is-visible'));
     document.dispatchEvent(new Event('fieldcraft:ready'));
   }, 1250);
-  setModel(currentModel); setupMobileNav(); setupReveal(); setupScrollPolish(); setupParallax(); setupVisitorGate(); setupDesk(); applyCustomAssets();
+  setModel(currentModel); setupMobileNav(); setupReveal(); setupScrollPolish(); setupParallax(); setupFieldGallery(); setupVisitorGate(); setupDesk(); applyCustomAssets();
   trackEvent('page_view');
   $$('.fleet-tab').forEach((tab) => tab.addEventListener('click', () => setModel(tab.dataset.modelTab)));
   $('#bookingForm')?.addEventListener('submit', handleBookingSubmit);
