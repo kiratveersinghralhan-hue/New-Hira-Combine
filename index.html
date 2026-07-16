@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260716-field-v14" />
-    <script defer src="app.js?v=20260716-field-v14"></script>
+    <link rel="stylesheet" href="styles.css?v=20260716-field-v16" />
+    <script defer src="app.js?v=20260716-field-v16"></script>
   </head>
   <body>
     <div class="site-loader" id="siteLoader" aria-label="Loading Fieldcraft">
@@ -68,11 +68,11 @@
               <div class="showcase-card showcase-card-main">
                 <div class="showcase-tag">NEW HIRA <b id="heroModelTag">985</b></div>
                 <div class="showcase-kicker">PRECISION FIELD SYSTEM / 01</div>
-                <img id="heroMachineImage" src="assets/field-06-road.jpg" alt="New Hira 985 combine harvester in field-ready road profile" />
+                <img id="heroMachineImage" src="assets/cutout-985-three-quarter.png" alt="New Hira 985 combine harvester product cutout" />
               </div>
               <div class="showcase-card showcase-card-secondary">
                 <span>NEW HIRA <b>785</b></span>
-                <img src="assets/brochure-785-spread.jpg" alt="New Hira 785 combine harvester brochure image" />
+                <img src="assets/cutout-785-brochure-model.png" alt="New Hira 785 combine harvester product cutout" />
               </div>
               <div class="showcase-card showcase-card-mini">
                 <span class="mini-label">CUTTER BAR</span>
@@ -116,11 +116,11 @@
 
             <div class="fleet-switcher reveal" role="tablist" aria-label="Choose combine model">
               <button class="fleet-tab is-active" type="button" data-model-tab="985" role="tab" aria-selected="true">
-                <span class="fleet-tab-visual"><span class="fleet-tab-index">01</span><img src="assets/field-05-three-quarter.jpg" alt="New Hira 985 combine harvester real field photo" /></span>
+                <span class="fleet-tab-visual"><span class="fleet-tab-index">01</span><img src="assets/cutout-985-three-quarter.png" alt="New Hira 985 combine harvester product cutout" /></span>
                 <span class="fleet-tab-copy"><b>New Hira 985</b><small>4.4m cutter bar · 1,800kg grain tank</small></span>
               </button>
               <button class="fleet-tab" type="button" data-model-tab="785" role="tab" aria-selected="false">
-                <span class="fleet-tab-visual"><span class="fleet-tab-index">02</span><img src="assets/brochure-785-spread.jpg" alt="New Hira 785 combine harvester brochure image" /></span>
+                <span class="fleet-tab-visual"><span class="fleet-tab-index">02</span><img src="assets/cutout-785-brochure-model.png" alt="New Hira 785 combine harvester product cutout" /></span>
                 <span class="fleet-tab-copy"><b>New Hira 785</b><small>3.7m cutter bar · 1,600kg grain tank</small></span>
               </button>
             </div>
@@ -128,8 +128,8 @@
             <div class="machine-detail reveal" id="machineDetail">
               <div class="machine-visual">
                 <div class="machine-number">0<span id="machineNumber">1</span></div>
-                <div class="machine-image-wrap"><span class="machine-image-label">NEW HIRA / FIELD STAGE</span><img id="machineImage" src="assets/field-05-three-quarter.jpg" alt="New Hira 985 combine harvester real field photo" /></div>
-                <div class="machine-caption"><span id="machineCaption">New Hira 985 / front profile</span><span>Fieldcraft archive</span></div>
+                <div class="machine-image-wrap"><span class="machine-image-label">NEW HIRA / PRODUCT STAGE</span><img id="machineImage" src="assets/cutout-985-three-quarter.png" alt="New Hira 985 combine harvester product cutout" /></div>
+                <div class="machine-caption"><span id="machineCaption">New Hira 985 / transparent product cutout</span><span>Fieldcraft product archive</span></div>
               </div>
               <div class="machine-info">
                 <div class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span><span id="machineEyebrow">The high-capacity workhorse</span></div>
@@ -160,7 +160,7 @@
           </div>
         </section>
 
-        <section class="section field-fit-section">
+        <section class="section field-fit-section legacy-field-showcase">
           <div class="container field-fit-grid">
             <div class="field-fit-copy reveal"><div class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span> Crop intelligence</div><h2>Made to move<br /><em>with the season.</em></h2><p>Good harvesting is a timing game. Explore the real New Hira 985 field photo stage, then tell us your crop and field location so we can plan the right route.</p><a href="#booking" class="text-link dark-link">Plan your harvest <span>↗</span></a></div>
             <div class="field-gallery reveal" id="fieldGallery" aria-label="New Hira 985 field gallery">
@@ -188,6 +188,40 @@
                 <button type="button" class="gallery-thumb" data-gallery-thumb="5" aria-label="Show field photo 6"><img src="assets/field-06-road.jpg" alt="" /></button>
                 <button type="button" class="gallery-thumb" data-gallery-thumb="6" aria-label="Show field photo 7"><img src="assets/field-07-side.jpg" alt="" /></button>
                 <button type="button" class="gallery-thumb" data-gallery-thumb="7" aria-label="Show field photo 8"><img src="assets/field-08-detail.jpg" alt="" /></button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section product-carousel-section" id="product-stage">
+          <div class="container product-carousel-layout">
+            <div class="product-carousel-copy reveal">
+              <div class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span> Product intelligence</div>
+              <h2>Built for the field.<br /><em>Shown without the noise.</em></h2>
+              <p>Drag through the full New Hira range. The centre machine rises forward, while the next and previous combines sit back in real 3D depth.</p>
+              <div class="product-carousel-key"><span class="key-dot key-dot-current"></span> Centre focus <span class="key-dot"></span> Drag or use arrows</div>
+              <a href="#booking" class="text-link dark-link">Reserve a machine <span>&rarr;</span></a>
+            </div>
+            <div class="product-gallery reveal" id="productGallery" aria-label="New Hira 3D product carousel" tabindex="0">
+              <div class="product-gallery-stage" aria-live="polite">
+                <div class="product-gallery-topline"><span class="micro-label">NEW HIRA / PRODUCT EDITION</span><span id="galleryCounter">01 / 05</span></div>
+                <div class="product-gallery-slides" id="gallerySlides">
+                  <figure class="gallery-slide is-active" data-gallery-index="0"><img src="assets/cutout-985-three-quarter.png" alt="New Hira 985 three-quarter product cutout" /><figcaption><span>01 / NEW HIRA 985</span><strong>Three-quarter stance</strong><small>Real machine details and decals, without a field background.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="1"><img src="assets/cutout-985-orange-reel.png" alt="New Hira 985 orange header product cutout" /><figcaption><span>02 / FRONT HEADER</span><strong>Head-on profile</strong><small>Orange working reel, 985 badge and auger in full focus.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="2"><img src="assets/cutout-985-maize-header.png" alt="New Hira 985 maize header product cutout" /><figcaption><span>03 / ROW CROP</span><strong>Maize-ready setup</strong><small>Five-point crop header and the full 985 cab assembly.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="3"><img src="assets/cutout-985-black-reel.png" alt="New Hira 985 black reel product cutout" /><figcaption><span>04 / WIDE REEL</span><strong>Full cutting presence</strong><small>Long black reel profile, canopy and side engineering in one clean view.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="4"><img src="assets/cutout-785-brochure-model.png" alt="New Hira 785 product cutout based on supplied brochure" /><figcaption><span>05 / NEW HIRA 785</span><strong>Compact workhorse</strong><small>Brochure-matched 785 profile with green and cream colour layout.</small></figcaption></figure>
+                </div>
+                <div class="product-gallery-controls"><button class="gallery-arrow" type="button" data-gallery-prev aria-label="Previous product view">&larr;</button><div class="gallery-dots" id="galleryDots"></div><button class="gallery-arrow" type="button" data-gallery-next aria-label="Next product view">&rarr;</button></div>
+                <div class="product-gallery-progress"><span id="galleryProgress"></span></div>
+                <div class="product-gallery-floor" aria-hidden="true"><span></span><span></span><span></span></div>
+              </div>
+              <div class="product-gallery-rail" id="galleryRail" aria-label="Choose product view">
+                <button type="button" class="gallery-thumb is-active" data-gallery-thumb="0" aria-label="Show New Hira 985 three-quarter view"><img src="assets/cutout-985-three-quarter.png" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="1" aria-label="Show New Hira 985 orange reel view"><img src="assets/cutout-985-orange-reel.png" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="2" aria-label="Show New Hira 985 maize header view"><img src="assets/cutout-985-maize-header.png" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="3" aria-label="Show New Hira 985 black reel view"><img src="assets/cutout-985-black-reel.png" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="4" aria-label="Show New Hira 785 product view"><img src="assets/cutout-785-brochure-model.png" alt="" /></button>
               </div>
             </div>
           </div>

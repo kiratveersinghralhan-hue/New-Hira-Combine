@@ -1,11 +1,11 @@
 const MODELS = {
   985: {
-    id: '985', number: '01', name: 'New Hira 985', eyebrow: 'The high-capacity workhorse', image: 'assets/field-05-three-quarter.jpg', caption: 'New Hira 985 / real field photo',
+    id: '985', number: '01', name: 'New Hira 985', eyebrow: 'The high-capacity workhorse', image: 'assets/cutout-985-three-quarter.png', caption: 'New Hira 985 / transparent product cutout',
     copy: 'Maximum yield in the shortest time — built for farmers who want more field covered, with less grain loss and low fuel consumption.', width: '4.4', tank: '1,800', walkers: '5', crops: 'Wheat · Paddy · Soyabean · Gram · Sunflower · Pulses',
     specs: [['Effective cutter', '4.28 m'], ['Threshing drum', '1,258 mm'], ['Grain tank', '1,800 kg'], ['Fuel tank', '350 litre'], ['Working width', '5,900 mm'], ['Ground clearance', '250 mm']]
   },
   785: {
-    id: '785', number: '02', name: 'New Hira 785', eyebrow: 'The agile field finisher', image: 'assets/brochure-785-spread.jpg', caption: 'New Hira 785 / brochure archive',
+    id: '785', number: '02', name: 'New Hira 785', eyebrow: 'The agile field finisher', image: 'assets/cutout-785-brochure-model.png', caption: 'New Hira 785 / brochure-matched product cutout',
     copy: 'A compact, capable multicrop combine for smooth field access, small turning radius and a dependable finish across changing conditions.', width: '3.7', tank: '1,600', walkers: '4', crops: 'Wheat · Paddy · Soyabean · Gram · Sunflower · Pulses',
     specs: [['Effective cutter', '3.6 m'], ['Threshing drum', '1,015 mm'], ['Grain tank', '1,600 kg'], ['Fuel tank', '350 litre'], ['Working width', '5,290 mm'], ['Ground clearance', '250 mm']]
   }
@@ -383,17 +383,20 @@ function setupFleetCarousel() {
 }
 
 function setupFieldGallery() {
-  const gallery = $('#fieldGallery');
+  const gallery = $('#productGallery');
   if (!gallery) return;
   const slides = $$('.gallery-slide', gallery);
   const thumbs = $$('.gallery-thumb', gallery);
-  const dots = $('#galleryDots');
-  const counter = $('#galleryCounter');
-  const progress = $('#galleryProgress');
-  const fallback = 'assets/brochure-985-spread.jpg';
+  const dots = $('#galleryDots', gallery);
+  const counter = $('#galleryCounter', gallery);
+  const progress = $('#galleryProgress', gallery);
+  const fallback = 'assets/cutout-985-three-quarter.png';
   let active = 0;
   let timer;
   let progressTimer;
+  let pointerStartX = 0;
+  let pointerDeltaX = 0;
+  let isDragging = false;
 
   gallery.querySelectorAll('img').forEach((image) => {
     image.addEventListener('error', () => {
@@ -404,7 +407,7 @@ function setupFieldGallery() {
   });
 
   if (dots) {
-    dots.innerHTML = slides.map((_, index) => `<button type="button" class="gallery-dot${index === 0 ? ' is-active' : ''}" data-gallery-dot="${index}" aria-label="Show field photo ${index + 1}" aria-pressed="${index === 0}"></button>`).join('');
+    dots.innerHTML = slides.map((_, index) => `<button type="button" class="gallery-dot${index === 0 ? ' is-active' : ''}" data-gallery-dot="${index}" aria-label="Show product view ${index + 1}" aria-pressed="${index === 0}"></button>`).join('');
   }
 
   const restartProgress = () => {
@@ -460,6 +463,37 @@ function setupFieldGallery() {
   gallery.addEventListener('focusout', (event) => { if (!gallery.contains(event.relatedTarget)) { restart(); if (progress) progress.style.animationPlayState = 'running'; } });
   gallery.addEventListener('touchstart', () => { window.clearInterval(timer); if (progress) progress.style.animationPlayState = 'paused'; }, { passive: true });
   gallery.addEventListener('touchend', () => { restart(); if (progress) progress.style.animationPlayState = 'running'; }, { passive: true });
+  gallery.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    isDragging = true;
+    pointerStartX = event.clientX;
+    pointerDeltaX = 0;
+    gallery.classList.add('is-dragging');
+    gallery.setPointerCapture?.(event.pointerId);
+    window.clearInterval(timer);
+    if (progress) progress.style.animationPlayState = 'paused';
+  });
+  gallery.addEventListener('pointermove', (event) => {
+    if (!isDragging) return;
+    pointerDeltaX = event.clientX - pointerStartX;
+    gallery.style.setProperty('--gallery-drag', `${Math.max(-44, Math.min(44, pointerDeltaX / 7))}px`);
+  });
+  const finishDrag = (event) => {
+    if (!isDragging) return;
+    isDragging = false;
+    gallery.classList.remove('is-dragging');
+    gallery.style.removeProperty('--gallery-drag');
+    gallery.releasePointerCapture?.(event.pointerId);
+    if (Math.abs(pointerDeltaX) > 48) go(active + (pointerDeltaX < 0 ? 1 : -1));
+    else restart();
+    if (progress) progress.style.animationPlayState = 'running';
+  };
+  gallery.addEventListener('pointerup', finishDrag);
+  gallery.addEventListener('pointercancel', finishDrag);
+  gallery.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') { event.preventDefault(); go(active - 1); }
+    if (event.key === 'ArrowRight') { event.preventDefault(); go(active + 1); }
+  });
   update(0, false);
   restart();
   window.addEventListener('pagehide', () => { window.clearInterval(timer); window.clearTimeout(progressTimer); }, { once: true });
