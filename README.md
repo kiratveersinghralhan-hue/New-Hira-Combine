@@ -4,15 +4,15 @@ This is a GitHub-ready static booking website for Ram Chand & Sons / New Hira co
 
 ## What is included
 
-- Premium responsive landing page with intro animation, 3D pointer tilt, model switcher and real brochure photography.
+- Premium responsive landing page with intro animation, 3D pointer tilt, glass navigation, model switcher and real field photography.
 - New Hira 985 and 785 comparison with brochure-derived specifications.
 - Booking form that saves a request locally and opens a pre-filled WhatsApp message to `+91 92161 07700`.
 - Owner desk protected by the demo PIN `985785`.
 - Owner desk views for bookings, leads & visitor pulses, and browser-local site content controls.
 - CSV export for the local booking board.
 - Visitor registration gate for callback leads.
-- `assets/field-dusk.png`, an original cinematic field backdrop, plus the four supplied brochure photographs used as the exact 985/785 product archive.
-- A working autoplay photo carousel using the exact brochure images that are included in the ZIP.
+- `assets/field-dusk.png`, an original cinematic field backdrop, the four supplied brochure photographs, and the eight supplied New Hira 985 field photographs.
+- A working autoplay 3D field-photo carousel with center/side slide staging.
 
 ## Important static-site behavior
 
@@ -57,7 +57,7 @@ Open **Owner desk** from the header or footer and enter `985785`. Change this PI
 
 For a change that every visitor should see, replace the file in the GitHub `assets/` folder and push the update. The admin media library is designed for local browser previews and quick temporary swaps; its files do not automatically become new GitHub files.
 
-The brochure spreads are intentionally kept untouched so the New Hira stickers, markings and printed details remain authentic. Public image changes should be made by replacing or adding files inside `assets/`, then updating the image paths in `index.html`.
+The real 985 field photos are included as `field-01-harvesting.jpg` through `field-08-detail.jpg`. The 785 visual still uses the brochure archive because no separate real 785 field photo was supplied. Public image changes should be made by replacing or adding files inside `assets/`, then updating the image paths in `index.html`.
 
 ## Optional Cloudflare Worker
 

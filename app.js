@@ -1,11 +1,11 @@
 const MODELS = {
   985: {
-    id: '985', number: '01', name: 'New Hira 985', eyebrow: 'The high-capacity workhorse', image: 'assets/brochure-985-spread.jpg', caption: 'New Hira 985 / exact brochure spread',
+    id: '985', number: '01', name: 'New Hira 985', eyebrow: 'The high-capacity workhorse', image: 'assets/field-05-three-quarter.jpg', caption: 'New Hira 985 / real field photo',
     copy: 'Maximum yield in the shortest time — built for farmers who want more field covered, with less grain loss and low fuel consumption.', width: '4.4', tank: '1,800', walkers: '5', crops: 'Wheat · Paddy · Soyabean · Gram · Sunflower · Pulses',
     specs: [['Effective cutter', '4.28 m'], ['Threshing drum', '1,258 mm'], ['Grain tank', '1,800 kg'], ['Fuel tank', '350 litre'], ['Working width', '5,900 mm'], ['Ground clearance', '250 mm']]
   },
   785: {
-    id: '785', number: '02', name: 'New Hira 785', eyebrow: 'The agile field finisher', image: 'assets/brochure-785-spread.jpg', caption: 'New Hira 785 / exact brochure spread',
+    id: '785', number: '02', name: 'New Hira 785', eyebrow: 'The agile field finisher', image: 'assets/brochure-785-spread.jpg', caption: 'New Hira 785 / brochure archive',
     copy: 'A compact, capable multicrop combine for smooth field access, small turning radius and a dependable finish across changing conditions.', width: '3.7', tank: '1,600', walkers: '4', crops: 'Wheat · Paddy · Soyabean · Gram · Sunflower · Pulses',
     specs: [['Effective cutter', '3.6 m'], ['Threshing drum', '1,015 mm'], ['Grain tank', '1,600 kg'], ['Fuel tank', '350 litre'], ['Working width', '5,290 mm'], ['Ground clearance', '250 mm']]
   }
@@ -18,7 +18,7 @@ const STORAGE = {
   assets: 'fieldcraft_assets_v1',
   settings: 'fieldcraft_settings_v1'
 };
-const VISITOR_GATE_KEY = 'fieldcraft_visitor_seen_v2';
+const VISITOR_GATE_KEY = 'fieldcraft_visitor_seen_v3';
 
 // Optional cross-device endpoint. Leave blank for GitHub Pages-only mode.
 const CONFIG = { analyticsEndpoint: '' };
@@ -111,12 +111,12 @@ function setModel(modelId) {
   const image = $('#machineImage');
   if (image) {
     image.classList.add('is-switching');
-    setTimeout(() => { image.src = model.image; image.alt = `${model.name} exact brochure image`; image.classList.remove('is-switching'); }, 180);
+    setTimeout(() => { image.src = model.image; image.alt = `${model.name} combine harvester image`; image.classList.remove('is-switching'); }, 180);
   }
   const heroImage = $('#heroMachineImage');
   if (heroImage) {
     heroImage.classList.add('is-switching');
-    setTimeout(() => { heroImage.src = model.image; heroImage.alt = `${model.name} exact brochure image`; heroImage.classList.remove('is-switching'); }, 180);
+    setTimeout(() => { heroImage.src = model.image; heroImage.alt = `${model.name} combine harvester image`; heroImage.classList.remove('is-switching'); }, 180);
   }
   const heroModelTag = $('#heroModelTag');
   if (heroModelTag) heroModelTag.textContent = model.id;
@@ -416,9 +416,16 @@ function setupFieldGallery() {
 
   const update = (next, announce = true) => {
     active = (next + slides.length) % slides.length;
+    const prevIndex = (active - 1 + slides.length) % slides.length;
+    const nextIndex = (active + 1) % slides.length;
     slides.forEach((slide, index) => {
       const current = index === active;
+      const previous = index === prevIndex;
+      const nextSlide = index === nextIndex;
       slide.classList.toggle('is-active', current);
+      slide.classList.toggle('is-prev', previous);
+      slide.classList.toggle('is-next', nextSlide);
+      slide.classList.toggle('is-distant', !current && !previous && !nextSlide);
       slide.setAttribute('aria-hidden', String(!current));
     });
     thumbs.forEach((thumb, index) => {

@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260716-royal-v13" />
-    <script defer src="app.js?v=20260716-royal-v13"></script>
+    <link rel="stylesheet" href="styles.css?v=20260716-field-v14" />
+    <script defer src="app.js?v=20260716-field-v14"></script>
   </head>
   <body>
     <div class="site-loader" id="siteLoader" aria-label="Loading Fieldcraft">
@@ -68,7 +68,7 @@
               <div class="showcase-card showcase-card-main">
                 <div class="showcase-tag">NEW HIRA <b id="heroModelTag">985</b></div>
                 <div class="showcase-kicker">PRECISION FIELD SYSTEM / 01</div>
-                <img id="heroMachineImage" src="assets/brochure-985-spread.jpg" alt="New Hira 985 combine harvester brochure image" />
+                <img id="heroMachineImage" src="assets/field-06-road.jpg" alt="New Hira 985 combine harvester in field-ready road profile" />
               </div>
               <div class="showcase-card showcase-card-secondary">
                 <span>NEW HIRA <b>785</b></span>
@@ -102,7 +102,9 @@
         </section>
 
         <div class="crop-marquee" aria-label="Suitable crops">
-          <div class="crop-marquee-track"><span>Wheat</span><b>✦</b><span>Paddy</span><b>✦</b><span>Sunflower</span><b>✦</b><span>Soyabean</span><b>✦</b><span>Gram</span><b>✦</b><span>Pulses</span><b>✦</b><span>Wheat</span><b>✦</b><span>Paddy</span><b>✦</b><span>Sunflower</span><b>✦</b><span>Soyabean</span><b>✦</b><span>Gram</span><b>✦</b><span>Pulses</span><b>✦</b></div>
+          <span class="harvest-machine" aria-hidden="true">NEW HIRA 985</span>
+          <span class="harvest-cut" aria-hidden="true"></span>
+          <div class="crop-marquee-track"><span>Wheat</span><b></b><span>Paddy</span><b></b><span>Sunflower</span><b></b><span>Soyabean</span><b></b><span>Gram</span><b></b><span>Pulses</span><b></b><span>Wheat</span><b></b><span>Paddy</span><b></b><span>Sunflower</span><b></b><span>Soyabean</span><b></b><span>Gram</span><b></b><span>Pulses</span><b></b></div>
         </div>
 
         <section class="section fleet-section" id="machines">
@@ -114,7 +116,7 @@
 
             <div class="fleet-switcher reveal" role="tablist" aria-label="Choose combine model">
               <button class="fleet-tab is-active" type="button" data-model-tab="985" role="tab" aria-selected="true">
-                <span class="fleet-tab-visual"><span class="fleet-tab-index">01</span><img src="assets/brochure-985-spread.jpg" alt="New Hira 985 combine harvester brochure image" /></span>
+                <span class="fleet-tab-visual"><span class="fleet-tab-index">01</span><img src="assets/field-05-three-quarter.jpg" alt="New Hira 985 combine harvester real field photo" /></span>
                 <span class="fleet-tab-copy"><b>New Hira 985</b><small>4.4m cutter bar · 1,800kg grain tank</small></span>
               </button>
               <button class="fleet-tab" type="button" data-model-tab="785" role="tab" aria-selected="false">
@@ -126,7 +128,7 @@
             <div class="machine-detail reveal" id="machineDetail">
               <div class="machine-visual">
                 <div class="machine-number">0<span id="machineNumber">1</span></div>
-                <div class="machine-image-wrap"><span class="machine-image-label">NEW HIRA / BROCHURE ARCHIVE</span><img id="machineImage" src="assets/brochure-985-spread.jpg" alt="New Hira 985 combine harvester brochure image" /></div>
+                <div class="machine-image-wrap"><span class="machine-image-label">NEW HIRA / FIELD STAGE</span><img id="machineImage" src="assets/field-05-three-quarter.jpg" alt="New Hira 985 combine harvester real field photo" /></div>
                 <div class="machine-caption"><span id="machineCaption">New Hira 985 / front profile</span><span>Fieldcraft archive</span></div>
               </div>
               <div class="machine-info">
@@ -160,24 +162,32 @@
 
         <section class="section field-fit-section">
           <div class="container field-fit-grid">
-            <div class="field-fit-copy reveal"><div class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span> Crop intelligence</div><h2>Made to move<br /><em>with the season.</em></h2><p>Good harvesting is a timing game. Explore the exact New Hira brochure frames, then tell us your crop and field location so we can plan the right route.</p><a href="#booking" class="text-link dark-link">Plan your harvest <span>↗</span></a></div>
+            <div class="field-fit-copy reveal"><div class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span> Crop intelligence</div><h2>Made to move<br /><em>with the season.</em></h2><p>Good harvesting is a timing game. Explore the real New Hira 985 field photo stage, then tell us your crop and field location so we can plan the right route.</p><a href="#booking" class="text-link dark-link">Plan your harvest <span>↗</span></a></div>
             <div class="field-gallery reveal" id="fieldGallery" aria-label="New Hira 985 field gallery">
               <div class="gallery-stage" aria-live="polite">
-                <div class="gallery-meta"><span class="micro-label">AUTOPLAY PHOTO CAROUSEL / EXACT BROCHURE</span><span id="galleryCounter">01 / 04</span></div>
+                <div class="gallery-meta"><span class="micro-label">3D FIELD PHOTO CAROUSEL / NEW HIRA 985</span><span id="galleryCounter">01 / 08</span></div>
                 <div class="gallery-slides" id="gallerySlides">
-                  <figure class="gallery-slide is-active" data-gallery-index="0"><img src="assets/brochure-985-spread.jpg" alt="Exact New Hira 985 brochure spread" /><figcaption><span>01 / NEW HIRA 985</span><strong>Full brochure frame</strong><small>The original 985 brochure photo is shown complete, without cutout or crop.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="1"><img src="assets/brochure-985-specs.jpg" alt="Exact New Hira 985 technical specification brochure page" /><figcaption><span>02 / 985 SPECIFICATIONS</span><strong>Technical page</strong><small>Specs and brochure details kept as the source image.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="2"><img src="assets/brochure-785-spread.jpg" alt="Exact New Hira 785 brochure spread" /><figcaption><span>03 / NEW HIRA 785</span><strong>Full brochure frame</strong><small>The original 785 brochure photo is shown complete, without cutout or crop.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="3"><img src="assets/brochure-785-specs.jpg" alt="Exact New Hira 785 technical specification brochure page" /><figcaption><span>04 / 785 SPECIFICATIONS</span><strong>Technical page</strong><small>The brochure details remain readable and untouched.</small></figcaption></figure>
+                  <figure class="gallery-slide is-active" data-gallery-index="0"><img src="assets/field-01-harvesting.jpg" alt="New Hira 985 harvesting in crop field" /><figcaption><span>01 / FIELD OPERATIONS</span><strong>Harvest in motion</strong><small>Real field photo, staged in a premium carousel.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="1"><img src="assets/field-02-front-header.jpg" alt="Front header view of New Hira 985 combine" /><figcaption><span>02 / FRONT HEADER</span><strong>Head-on profile</strong><small>Machine decals and cutting header kept visible.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="2"><img src="assets/field-03-row-crop.jpg" alt="New Hira 985 row-crop attachment" /><figcaption><span>03 / ROW CROP</span><strong>Crop-ready setup</strong><small>Front assembly displayed cleanly on the stage.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="3"><img src="assets/field-04-row-crop-alt.jpg" alt="New Hira 985 row crop front view" /><figcaption><span>04 / WORKING VIEW</span><strong>Precision header</strong><small>Large center frame with side-photo depth.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="4"><img src="assets/field-05-three-quarter.jpg" alt="Three-quarter road view of New Hira 985 combine" /><figcaption><span>05 / NEW HIRA 985</span><strong>Three-quarter stance</strong><small>Strong product angle for the booking page.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="5"><img src="assets/field-06-road.jpg" alt="New Hira 985 on road near field" /><figcaption><span>06 / ROAD READY</span><strong>Field route ready</strong><small>Made to move between village harvest windows.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="6"><img src="assets/field-07-side.jpg" alt="Side view of New Hira 985 combine harvester" /><figcaption><span>07 / SIDE PROFILE</span><strong>Full machine presence</strong><small>Wide photo carousel frame with real machine scale.</small></figcaption></figure>
+                  <figure class="gallery-slide" data-gallery-index="7"><img src="assets/field-08-detail.jpg" alt="Close detail of New Hira 985 combine harvester" /><figcaption><span>08 / DETAILS</span><strong>Close engineering</strong><small>Cabin, lights and New Hira 985 markings up close.</small></figcaption></figure>
                 </div>
                 <div class="gallery-controls"><button class="gallery-arrow" type="button" data-gallery-prev aria-label="Previous field photo">←</button><div class="gallery-dots" id="galleryDots"></div><button class="gallery-arrow" type="button" data-gallery-next aria-label="Next field photo">→</button></div>
                 <div class="gallery-progress"><span id="galleryProgress"></span></div>
               </div>
               <div class="gallery-rail" id="galleryRail" aria-label="Choose field photo">
-                <button type="button" class="gallery-thumb is-active" data-gallery-thumb="0" aria-label="Show brochure photo 1"><img src="assets/brochure-985-spread.jpg" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="1" aria-label="Show brochure photo 2"><img src="assets/brochure-985-specs.jpg" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="2" aria-label="Show brochure photo 3"><img src="assets/brochure-785-spread.jpg" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="3" aria-label="Show brochure photo 4"><img src="assets/brochure-785-specs.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb is-active" data-gallery-thumb="0" aria-label="Show field photo 1"><img src="assets/field-01-harvesting.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="1" aria-label="Show field photo 2"><img src="assets/field-02-front-header.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="2" aria-label="Show field photo 3"><img src="assets/field-03-row-crop.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="3" aria-label="Show field photo 4"><img src="assets/field-04-row-crop-alt.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="4" aria-label="Show field photo 5"><img src="assets/field-05-three-quarter.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="5" aria-label="Show field photo 6"><img src="assets/field-06-road.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="6" aria-label="Show field photo 7"><img src="assets/field-07-side.jpg" alt="" /></button>
+                <button type="button" class="gallery-thumb" data-gallery-thumb="7" aria-label="Show field photo 8"><img src="assets/field-08-detail.jpg" alt="" /></button>
               </div>
             </div>
           </div>
