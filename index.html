@@ -2,320 +2,506 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#101713" />
-    <meta name="description" content="Book a New Hira 785 or 985 multicrop combine harvester with Ram Chand & Sons." />
-    <title>Fieldcraft | New Hira Combine Harvesters</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b130f" />
+    <meta name="description" content="Reserve New Hira 985 and 785 multicrop combine harvesters with Ram Chand & Sons in Nabha, Patiala and surrounding fields." />
+    <meta property="og:title" content="New Hira Fieldcraft | Combine Harvester Booking" />
+    <meta property="og:description" content="Premium New Hira harvest coordination. Choose your machine, share your field and reserve your harvest window." />
+    <meta property="og:image" content="assets/field-05-three-quarter.jpg" />
+    <title>New Hira Fieldcraft | Harvest Booking</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260716-field-v16" />
-    <script defer src="app.js?v=20260716-field-v16"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=20260717-field-v17" />
+    <script defer src="app.js?v=20260717-field-v17"></script>
   </head>
   <body>
-    <div class="site-loader" id="siteLoader" aria-label="Loading Fieldcraft">
-      <div class="loader-mark"><span></span><span></span><span></span></div>
-      <div class="loader-brandline"><span>RAM CHAND &amp; SONS</span><span>NEW HIRA / 1985—2025</span></div>
-      <strong class="loader-title">FIELDCRAFT</strong>
-      <div class="loader-status"><span>HARVEST OPERATIONS</span><span>INITIALISING / <b>01</b></span></div>
-      <div class="loader-progress"><span></span></div>
-      <p>FIELDCRAFT / RAM CHAND &amp; SONS</p>
+    <div class="site-loader" id="siteLoader" aria-label="Loading New Hira Fieldcraft">
+      <div class="loader-grid" aria-hidden="true"></div>
+      <div class="loader-core">
+        <div class="brand-emblem brand-emblem-large" aria-hidden="true"><span></span><i></i><b></b></div>
+        <p>RAM CHAND &amp; SONS / NABHA</p>
+        <h1>NEW HIRA</h1>
+        <div class="loader-rule"><span></span></div>
+        <small>PREPARING THE FIELD / <b id="loaderCount">00</b></small>
+      </div>
     </div>
-    <div class="scroll-progress" aria-hidden="true"><span></span></div>
 
-    <div class="site-shell">
-      <header class="site-header" id="top">
-        <a class="brand" href="#home" aria-label="Fieldcraft home">
-          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span class="brand-copy"><strong>NEW HIRA</strong><small>FIELDCRAFT / BOOKING DESK</small></span>
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
+    <div class="nav-scrim" id="navScrim" hidden></div>
+
+    <header class="site-header" id="top">
+      <div class="header-inner">
+        <a class="brand" href="#home" aria-label="New Hira Fieldcraft home">
+          <span class="brand-emblem" aria-hidden="true"><span></span><i></i><b></b></span>
+          <span class="brand-words"><strong>NEW HIRA</strong><small>FIELDCRAFT / BOOKING DESK</small></span>
         </a>
 
-        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false">
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-controls="siteNav" aria-expanded="false">
           <span></span><span></span>
         </button>
 
         <nav class="site-nav" id="siteNav" aria-label="Primary navigation">
-          <a href="#machines">The fleet</a>
-          <a href="#why-fieldcraft">Why Fieldcraft</a>
-          <a href="#booking">Book a machine</a>
-          <button class="nav-desk-button" type="button" data-open-desk>Owner desk <span>↗</span></button>
+          <a href="#machines"><span>01</span> Machines</a>
+          <a href="#experience"><span>02</span> In the field</a>
+          <a href="#booking"><span>03</span> Book harvest</a>
+          <button type="button" data-open-desk><span>04</span> Owner desk</button>
+          <a class="nav-call" href="tel:+919216107700"><i></i> +91 92161 07700</a>
         </nav>
-        <a class="header-call" href="tel:+919216107700"><span class="live-dot"></span> Call now</a>
-      </header>
 
-      <main>
-        <section class="hero-section" id="home">
-          <div class="hero-backdrop" aria-hidden="true"></div>
-          <div class="grain-layer" aria-hidden="true"></div>
-          <div class="container hero-layout">
-            <div class="hero-copy reveal">
-              <div class="eyebrow"><span class="eyebrow-line"></span> Harvest season, handled</div>
-              <h1>Put the <em>right machine</em> in your field.</h1>
-              <p class="hero-lede">Premium New Hira multicrop combines, coordinated by Ram Chand &amp; Sons. Book your harvest window before the rush.</p>
-              <div class="hero-actions">
-                <a class="button button-copper" href="#booking">Reserve your window <span>↗</span></a>
-                <a class="text-link light-link" href="#machines">Explore the fleet <span>↓</span></a>
-              </div>
-              <div class="hero-proof">
-                <span class="proof-avatars"><i>RC</i><i>NH</i><i>+</i></span>
-                <span>Trusted field coordination<br /><b>Patiala · Nabha · Punjab</b></span>
-              </div>
-            </div>
+        <a class="header-cta" href="#booking">Reserve a machine <span>&nearr;</span></a>
+      </div>
+    </header>
 
-            <div class="hero-showcase reveal reveal-delay" id="heroShowcase" aria-label="New Hira combine preview">
-              <div class="showcase-orbit orbit-one"></div>
-              <div class="showcase-orbit orbit-two"></div>
-              <div class="showcase-card showcase-card-main">
-                <div class="showcase-tag">NEW HIRA <b id="heroModelTag">985</b></div>
-                <div class="showcase-kicker">PRECISION FIELD SYSTEM / 01</div>
-                <img id="heroMachineImage" src="assets/cutout-985-three-quarter.png" alt="New Hira 985 combine harvester product cutout" />
-              </div>
-              <div class="showcase-card showcase-card-secondary">
-                <span>NEW HIRA <b>785</b></span>
-                <img src="assets/cutout-785-brochure-model.png" alt="New Hira 785 combine harvester product cutout" />
-              </div>
-              <div class="showcase-card showcase-card-mini">
-                <span class="mini-label">CUTTER BAR</span>
-                <strong>4.4 m</strong>
-                <small>effective working width</small>
-              </div>
-              <div class="showcase-card showcase-card-stamp">
-                <span>01</span>
-                <b>BUILT<br />FOR THE<br /><i>FIELD</i></b>
-              </div>
-              <div class="showcase-bottomline"><span>SELF-PROPELLED MULTICROP</span><span>01 / 02</span></div>
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-field" aria-hidden="true"></div>
+        <div class="hero-grid" aria-hidden="true"></div>
+        <div class="hero-vignette" aria-hidden="true"></div>
+        <div class="hero-noise" aria-hidden="true"></div>
+
+        <div class="hero-inner">
+          <div class="hero-copy reveal">
+            <div class="eyebrow light"><span></span> THE HARVEST COMMAND</div>
+            <h1>The field will not <em>wait.</em></h1>
+            <p>Put proven New Hira power behind your harvest. Choose the machine, share the field and lock your working window with Ram Chand &amp; Sons.</p>
+            <div class="hero-actions">
+              <a class="button button-gold" href="#booking">Reserve your window <span>&nearr;</span></a>
+              <a class="button button-ghost" href="#machines">Explore the fleet <span>&darr;</span></a>
             </div>
           </div>
-          <div class="hero-scroll"><span></span> Scroll to explore</div>
-        </section>
 
-        <section class="quick-booking" aria-label="Quick booking">
-          <div class="container quick-booking-grid">
-            <div class="quick-booking-intro"><span class="micro-label">FAST TRACK</span><strong>Tell us where to send the machine.</strong></div>
-            <form id="quickBookingForm" class="quick-form">
-              <label><span>Your name</span><input name="name" type="text" placeholder="Farmer / family name" required /></label>
-              <label><span>Village / district</span><input name="location" type="text" placeholder="e.g. Nabha, Patiala" required /></label>
-              <label><span>Preferred crop</span><select name="crop" required><option value="">Select crop</option><option>Wheat</option><option>Paddy</option><option>Sunflower</option><option>Soyabean</option><option>Gram</option><option>Other</option></select></label>
-              <button class="button button-dark" type="submit">Start a booking <span>↗</span></button>
+          <div class="hero-product reveal" id="heroProduct">
+            <div class="hero-halo" aria-hidden="true"></div>
+            <div class="hero-model-code" aria-hidden="true">985</div>
+            <img id="heroMachine" src="assets/cutout-985-three-quarter.png" alt="New Hira 985 combine harvester" />
+            <div class="hero-floor" aria-hidden="true"></div>
+            <div class="hero-spec hero-spec-one"><small>CUTTER BAR</small><b id="heroWidth">4.4 M</b></div>
+            <div class="hero-spec hero-spec-two"><small>GRAIN TANK</small><b id="heroTank">1,800 KG</b></div>
+            <div class="hero-model-switch" role="group" aria-label="Choose hero machine">
+              <button class="is-active" type="button" data-hero-model="985" aria-pressed="true"><span>01</span> 985</button>
+              <button type="button" data-hero-model="785" aria-pressed="false"><span>02</span> 785</button>
+            </div>
+          </div>
+
+          <div class="hero-meta">
+            <div><span>OPERATION AREA</span><b>Patiala / Nabha / Punjab</b></div>
+            <div><span>MACHINE CLASS</span><b>Self-propelled multicrop</b></div>
+            <div><span>BOOKING DESK</span><b><i class="live-dot"></i> Taking requests</b></div>
+          </div>
+        </div>
+
+        <a class="hero-scroll" href="#machines"><span></span> Scroll into the field</a>
+      </section>
+
+      <section class="crop-command" aria-label="Supported crops">
+        <div class="crop-machine" aria-hidden="true">
+          <span class="crop-machine-body">NEW HIRA</span><i></i><b></b>
+        </div>
+        <div class="crop-track">
+          <div>
+            <span>WHEAT</span><i></i><span>PADDY</span><i></i><span>SUNFLOWER</span><i></i><span>SOYABEAN</span><i></i><span>GRAM</span><i></i><span>PULSES</span><i></i>
+            <span>WHEAT</span><i></i><span>PADDY</span><i></i><span>SUNFLOWER</span><i></i><span>SOYABEAN</span><i></i><span>GRAM</span><i></i><span>PULSES</span><i></i>
+          </div>
+        </div>
+      </section>
+
+      <section class="command-strip">
+        <div class="container command-strip-inner">
+          <div class="command-intro"><span class="section-code">FAST / 01</span><strong>Start with your field.</strong><small>We will match the machine and route.</small></div>
+          <form class="quick-form" id="quickBookingForm">
+            <label><span>Name</span><input name="name" autocomplete="name" placeholder="Farmer / family name" required /></label>
+            <label><span>Village or district</span><input name="location" autocomplete="address-level2" placeholder="e.g. Nabha, Patiala" required /></label>
+            <label><span>Crop</span><select name="crop" required><option value="">Select crop</option><option>Wheat</option><option>Paddy</option><option>Sunflower</option><option>Soyabean</option><option>Gram</option><option>Pulses</option><option>Other</option></select></label>
+            <button class="button button-ink" type="submit">Plan my harvest <span>&nearr;</span></button>
+          </form>
+        </div>
+      </section>
+
+      <section class="campaign section">
+        <div class="container">
+          <div class="campaign-heading reveal">
+            <div>
+              <div class="eyebrow"><span></span> BUILT AROUND THE SEASON</div>
+              <h2>Industrial capacity.<br /><em>Local coordination.</em></h2>
+            </div>
+            <p>A serious harvest needs more than a machine. It needs timing, route planning and one booking desk that stays accountable from the first call to the final row.</p>
+          </div>
+          <div class="campaign-grid reveal">
+            <article class="campaign-card campaign-card-image">
+              <img src="assets/field-01-harvesting.jpg" alt="New Hira combine harvesting a crop field" />
+              <div><span>FIELD PROOF / 01</span><b>Working where it matters.</b></div>
+            </article>
+            <article class="campaign-stat"><span>01 / FLEET</span><strong>02</strong><h3>Purpose-built machines</h3><p>Choose capacity or compact field agility.</p></article>
+            <article class="campaign-stat"><span>02 / CROPS</span><strong>06</strong><h3>Core crop types</h3><p>From wheat and paddy to pulses and sunflower.</p></article>
+            <article class="campaign-stat"><span>03 / RESPONSE</span><strong>24<small>h</small></strong><h3>Booking follow-up</h3><p>Direct contact through one family-run desk.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="fleet section" id="machines">
+        <div class="container">
+          <div class="section-head reveal">
+            <div>
+              <span class="section-code">THE FLEET / 02</span>
+              <h2>Choose your <em>edge.</em></h2>
+            </div>
+            <p>Specifications below are taken from the supplied New Hira brochures. Switch between both machines to find the right fit for field size, access and crop.</p>
+          </div>
+
+          <div class="fleet-tabs reveal" role="tablist" aria-label="New Hira models">
+            <button class="fleet-tab is-active" type="button" data-model="985" role="tab" aria-selected="true">
+              <span>01</span><b>NEW HIRA 985</b><small>High-capacity workhorse</small>
+            </button>
+            <button class="fleet-tab" type="button" data-model="785" role="tab" aria-selected="false">
+              <span>02</span><b>NEW HIRA 785</b><small>Agile field finisher</small>
+            </button>
+          </div>
+
+          <div class="fleet-stage reveal" id="fleetStage">
+            <div class="fleet-visual">
+              <div class="fleet-visual-grid" aria-hidden="true"></div>
+              <span class="fleet-giant" id="fleetGiant">985</span>
+              <img id="fleetImage" src="assets/cutout-985-three-quarter.png" alt="New Hira 985 combine harvester cutout" />
+              <div class="fleet-shadow" aria-hidden="true"></div>
+              <span class="fleet-caption">NEW HIRA / PRODUCT ARCHIVE / BACKGROUND-FREE</span>
+            </div>
+            <div class="fleet-copy">
+              <div class="eyebrow"><span></span><b id="fleetEyebrow">THE HIGH-CAPACITY WORKHORSE</b></div>
+              <h3>New Hira <em id="fleetName">985</em></h3>
+              <p id="fleetDescription">Maximum yield in the shortest time, with a larger cutter bar, five straw walkers and an 1,800 kg wheat grain tank.</p>
+              <div class="fleet-primary-specs">
+                <div><span>CUTTER BAR</span><strong id="fleetWidth">4.4<small>m</small></strong></div>
+                <div><span>GRAIN TANK</span><strong id="fleetTank">1,800<small>kg</small></strong></div>
+                <div><span>STRAW WALKERS</span><strong id="fleetWalkers">5</strong></div>
+              </div>
+              <div class="fleet-spec-list" id="fleetSpecList"></div>
+              <div class="fleet-actions">
+                <a class="button button-ink" href="#booking" id="fleetBook">Book this machine <span>&nearr;</span></a>
+                <button class="text-action" type="button" id="viewBrochure">View brochure proof <span>&plus;</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="product-world section" id="product-stage">
+        <div class="product-world-bg" aria-hidden="true"></div>
+        <div class="container">
+          <div class="product-world-heading reveal">
+            <div><span class="section-code">PRODUCT STAGE / 03</span><h2>Every angle.<br /><em>One unmistakable machine.</em></h2></div>
+            <p>Swipe or drag the stage. The active machine moves forward while the adjacent views remain visible in perspective.</p>
+          </div>
+
+          <div class="depth-carousel reveal" id="depthCarousel" tabindex="0" aria-label="New Hira 3D product carousel">
+            <div class="depth-stage">
+              <figure class="depth-card is-active" data-depth-index="0">
+                <span class="depth-index">01 / 05</span>
+                <img src="assets/cutout-985-three-quarter.png" alt="New Hira 985 three-quarter view" />
+                <figcaption><small>NEW HIRA 985</small><strong>Field authority</strong></figcaption>
+              </figure>
+              <figure class="depth-card is-next" data-depth-index="1">
+                <span class="depth-index">02 / 05</span>
+                <img src="assets/cutout-985-orange-reel.png" alt="New Hira 985 with orange reel" />
+                <figcaption><small>FRONT REEL</small><strong>Cutting presence</strong></figcaption>
+              </figure>
+              <figure class="depth-card is-far-next" data-depth-index="2">
+                <span class="depth-index">03 / 05</span>
+                <img src="assets/cutout-985-maize-header.png" alt="New Hira 985 row crop header" />
+                <figcaption><small>ROW CROP</small><strong>Crop-ready form</strong></figcaption>
+              </figure>
+              <figure class="depth-card is-hidden" data-depth-index="3">
+                <span class="depth-index">04 / 05</span>
+                <img src="assets/cutout-985-black-reel.png" alt="New Hira 985 wide black reel" />
+                <figcaption><small>WIDE REEL</small><strong>Full working width</strong></figcaption>
+              </figure>
+              <figure class="depth-card is-prev" data-depth-index="4">
+                <span class="depth-index">05 / 05</span>
+                <img src="assets/cutout-785-brochure-model.png" alt="New Hira 785 brochure-matched model" />
+                <figcaption><small>NEW HIRA 785</small><strong>Compact precision</strong></figcaption>
+              </figure>
+            </div>
+            <div class="depth-floor" aria-hidden="true"><span></span></div>
+            <div class="depth-controls">
+              <button type="button" data-depth-prev aria-label="Previous machine view">&larr;</button>
+              <div class="depth-progress"><span id="depthProgress"></span></div>
+              <strong id="depthCounter">01 / 05</strong>
+              <button type="button" data-depth-next aria-label="Next machine view">&rarr;</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="experience section" id="experience">
+        <div class="container">
+          <div class="section-head reveal">
+            <div><span class="section-code">IN THE FIELD / 04</span><h2>Proof in <em>motion.</em></h2></div>
+            <p>Real New Hira 985 photographs, shown uncropped inside the active frame with cinematic side previews for the next and previous field moments.</p>
+          </div>
+
+          <div class="field-reel reveal" id="fieldReel" tabindex="0" aria-label="New Hira field photo carousel">
+            <div class="field-reel-stage">
+              <figure class="field-frame is-active" data-field-index="0"><img src="assets/field-01-harvesting.jpg" alt="New Hira combine harvesting in a field" /><figcaption><span>01 / HARVEST</span><b>Working crop, real conditions.</b></figcaption></figure>
+              <figure class="field-frame is-next" data-field-index="1"><img src="assets/field-02-front-header.jpg" alt="New Hira 985 front header view" /><figcaption><span>02 / FRONT HEADER</span><b>Head-on engineering.</b></figcaption></figure>
+              <figure class="field-frame is-hidden" data-field-index="2"><img src="assets/field-03-row-crop.jpg" alt="New Hira 985 row crop attachment" /><figcaption><span>03 / ROW CROP</span><b>Built around the crop.</b></figcaption></figure>
+              <figure class="field-frame is-hidden" data-field-index="3"><img src="assets/field-04-row-crop-alt.jpg" alt="New Hira 985 alternate crop header" /><figcaption><span>04 / PRECISION</span><b>A purpose-made front.</b></figcaption></figure>
+              <figure class="field-frame is-hidden" data-field-index="4"><img src="assets/field-05-three-quarter.jpg" alt="New Hira 985 three-quarter field view" /><figcaption><span>05 / STANCE</span><b>Presence from every angle.</b></figcaption></figure>
+              <figure class="field-frame is-hidden" data-field-index="5"><img src="assets/field-06-road.jpg" alt="New Hira 985 prepared for road travel" /><figcaption><span>06 / ROUTE</span><b>Ready for the next field.</b></figcaption></figure>
+              <figure class="field-frame is-hidden" data-field-index="6"><img src="assets/field-07-side.jpg" alt="New Hira 985 side view" /><figcaption><span>07 / PROFILE</span><b>Full working scale.</b></figcaption></figure>
+              <figure class="field-frame is-prev" data-field-index="7"><img src="assets/field-08-detail.jpg" alt="New Hira 985 close engineering detail" /><figcaption><span>08 / DETAIL</span><b>The machine up close.</b></figcaption></figure>
+            </div>
+            <div class="field-reel-controls">
+              <button type="button" data-field-prev aria-label="Previous field photograph">&larr;</button>
+              <div class="field-dots" id="fieldDots"></div>
+              <span id="fieldCounter">01 / 08</span>
+              <button type="button" data-field-next aria-label="Next field photograph">&rarr;</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="booking section" id="booking">
+        <div class="booking-backdrop" id="bookingBackdrop" aria-hidden="true"></div>
+        <div class="container booking-layout">
+          <div class="booking-copy reveal">
+            <div class="eyebrow light"><span></span> RESERVATION DESK / 05</div>
+            <h2>Lock the day.<br /><em>Move the harvest.</em></h2>
+            <p>Send the field details once. The request reaches the booking desk, receives a reference number and stays available in the private operations panel.</p>
+            <div class="booking-assurance">
+              <div><span>01</span><p><b>Share the field</b><small>Village, crop and acreage</small></p></div>
+              <div><span>02</span><p><b>Confirm the fit</b><small>Machine, access and timing</small></p></div>
+              <div><span>03</span><p><b>Lock the window</b><small>Direct follow-up on WhatsApp</small></p></div>
+            </div>
+            <a class="booking-call" href="tel:+919216107700"><i class="live-dot"></i><span>Prefer to call?</span><b>+91 92161 07700</b></a>
+          </div>
+
+          <div class="booking-console reveal">
+            <div class="booking-console-head">
+              <div><span>NEW HIRA / FIELD RESERVATION</span><b id="bookingStepLabel">STEP 01 OF 03</b></div>
+              <div class="booking-stepper" aria-label="Booking progress"><i class="is-active"></i><i></i><i></i></div>
+            </div>
+
+            <form id="bookingForm" class="booking-form">
+              <section class="booking-step is-active" data-booking-step="0">
+                <span class="form-kicker">CONTACT &amp; LOCATION</span>
+                <h3>Who should we coordinate with?</h3>
+                <div class="form-grid">
+                  <label class="span-2"><span>Farmer / family name *</span><input name="name" autocomplete="name" required placeholder="Full name" /></label>
+                  <label><span>WhatsApp number *</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="10-digit mobile" /></label>
+                  <label><span>Village *</span><input name="village" autocomplete="address-level3" required placeholder="Village name" /></label>
+                  <label class="span-2"><span>District / nearby town *</span><input name="location" autocomplete="address-level2" required placeholder="Nabha, Patiala, Sangrur..." /></label>
+                </div>
+                <div class="form-actions"><span>Fields marked * are required</span><button class="button button-gold" type="button" data-booking-next>Crop details <b>&rarr;</b></button></div>
+              </section>
+
+              <section class="booking-step" data-booking-step="1" hidden>
+                <span class="form-kicker">FIELD &amp; TIMING</span>
+                <h3>Tell us what is ready to cut.</h3>
+                <div class="form-grid">
+                  <label><span>Crop *</span><select name="crop" required><option value="">Select crop</option><option>Wheat</option><option>Paddy</option><option>Sunflower</option><option>Soyabean</option><option>Gram</option><option>Pulses</option><option>Other</option></select></label>
+                  <label><span>Approx. acreage *</span><input name="acreage" type="number" min="1" max="10000" inputmode="decimal" required placeholder="e.g. 18" /></label>
+                  <label><span>Preferred date *</span><input name="date" type="date" required /></label>
+                  <label><span>Date flexibility</span><select name="flexibility"><option>Exact date preferred</option><option>1-2 days flexible</option><option>3-5 days flexible</option><option>Call to discuss</option></select></label>
+                  <label class="span-2"><span>Field access</span><select name="access"><option>Normal tractor access</option><option>Narrow village road</option><option>Soft / wet approach</option><option>Unsure - please call</option></select></label>
+                </div>
+                <div class="form-actions"><button class="text-action light-action" type="button" data-booking-prev>&larr; Back</button><button class="button button-gold" type="button" data-booking-next>Machine fit <b>&rarr;</b></button></div>
+              </section>
+
+              <section class="booking-step" data-booking-step="2" hidden>
+                <span class="form-kicker">MACHINE &amp; CONFIRMATION</span>
+                <h3>Choose your preferred machine.</h3>
+                <div class="machine-choice">
+                  <label><input type="radio" name="machine" value="New Hira 985" checked /><span><b>NEW HIRA 985</b><small>Higher capacity / 4.4 m cutter</small><img src="assets/cutout-985-three-quarter.png" alt="" /></span></label>
+                  <label><input type="radio" name="machine" value="New Hira 785" /><span><b>NEW HIRA 785</b><small>Compact agility / 3.7 m cutter</small><img src="assets/cutout-785-brochure-model.png" alt="" /></span></label>
+                  <label><input type="radio" name="machine" value="Help me choose" /><span><b>HELP ME CHOOSE</b><small>We will match it to your field</small></span></label>
+                </div>
+                <label class="notes-label"><span>Anything the operator should know?</span><textarea name="notes" rows="3" maxlength="500" placeholder="Field landmark, access, crop condition or timing note"></textarea></label>
+                <label class="consent"><input type="checkbox" name="consent" required /><span>I agree to be contacted about this booking by phone or WhatsApp.</span></label>
+                <div class="form-actions"><button class="text-action light-action" type="button" data-booking-prev>&larr; Back</button><button class="button button-gold" type="submit" id="bookingSubmit">Send reservation <b>&nearr;</b></button></div>
+              </section>
             </form>
-          </div>
-        </section>
 
-        <div class="crop-marquee" aria-label="Suitable crops">
-          <span class="harvest-machine" aria-hidden="true">NEW HIRA 985</span>
-          <span class="harvest-cut" aria-hidden="true"></span>
-          <div class="crop-marquee-track"><span>Wheat</span><b></b><span>Paddy</span><b></b><span>Sunflower</span><b></b><span>Soyabean</span><b></b><span>Gram</span><b></b><span>Pulses</span><b></b><span>Wheat</span><b></b><span>Paddy</span><b></b><span>Sunflower</span><b></b><span>Soyabean</span><b></b><span>Gram</span><b></b><span>Pulses</span><b></b></div>
+            <div class="booking-success" id="bookingSuccess" hidden>
+              <span class="success-mark">&check;</span>
+              <span class="form-kicker">REQUEST CREATED</span>
+              <h3>Your field is on the board.</h3>
+              <p id="bookingSuccessCopy">The booking desk has received your request.</p>
+              <div class="booking-reference"><span>BOOKING REFERENCE</span><strong id="bookingReference">NH-000000</strong></div>
+              <div class="success-actions">
+                <a class="button button-whatsapp" id="bookingWhatsApp" href="#" target="_blank" rel="noopener">Confirm on WhatsApp <span>&nearr;</span></a>
+                <button class="text-action light-action" id="newBookingButton" type="button">Create another request</button>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
 
-        <section class="section fleet-section" id="machines">
-          <div class="container">
-            <div class="section-heading split-heading reveal">
-              <div><div class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span> Choose your edge</div><h2>Two machines.<br /><em>One clean harvest.</em></h2></div>
-              <p>Every booking is matched to the crop, acreage and access of your field. Explore the two New Hira machines available through our desk.</p>
-            </div>
-
-            <div class="fleet-switcher reveal" role="tablist" aria-label="Choose combine model">
-              <button class="fleet-tab is-active" type="button" data-model-tab="985" role="tab" aria-selected="true">
-                <span class="fleet-tab-visual"><span class="fleet-tab-index">01</span><img src="assets/cutout-985-three-quarter.png" alt="New Hira 985 combine harvester product cutout" /></span>
-                <span class="fleet-tab-copy"><b>New Hira 985</b><small>4.4m cutter bar · 1,800kg grain tank</small></span>
-              </button>
-              <button class="fleet-tab" type="button" data-model-tab="785" role="tab" aria-selected="false">
-                <span class="fleet-tab-visual"><span class="fleet-tab-index">02</span><img src="assets/cutout-785-brochure-model.png" alt="New Hira 785 combine harvester product cutout" /></span>
-                <span class="fleet-tab-copy"><b>New Hira 785</b><small>3.7m cutter bar · 1,600kg grain tank</small></span>
-              </button>
-            </div>
-
-            <div class="machine-detail reveal" id="machineDetail">
-              <div class="machine-visual">
-                <div class="machine-number">0<span id="machineNumber">1</span></div>
-                <div class="machine-image-wrap"><span class="machine-image-label">NEW HIRA / PRODUCT STAGE</span><img id="machineImage" src="assets/cutout-985-three-quarter.png" alt="New Hira 985 combine harvester product cutout" /></div>
-                <div class="machine-caption"><span id="machineCaption">New Hira 985 / transparent product cutout</span><span>Fieldcraft product archive</span></div>
-              </div>
-              <div class="machine-info">
-                <div class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span><span id="machineEyebrow">The high-capacity workhorse</span></div>
-                <h3 id="machineTitle">New Hira <em>985</em></h3>
-                <p id="machineCopy">Maximum yield in the shortest time — built for farmers who want more field covered, with less grain loss and low fuel consumption.</p>
-                <div class="machine-stat-row">
-                  <div><span>CUTTER BAR</span><strong id="machineWidth">4.4<span>m</span></strong></div>
-                  <div><span>GRAIN TANK</span><strong id="machineTank">1,800<span>kg</span></strong></div>
-                  <div><span>STRAWWALKERS</span><strong id="machineWalkers">5</strong></div>
-                </div>
-                <div class="machine-spec-list" id="machineSpecList"></div>
-                <a class="button button-dark" href="#booking" id="machineBookButton">Book this machine <span>↗</span></a>
-              </div>
-            </div>
+      <section class="process section">
+        <div class="container">
+          <div class="process-heading reveal"><span class="section-code">FROM CALL TO CROP / 06</span><h2>Clear at every <em>turn.</em></h2></div>
+          <div class="process-grid reveal">
+            <article><span>01</span><i>&plus;</i><h3>Request logged</h3><p>Your contact, field and crop enter the booking board with a unique reference.</p></article>
+            <article><span>02</span><i>&nearr;</i><h3>Route confirmed</h3><p>The desk checks machine fit, timing and travel between nearby harvests.</p></article>
+            <article><span>03</span><i>&check;</i><h3>Window reserved</h3><p>You receive direct confirmation and the operator gets the complete field brief.</p></article>
           </div>
-        </section>
-
-        <section class="section dark-section why-section" id="why-fieldcraft">
-          <div class="container">
-            <div class="section-heading split-heading light-heading reveal"><div><div class="eyebrow"><span class="eyebrow-line"></span> The Fieldcraft standard</div><h2>Performance that<br /><em>reads the field.</em></h2></div><p>From the first call to the last row, we keep coordination direct, practical and built around your harvest timing.</p></div>
-            <div class="stat-grid reveal">
-              <article class="stat-card"><span class="stat-index">/ 01</span><strong>0<span>2</span></strong><h3>precision machines</h3><p>Choose the New Hira 785 or 985 to suit your acreage and crop.</p></article>
-              <article class="stat-card"><span class="stat-index">/ 02</span><strong>6</strong><h3>core crops</h3><p>Wheat, paddy, sunflower, soyabean, gram and pulses are all on the brief.</p></article>
-              <article class="stat-card"><span class="stat-index">/ 03</span><strong>24<span>h</span></strong><h3>booking response</h3><p>Send your field details to WhatsApp and get a practical next step.</p></article>
-              <article class="stat-card"><span class="stat-index">/ 04</span><strong>1</strong><h3>clear contact</h3><p>One booking desk for the farmer, the family and the operator.</p></article>
-            </div>
-            <div class="quote-band reveal"><span class="quote-mark">“</span><p>Quality ka waada,<br /><em>mazbooti sab se zyada.</em></p><span class="quote-caption">New Hira / the name making legend</span></div>
-          </div>
-        </section>
-
-        <section class="section field-fit-section legacy-field-showcase">
-          <div class="container field-fit-grid">
-            <div class="field-fit-copy reveal"><div class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span> Crop intelligence</div><h2>Made to move<br /><em>with the season.</em></h2><p>Good harvesting is a timing game. Explore the real New Hira 985 field photo stage, then tell us your crop and field location so we can plan the right route.</p><a href="#booking" class="text-link dark-link">Plan your harvest <span>↗</span></a></div>
-            <div class="field-gallery reveal" id="fieldGallery" aria-label="New Hira 985 field gallery">
-              <div class="gallery-stage" aria-live="polite">
-                <div class="gallery-meta"><span class="micro-label">3D FIELD PHOTO CAROUSEL / NEW HIRA 985</span><span id="galleryCounter">01 / 08</span></div>
-                <div class="gallery-slides" id="gallerySlides">
-                  <figure class="gallery-slide is-active" data-gallery-index="0"><img src="assets/field-01-harvesting.jpg" alt="New Hira 985 harvesting in crop field" /><figcaption><span>01 / FIELD OPERATIONS</span><strong>Harvest in motion</strong><small>Real field photo, staged in a premium carousel.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="1"><img src="assets/field-02-front-header.jpg" alt="Front header view of New Hira 985 combine" /><figcaption><span>02 / FRONT HEADER</span><strong>Head-on profile</strong><small>Machine decals and cutting header kept visible.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="2"><img src="assets/field-03-row-crop.jpg" alt="New Hira 985 row-crop attachment" /><figcaption><span>03 / ROW CROP</span><strong>Crop-ready setup</strong><small>Front assembly displayed cleanly on the stage.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="3"><img src="assets/field-04-row-crop-alt.jpg" alt="New Hira 985 row crop front view" /><figcaption><span>04 / WORKING VIEW</span><strong>Precision header</strong><small>Large center frame with side-photo depth.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="4"><img src="assets/field-05-three-quarter.jpg" alt="Three-quarter road view of New Hira 985 combine" /><figcaption><span>05 / NEW HIRA 985</span><strong>Three-quarter stance</strong><small>Strong product angle for the booking page.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="5"><img src="assets/field-06-road.jpg" alt="New Hira 985 on road near field" /><figcaption><span>06 / ROAD READY</span><strong>Field route ready</strong><small>Made to move between village harvest windows.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="6"><img src="assets/field-07-side.jpg" alt="Side view of New Hira 985 combine harvester" /><figcaption><span>07 / SIDE PROFILE</span><strong>Full machine presence</strong><small>Wide photo carousel frame with real machine scale.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="7"><img src="assets/field-08-detail.jpg" alt="Close detail of New Hira 985 combine harvester" /><figcaption><span>08 / DETAILS</span><strong>Close engineering</strong><small>Cabin, lights and New Hira 985 markings up close.</small></figcaption></figure>
-                </div>
-                <div class="gallery-controls"><button class="gallery-arrow" type="button" data-gallery-prev aria-label="Previous field photo">←</button><div class="gallery-dots" id="galleryDots"></div><button class="gallery-arrow" type="button" data-gallery-next aria-label="Next field photo">→</button></div>
-                <div class="gallery-progress"><span id="galleryProgress"></span></div>
-              </div>
-              <div class="gallery-rail" id="galleryRail" aria-label="Choose field photo">
-                <button type="button" class="gallery-thumb is-active" data-gallery-thumb="0" aria-label="Show field photo 1"><img src="assets/field-01-harvesting.jpg" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="1" aria-label="Show field photo 2"><img src="assets/field-02-front-header.jpg" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="2" aria-label="Show field photo 3"><img src="assets/field-03-row-crop.jpg" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="3" aria-label="Show field photo 4"><img src="assets/field-04-row-crop-alt.jpg" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="4" aria-label="Show field photo 5"><img src="assets/field-05-three-quarter.jpg" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="5" aria-label="Show field photo 6"><img src="assets/field-06-road.jpg" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="6" aria-label="Show field photo 7"><img src="assets/field-07-side.jpg" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="7" aria-label="Show field photo 8"><img src="assets/field-08-detail.jpg" alt="" /></button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section product-carousel-section" id="product-stage">
-          <div class="container product-carousel-layout">
-            <div class="product-carousel-copy reveal">
-              <div class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span> Product intelligence</div>
-              <h2>Built for the field.<br /><em>Shown without the noise.</em></h2>
-              <p>Drag through the full New Hira range. The centre machine rises forward, while the next and previous combines sit back in real 3D depth.</p>
-              <div class="product-carousel-key"><span class="key-dot key-dot-current"></span> Centre focus <span class="key-dot"></span> Drag or use arrows</div>
-              <a href="#booking" class="text-link dark-link">Reserve a machine <span>&rarr;</span></a>
-            </div>
-            <div class="product-gallery reveal" id="productGallery" aria-label="New Hira 3D product carousel" tabindex="0">
-              <div class="product-gallery-stage" aria-live="polite">
-                <div class="product-gallery-topline"><span class="micro-label">NEW HIRA / PRODUCT EDITION</span><span id="galleryCounter">01 / 05</span></div>
-                <div class="product-gallery-slides" id="gallerySlides">
-                  <figure class="gallery-slide is-active" data-gallery-index="0"><img src="assets/cutout-985-three-quarter.png" alt="New Hira 985 three-quarter product cutout" /><figcaption><span>01 / NEW HIRA 985</span><strong>Three-quarter stance</strong><small>Real machine details and decals, without a field background.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="1"><img src="assets/cutout-985-orange-reel.png" alt="New Hira 985 orange header product cutout" /><figcaption><span>02 / FRONT HEADER</span><strong>Head-on profile</strong><small>Orange working reel, 985 badge and auger in full focus.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="2"><img src="assets/cutout-985-maize-header.png" alt="New Hira 985 maize header product cutout" /><figcaption><span>03 / ROW CROP</span><strong>Maize-ready setup</strong><small>Five-point crop header and the full 985 cab assembly.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="3"><img src="assets/cutout-985-black-reel.png" alt="New Hira 985 black reel product cutout" /><figcaption><span>04 / WIDE REEL</span><strong>Full cutting presence</strong><small>Long black reel profile, canopy and side engineering in one clean view.</small></figcaption></figure>
-                  <figure class="gallery-slide" data-gallery-index="4"><img src="assets/cutout-785-brochure-model.png" alt="New Hira 785 product cutout based on supplied brochure" /><figcaption><span>05 / NEW HIRA 785</span><strong>Compact workhorse</strong><small>Brochure-matched 785 profile with green and cream colour layout.</small></figcaption></figure>
-                </div>
-                <div class="product-gallery-controls"><button class="gallery-arrow" type="button" data-gallery-prev aria-label="Previous product view">&larr;</button><div class="gallery-dots" id="galleryDots"></div><button class="gallery-arrow" type="button" data-gallery-next aria-label="Next product view">&rarr;</button></div>
-                <div class="product-gallery-progress"><span id="galleryProgress"></span></div>
-                <div class="product-gallery-floor" aria-hidden="true"><span></span><span></span><span></span></div>
-              </div>
-              <div class="product-gallery-rail" id="galleryRail" aria-label="Choose product view">
-                <button type="button" class="gallery-thumb is-active" data-gallery-thumb="0" aria-label="Show New Hira 985 three-quarter view"><img src="assets/cutout-985-three-quarter.png" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="1" aria-label="Show New Hira 985 orange reel view"><img src="assets/cutout-985-orange-reel.png" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="2" aria-label="Show New Hira 985 maize header view"><img src="assets/cutout-985-maize-header.png" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="3" aria-label="Show New Hira 985 black reel view"><img src="assets/cutout-985-black-reel.png" alt="" /></button>
-                <button type="button" class="gallery-thumb" data-gallery-thumb="4" aria-label="Show New Hira 785 product view"><img src="assets/cutout-785-brochure-model.png" alt="" /></button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section booking-section" id="booking">
-          <div class="booking-bg" aria-hidden="true"></div>
-          <div class="container booking-layout">
-            <div class="booking-copy reveal"><div class="eyebrow"><span class="eyebrow-line"></span> Reserve a field window</div><h2>Let’s get your<br /><em>harvest moving.</em></h2><p>Share the basics. Your request opens a pre-filled WhatsApp message to the Fieldcraft booking desk so we can confirm availability and route.</p><div class="contact-card"><span class="live-dot"></span><div><small>Direct booking line</small><a href="tel:+919216107700">+91 92161 07700</a></div><span class="contact-arrow">↗</span></div></div>
-            <div class="booking-card reveal reveal-delay">
-              <div class="booking-card-top"><span class="micro-label">BOOKING FORM / 01</span><span>Private &amp; direct</span></div>
-              <form id="bookingForm" class="booking-form">
-                <div class="form-row"><label><span>Full name *</span><input name="name" type="text" placeholder="Your name" required /></label><label><span>Phone *</span><input name="phone" type="tel" placeholder="10-digit mobile" required /></label></div>
-                <div class="form-row"><label><span>Village / district *</span><input name="location" type="text" placeholder="Where is the field?" required /></label><label><span>Crop *</span><select name="crop" required><option value="">Select crop</option><option>Wheat</option><option>Paddy</option><option>Sunflower</option><option>Soyabean</option><option>Gram</option><option>Pulses</option><option>Other</option></select></label></div>
-                <div class="form-row"><label><span>Preferred date *</span><input name="date" type="date" required /></label><label><span>Approx. acreage</span><input name="acreage" type="number" min="1" placeholder="e.g. 25" /></label></div>
-                <label><span>Machine preference</span><select name="machine"><option>Help me choose</option><option>New Hira 985</option><option>New Hira 785</option></select></label>
-                <label><span>Anything we should know?</span><textarea name="notes" rows="3" placeholder="Field access, urgency, nearby landmark..."></textarea></label>
-                <button class="button button-copper full-button" type="submit">Send booking request on WhatsApp <span>↗</span></button>
-                <p class="form-note">By sending, WhatsApp opens with your details pre-filled. No payment is taken online.</p>
-              </form>
-              <div class="booking-success" id="bookingSuccess" hidden>
-                <div class="success-icon">✓</div><span class="micro-label">REQUEST READY</span><h3>Your field is on the board.</h3><p>Tap below to send the pre-filled request to the booking desk. We’ll reply with availability and next steps.</p><a class="button button-copper full-button" id="whatsappLink" href="#" target="_blank" rel="noopener">Open WhatsApp <span>↗</span></a><button class="text-button" type="button" id="newBookingButton">Make another request</button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section process-section">
-          <div class="container">
-            <div class="section-heading centered-heading reveal"><div class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span> The simple route</div><h2>From phone call<br /><em>to first cut.</em></h2></div>
-            <div class="process-line reveal">
-              <article><span>01</span><div class="process-icon">✦</div><h3>Share the field</h3><p>Tell us your village, crop, date and estimated acreage.</p></article>
-              <article><span>02</span><div class="process-icon">↗</div><h3>Confirm the fit</h3><p>We match your request to the right machine and route.</p></article>
-              <article><span>03</span><div class="process-icon">▰</div><h3>Book the window</h3><p>Lock the day and keep your harvest moving.</p></article>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer class="site-footer">
-        <div class="container footer-grid">
-          <div class="footer-brand"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span class="brand-copy"><strong>NEW HIRA</strong><small>FIELDCRAFT / BOOKING DESK</small></span></a><p>Practical harvest coordination for the fields around Patiala, Nabha and beyond.</p></div>
-          <div class="footer-links"><span class="micro-label">EXPLORE</span><a href="#machines">The fleet</a><a href="#why-fieldcraft">The standard</a><a href="#booking">Book a machine</a></div>
-          <div class="footer-links"><span class="micro-label">CONTACT</span><a href="tel:+911765509077">01765 509077</a><a href="tel:+919217071777">+91 92170 71777</a><a href="mailto:new.hira@yahoo.com">new.hira@yahoo.com</a></div>
-          <div class="footer-address"><span class="micro-label">RAM CHAND &amp; SONS</span><p>Patiala Road, Nabha<br />Punjab — 147201, India</p><button type="button" class="text-button light-text-button" data-open-desk>Open owner desk ↗</button></div>
         </div>
-        <div class="container footer-bottom"><span>© <span id="year"></span> Fieldcraft / New Hira booking desk</span><span>Built for the season ahead</span></div>
-      </footer>
-    </div>
+      </section>
+    </main>
 
-    <div class="visitor-modal-backdrop" id="visitorModal" hidden>
-      <section class="visitor-modal" role="dialog" aria-modal="true" aria-labelledby="visitorTitle">
-        <button class="modal-close" id="visitorModalClose" type="button" aria-label="Close welcome form">×</button>
-        <div class="visitor-modal-visual"><span class="micro-label">FIELDCRAFT / 01</span><strong>Before the<br /><em>rush begins.</em></strong><small>Get a quick call back when a New Hira machine is moving near your field.</small></div>
-        <div class="visitor-modal-form"><span class="micro-label">QUICK REGISTRATION</span><h2 id="visitorTitle">Stay close<br /><em>to the harvest.</em></h2><p>Leave your details and we’ll know how to reach you when you’re ready to book.</p><form id="leadCaptureForm"><label><span>Your name *</span><input name="name" required placeholder="Farmer / family name" /></label><label><span>WhatsApp number *</span><input name="phone" type="tel" required placeholder="10-digit mobile" /></label><label><span>Village / district</span><input name="location" placeholder="Where is the field?" /></label><label><span>What are you planning?</span><select name="interest"><option>Harvest booking</option><option>New Hira 985 details</option><option>New Hira 785 details</option><option>Call me back</option></select></label><button class="button button-copper full-button" type="submit">Register interest <span>↗</span></button></form><button class="text-button visitor-skip" id="skipVisitorGate" type="button">Continue without registering</button></div>
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#home"><span class="brand-emblem" aria-hidden="true"><span></span><i></i><b></b></span><span class="brand-words"><strong>NEW HIRA</strong><small>FIELDCRAFT / BOOKING DESK</small></span></a>
+          <p>Practical harvest coordination for fields around Nabha, Patiala and beyond.</p>
+        </div>
+        <div><span>EXPLORE</span><a href="#machines">Machines</a><a href="#experience">Field proof</a><a href="#booking">Book harvest</a></div>
+        <div><span>CONTACT</span><a href="tel:+911765509077">01765 509077</a><a href="tel:+919217071777">+91 92170 71777</a><a href="tel:+919216107700">+91 92161 07700</a><a href="mailto:new.hira@yahoo.com">new.hira@yahoo.com</a></div>
+        <div><span>RAM CHAND &amp; SONS</span><p>Patiala Road, Nabha<br />Punjab 147201, India</p><button type="button" data-open-desk>Open owner desk &nearr;</button></div>
+      </div>
+      <div class="container footer-bottom"><span>&copy; <b id="year"></b> RAM CHAND &amp; SONS</span><span>QUALITY KA WAADA / MAZBOOTI SAB SE ZYADA</span></div>
+    </footer>
+
+    <div class="lead-modal-backdrop" id="leadModal" hidden>
+      <section class="lead-modal" role="dialog" aria-modal="true" aria-labelledby="leadTitle">
+        <button class="modal-close modal-close-light" id="leadClose" type="button" aria-label="Close registration">&times;</button>
+        <div class="lead-visual">
+          <img src="assets/cutout-985-three-quarter.png" alt="" />
+          <span>SEASON ALERT / 01</span>
+          <h2>Know when a machine is <em>near your field.</em></h2>
+        </div>
+        <div class="lead-form-wrap">
+          <span class="section-code">QUICK REGISTRATION</span>
+          <h2 id="leadTitle">Stay ahead of the <em>harvest rush.</em></h2>
+          <p>Leave a number for a callback. Your details become a contactable lead in the private booking desk.</p>
+          <form id="leadForm">
+            <label><span>Your name *</span><input name="name" autocomplete="name" required placeholder="Farmer / family name" /></label>
+            <label><span>WhatsApp number *</span><input name="phone" type="tel" autocomplete="tel" required placeholder="10-digit mobile" /></label>
+            <label><span>Village / district</span><input name="location" autocomplete="address-level2" placeholder="Where is the field?" /></label>
+            <label><span>Interested in</span><select name="interest"><option>Harvest booking</option><option>New Hira 985</option><option>New Hira 785</option><option>Call me back</option></select></label>
+            <label class="consent consent-dark"><input name="consent" type="checkbox" required /><span>I agree to receive a call or WhatsApp message about harvest booking.</span></label>
+            <button class="button button-ink" type="submit">Register my interest <span>&nearr;</span></button>
+          </form>
+          <button class="lead-skip" id="leadSkip" type="button">Continue without registering</button>
+        </div>
       </section>
     </div>
 
-    <div class="modal-backdrop" id="deskModal" hidden>
-      <section class="desk-modal" role="dialog" aria-modal="true" aria-labelledby="deskTitle">
-        <button class="modal-close" type="button" data-close-desk aria-label="Close owner desk">×</button>
-        <div class="desk-gate" id="deskGate">
-          <div class="desk-mark">RC<span>&amp;</span>S</div><span class="micro-label">PRIVATE OPERATOR AREA</span><h2 id="deskTitle">Owner <em>desk.</em></h2><p>See requests saved on this device, add bookings for farmers, and export the board when you need to.</p>
-          <form id="deskLoginForm"><label><span>6-digit owner PIN</span><input id="deskPin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="Enter PIN" required /></label><button class="button button-dark full-button" type="submit">Enter desk <span>↗</span></button><small class="desk-hint">Default demo PIN: 985785</small></form>
+    <div class="brochure-modal" id="brochureModal" hidden>
+      <section role="dialog" aria-modal="true" aria-label="New Hira brochure proof">
+        <button class="modal-close" id="brochureClose" type="button" aria-label="Close brochure">&times;</button>
+        <div class="brochure-tabs">
+          <button class="is-active" type="button" data-brochure-model="985">NEW HIRA 985</button>
+          <button type="button" data-brochure-model="785">NEW HIRA 785</button>
         </div>
+        <img id="brochureImage" src="assets/brochure-985-specs.jpg" alt="New Hira 985 technical brochure" />
+        <p>The original supplied brochure is shown as specification proof. Product imagery elsewhere uses isolated machine cutouts.</p>
+      </section>
+    </div>
+
+    <div class="desk-backdrop" id="deskModal" hidden>
+      <section class="desk-shell" role="dialog" aria-modal="true" aria-labelledby="deskTitle">
+        <button class="desk-close" id="deskClose" type="button" aria-label="Close owner desk">&times;</button>
+
+        <div class="desk-gate" id="deskGate">
+          <div class="desk-gate-art">
+            <div class="brand-emblem brand-emblem-large" aria-hidden="true"><span></span><i></i><b></b></div>
+            <span>PRIVATE OPERATIONS</span>
+            <h2>Harvest<br /><em>command.</em></h2>
+            <p>Secure access for Ram Chand &amp; Sons.</p>
+          </div>
+          <div class="desk-login">
+            <span class="section-code">OWNER AUTHENTICATION</span>
+            <h2 id="deskTitle">Enter the <em>desk.</em></h2>
+            <p>Use the private six-digit operator PIN. Authentication is verified by the Cloudflare backend.</p>
+            <form id="deskLoginForm">
+              <label><span>6-digit owner PIN</span><input id="deskPin" name="pin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="current-password" required placeholder="••••••" /></label>
+              <button class="button button-ink" type="submit">Open operations <span>&nearr;</span></button>
+            </form>
+            <small id="deskBackendStatus">Connecting to secure booking service...</small>
+          </div>
+        </div>
+
         <div class="desk-app" id="deskApp" hidden>
-          <div class="desk-app-header"><div><span class="micro-label">PRIVATE OPERATIONS</span><h2>Owner <em>desk.</em></h2></div><div class="desk-actions"><button class="button button-outline" id="exportBookings" type="button">Export CSV <span>↓</span></button><button class="button button-copper" id="deskAddBooking" type="button">Add booking <span>+</span></button></div></div>
-          <div class="desk-tabs" role="tablist" aria-label="Owner desk sections"><button class="desk-tab is-active" type="button" data-desk-view="bookings">Bookings</button><button class="desk-tab" type="button" data-desk-view="leads">Leads &amp; visitors <span id="leadCount">0</span></button><button class="desk-tab" type="button" data-desk-view="content">Site content</button></div>
-          <div class="desk-view" id="deskView-bookings">
-            <div class="desk-summary"><div><span>ALL REQUESTS</span><strong id="totalBookings">0</strong></div><div><span>NEW</span><strong id="newBookings">0</strong></div><div><span>CONFIRMED</span><strong id="confirmedBookings">0</strong></div><label><span>FILTER</span><select id="bookingFilter"><option value="all">All bookings</option><option value="new">New</option><option value="confirmed">Confirmed</option><option value="completed">Completed</option></select></label></div>
-            <div class="desk-add-form" id="deskAddForm" hidden><div class="desk-add-heading"><span class="micro-label">ADD ON BEHALF OF A FARMER</span><button type="button" class="text-button" id="cancelDeskAdd">Cancel</button></div><form id="operatorBookingForm"><div class="form-row"><label><span>Name *</span><input name="name" required /></label><label><span>Phone *</span><input name="phone" required /></label><label><span>Location *</span><input name="location" required /></label></div><div class="form-row"><label><span>Crop *</span><select name="crop" required><option value="">Select</option><option>Wheat</option><option>Paddy</option><option>Sunflower</option><option>Soyabean</option><option>Gram</option><option>Pulses</option></select></label><label><span>Date *</span><input name="date" type="date" required /></label><label><span>Machine</span><select name="machine"><option>Help me choose</option><option>New Hira 985</option><option>New Hira 785</option></select></label></div><button class="button button-dark" type="submit">Save booking <span>✓</span></button></form></div>
-            <div class="booking-board" id="bookingBoard"></div>
-            <p class="desk-disclaimer">This GitHub-ready version stores requests in this browser only. For a multi-device team board, connect the optional Cloudflare endpoint in <code>app.js</code>.</p>
-          </div>
-          <div class="desk-view" id="deskView-leads" hidden>
-            <div class="desk-summary lead-summary"><div><span>SIGNUPS</span><strong id="leadCountSummary">0</strong></div><div><span>VISITOR PULSES</span><strong id="visitorCount">0</strong></div><div><span>LAST 24 HOURS</span><strong id="pulseCount">0</strong></div></div>
-            <div class="desk-panel-heading"><div><span class="micro-label">PEOPLE WHO RAISED A HAND</span><h3>Lead <em>list.</em></h3></div><p>Visitors who complete the welcome form are saved here, ready for a WhatsApp follow-up.</p></div>
-            <div class="lead-board" id="leadBoard"></div>
-            <div class="desk-panel-heading visitor-heading"><div><span class="micro-label">ON-SITE SIGNALS</span><h3>Visitor <em>pulses.</em></h3></div><p>Page views, booking starts and lead gates are recorded locally in this browser.</p></div>
-            <div class="visitor-pulse-board" id="visitorPulseBoard"></div>
-            <p class="desk-disclaimer">A static GitHub site cannot identify anonymous people or aggregate visitors between devices. For that, connect a Cloudflare Worker or Cloudflare Web Analytics as described in the included guide.</p>
-          </div>
-          <div class="desk-view" id="deskView-content" hidden>
-            <div class="desk-panel-heading"><div><span class="micro-label">CONTENT CONTROL</span><h3>Keep the site <em>fresh.</em></h3></div><p>Upload a lightweight poster or short video and choose where it appears. These controls save to this browser in GitHub Pages mode.</p></div>
-            <div class="content-manager-grid">
-              <div class="content-panel"><span class="micro-label">BRAND SETTINGS</span><form id="brandSettingsForm" class="content-form"><label><span>Brand name</span><input name="brandName" value="FIELDCRAFT" /></label><label><span>Booking desk label</span><input name="tagline" value="NEW HIRA / BOOKING DESK" /></label><label><span>Primary contact</span><input name="contact" value="+91 92161 07700" /></label><button class="button button-dark" type="submit">Save settings <span>✓</span></button></form><p class="desk-disclaimer">The live heading stays Fieldcraft by default so the booking brand is clear; use New Hira in the machine cards and brochure proof.</p></div>
-              <div class="content-panel"><span class="micro-label">MEDIA LIBRARY</span><form id="assetUploadForm" class="content-form"><label><span>Choose image or short video</span><input id="assetFile" type="file" accept="image/*,video/*" required /></label><label><span>Place this asset in</span><select id="assetSlot"><option>Hero backdrop</option><option>Booking poster</option></select></label><button class="button button-copper" type="submit">Upload asset <span>↑</span></button><p class="desk-disclaimer">Keep files under 1.5 MB for safe local browser storage. For public edits that every visitor sees, replace the asset in the GitHub <code>assets/</code> folder.</p></form></div>
-            </div>
-            <div class="asset-board" id="assetBoard"></div>
+          <aside class="desk-sidebar">
+            <a class="brand desk-brand" href="#top"><span class="brand-emblem" aria-hidden="true"><span></span><i></i><b></b></span><span class="brand-words"><strong>NEW HIRA</strong><small>HARVEST COMMAND</small></span></a>
+            <nav aria-label="Owner desk sections">
+              <button class="is-active" type="button" data-admin-tab="overview"><span>01</span> Overview</button>
+              <button type="button" data-admin-tab="bookings"><span>02</span> Bookings <b id="sidebarBookingCount">0</b></button>
+              <button type="button" data-admin-tab="leads"><span>03</span> Leads <b id="sidebarLeadCount">0</b></button>
+              <button type="button" data-admin-tab="media"><span>04</span> Media</button>
+            </nav>
+            <div class="desk-sidebar-foot"><i class="live-dot"></i><span>Cloud operations</span><button id="deskLogout" type="button">Sign out &nearr;</button></div>
+          </aside>
+
+          <div class="desk-main">
+            <header class="desk-header">
+              <div><span class="section-code">PRIVATE OPERATIONS</span><h2>Harvest <em>command.</em></h2></div>
+              <div><span id="deskToday"></span><button class="desk-add-button" id="adminAddToggle" type="button">New booking <b>&plus;</b></button></div>
+            </header>
+
+            <section class="admin-view is-active" data-admin-view="overview">
+              <div class="desk-view-title"><div><span>LIVE OVERVIEW</span><h3>Season intelligence</h3></div><button type="button" data-admin-refresh>Refresh data &orarr;</button></div>
+              <div class="metric-grid">
+                <article><span>TOTAL BOOKINGS</span><strong id="metricBookings">0</strong><small id="metricToday">0 today</small></article>
+                <article><span>NEW REQUESTS</span><strong id="metricNew">0</strong><small>Awaiting contact</small></article>
+                <article><span>CONTACTABLE LEADS</span><strong id="metricLeads">0</strong><small>Registered visitors</small></article>
+                <article><span>7-DAY VISITS</span><strong id="metricVisits">0</strong><small>Anonymous sessions</small></article>
+              </div>
+              <div class="analytics-grid">
+                <article class="analytics-panel analytics-wide"><div class="panel-head"><div><span>7-DAY ACTIVITY</span><h4>Website demand</h4></div><small>Visits &amp; booking starts</small></div><div class="activity-chart" id="activityChart"></div></article>
+                <article class="analytics-panel"><div class="panel-head"><div><span>TOP CROPS</span><h4>Field demand</h4></div></div><div class="rank-list" id="cropRank"></div></article>
+                <article class="analytics-panel"><div class="panel-head"><div><span>DEVICE MIX</span><h4>Visitor access</h4></div></div><div class="device-mix" id="deviceMix"></div></article>
+              </div>
+              <div class="recent-panel"><div class="panel-head"><div><span>RECENT REQUESTS</span><h4>Latest booking activity</h4></div><button type="button" data-jump-admin="bookings">Open all &nearr;</button></div><div id="recentBookings"></div></div>
+            </section>
+
+            <section class="admin-view" data-admin-view="bookings" hidden>
+              <div class="desk-view-title"><div><span>BOOKING PIPELINE</span><h3>Field reservations</h3></div><div class="desk-filters"><input id="bookingSearch" type="search" placeholder="Search name, phone or village" /><select id="bookingFilter"><option value="all">All status</option><option value="new">New</option><option value="contacted">Contacted</option><option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><button type="button" id="exportBookings">Export CSV</button></div></div>
+              <div class="admin-add-panel" id="adminAddPanel" hidden>
+                <div><span class="section-code">ADD FOR A FARMER</span><h4>Manual booking</h4></div>
+                <form id="adminBookingForm">
+                  <input name="name" required placeholder="Farmer name" />
+                  <input name="phone" required placeholder="Mobile number" />
+                  <input name="village" required placeholder="Village" />
+                  <input name="location" required placeholder="District / town" />
+                  <select name="crop" required><option value="">Crop</option><option>Wheat</option><option>Paddy</option><option>Sunflower</option><option>Soyabean</option><option>Gram</option><option>Pulses</option><option>Other</option></select>
+                  <input name="acreage" type="number" min="1" placeholder="Acres" />
+                  <input name="date" type="date" required />
+                  <select name="machine"><option>Help me choose</option><option>New Hira 985</option><option>New Hira 785</option></select>
+                  <button class="button button-ink" type="submit">Save booking <span>&check;</span></button>
+                </form>
+              </div>
+              <div class="booking-board" id="bookingBoard"></div>
+              <div class="desk-pagination"><button id="bookingsPrev" type="button">&larr; Previous</button><span id="bookingsPage">Page 1</span><button id="bookingsNext" type="button">Next &rarr;</button></div>
+            </section>
+
+            <section class="admin-view" data-admin-view="leads" hidden>
+              <div class="desk-view-title"><div><span>CONTACTABLE AUDIENCE</span><h3>Leads &amp; registrations</h3></div><p>Only visitors who actively shared contact details appear here. Anonymous traffic is counted in analytics without exposing identity.</p></div>
+              <div class="lead-board" id="leadBoard"></div>
+            </section>
+
+            <section class="admin-view" data-admin-view="media" hidden>
+              <div class="desk-view-title"><div><span>CAMPAIGN CONTENT</span><h3>Media library</h3></div><p>Upload an image or short video to Cloudflare R2, choose its live slot and control whether visitors can see it.</p></div>
+              <div class="media-layout">
+                <form class="media-upload" id="mediaForm">
+                  <span class="section-code">UPLOAD NEW ASSET</span>
+                  <label><span>Image or video *</span><input name="file" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" required /></label>
+                  <label><span>Campaign title *</span><input name="title" required maxlength="100" placeholder="e.g. Paddy season poster" /></label>
+                  <label><span>Alt text / description</span><input name="alt" maxlength="180" placeholder="Describe the visual" /></label>
+                  <label><span>Live placement</span><select name="slot"><option value="gallery">Campaign gallery</option><option value="hero">Hero background</option><option value="booking">Booking backdrop</option></select></label>
+                  <label class="toggle-label"><input name="active" type="checkbox" checked /><span>Publish immediately</span></label>
+                  <button class="button button-ink" type="submit">Upload to library <span>&uarr;</span></button>
+                  <small>Maximum 20 MB. Public assets are stored in R2; searchable details stay in D1.</small>
+                </form>
+                <div class="media-library" id="mediaLibrary"></div>
+              </div>
+            </section>
           </div>
         </div>
       </section>
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <noscript><div class="noscript">This booking experience needs JavaScript. Please call +91 92161 07700 to reserve a machine.</div></noscript>
   </body>
 </html>

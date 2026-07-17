@@ -1,518 +1,1137 @@
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+const CONTACT_PHONE = '919216107700';
+const API_BASE = String(window.NEW_HIRA_API_BASE || '').replace(/\/$/, '');
+const API_ROOT = API_BASE + '/api';
+const SESSION_KEY = 'new_hira_session_v17';
+const LEAD_GATE_KEY = 'new_hira_lead_gate_v17';
+const PENDING_BOOKINGS_KEY = 'new_hira_pending_bookings_v17';
+const ADMIN_TOKEN_KEY = 'new_hira_admin_session_v17';
+
 const MODELS = {
-  985: {
-    id: '985', number: '01', name: 'New Hira 985', eyebrow: 'The high-capacity workhorse', image: 'assets/cutout-985-three-quarter.png', caption: 'New Hira 985 / transparent product cutout',
-    copy: 'Maximum yield in the shortest time — built for farmers who want more field covered, with less grain loss and low fuel consumption.', width: '4.4', tank: '1,800', walkers: '5', crops: 'Wheat · Paddy · Soyabean · Gram · Sunflower · Pulses',
-    specs: [['Effective cutter', '4.28 m'], ['Threshing drum', '1,258 mm'], ['Grain tank', '1,800 kg'], ['Fuel tank', '350 litre'], ['Working width', '5,900 mm'], ['Ground clearance', '250 mm']]
+  '985': {
+    name: '985',
+    image: 'assets/cutout-985-three-quarter.png',
+    eyebrow: 'THE HIGH-CAPACITY WORKHORSE',
+    description: 'Maximum yield in the shortest time, with a larger cutter bar, five straw walkers and an 1,800 kg wheat grain tank.',
+    width: '4.4',
+    tank: '1,800',
+    walkers: '5',
+    brochure: 'assets/brochure-985-specs.jpg',
+    specs: [
+      ['Effective cutter', '4.28 m'],
+      ['Threshing drum', '1,258 mm'],
+      ['Working width', '5,900 mm'],
+      ['Fuel tank', '350 litre'],
+      ['Ground clearance', '250 mm'],
+      ['Wheel base', '3,600 mm']
+    ]
   },
-  785: {
-    id: '785', number: '02', name: 'New Hira 785', eyebrow: 'The agile field finisher', image: 'assets/cutout-785-brochure-model.png', caption: 'New Hira 785 / brochure-matched product cutout',
-    copy: 'A compact, capable multicrop combine for smooth field access, small turning radius and a dependable finish across changing conditions.', width: '3.7', tank: '1,600', walkers: '4', crops: 'Wheat · Paddy · Soyabean · Gram · Sunflower · Pulses',
-    specs: [['Effective cutter', '3.6 m'], ['Threshing drum', '1,015 mm'], ['Grain tank', '1,600 kg'], ['Fuel tank', '350 litre'], ['Working width', '5,290 mm'], ['Ground clearance', '250 mm']]
+  '785': {
+    name: '785',
+    image: 'assets/cutout-785-brochure-model.png',
+    eyebrow: 'THE AGILE FIELD FINISHER',
+    description: 'A compact multicrop combine for smooth field access, small turning radius and dependable work across changing field conditions.',
+    width: '3.7',
+    tank: '1,600',
+    walkers: '4',
+    brochure: 'assets/brochure-785-specs.jpg',
+    specs: [
+      ['Effective cutter', '3.6 m'],
+      ['Threshing drum', '1,015 mm'],
+      ['Working width', '5,290 mm'],
+      ['Fuel tank', '350 litre'],
+      ['Ground clearance', '250 mm'],
+      ['Wheel base', '3,600 mm']
+    ]
   }
 };
 
-const STORAGE = {
-  bookings: 'fieldcraft_bookings_v1',
-  leads: 'fieldcraft_leads_v1',
-  visitors: 'fieldcraft_visitors_v1',
-  assets: 'fieldcraft_assets_v1',
-  settings: 'fieldcraft_settings_v1'
+const adminState = {
+  token: sessionStorage.getItem(ADMIN_TOKEN_KEY) || '',
+  bookings: [],
+  leads: [],
+  media: [],
+  page: 1,
+  totalPages: 1,
+  activeView: 'overview'
 };
-const VISITOR_GATE_KEY = 'fieldcraft_visitor_seen_v3';
 
-// Optional cross-device endpoint. Leave blank for GitHub Pages-only mode.
-const CONFIG = { analyticsEndpoint: '' };
-const OWNER_PIN = '985785';
-let currentModel = '985';
-let toastTimer;
-let fleetCarouselTimer;
-
-const $ = (selector, root = document) => root.querySelector(selector);
-const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-const readStore = (key, fallback = []) => {
-  try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; }
-};
-const writeStore = (key, value) => localStorage.setItem(key, JSON.stringify(value));
-const uid = (prefix) => `${prefix}-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
-const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[char]));
-const localDate = (value) => value ? new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(`${value}T00:00:00`)) : 'Date flexible';
-const eventDate = (value) => new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(value));
-
-function postToEndpoint(payload) {
-  if (!CONFIG.analyticsEndpoint) return;
-  fetch(CONFIG.analyticsEndpoint, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload), keepalive: true }).catch(() => {});
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
 }
 
-function showToast(message) {
+function cleanPhone(value) {
+  return String(value || '').replace(/\D/g, '').slice(-10);
+}
+
+function dateLabel(value) {
+  if (!value) return 'Date not set';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).format(date);
+}
+
+function timeLabel(value) {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).format(date);
+}
+
+function showToast(message, duration = 3600) {
   const toast = $('#toast');
   if (!toast) return;
   toast.textContent = message;
   toast.classList.add('is-visible');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 3200);
+  window.clearTimeout(showToast.timer);
+  showToast.timer = window.setTimeout(() => toast.classList.remove('is-visible'), duration);
 }
 
-function trackEvent(type, details = {}) {
-  const event = { id: uid('VIS'), type, createdAt: new Date().toISOString(), path: window.location.pathname || '/', referrer: document.referrer || 'direct', device: window.innerWidth < 700 ? 'mobile' : 'desktop', ...details };
-  const visitors = readStore(STORAGE.visitors);
-  visitors.unshift(event);
-  writeStore(STORAGE.visitors, visitors.slice(0, 100));
-  if (CONFIG.analyticsEndpoint && navigator.sendBeacon) {
-    navigator.sendBeacon(CONFIG.analyticsEndpoint, new Blob([JSON.stringify(event)], { type: 'application/json' }));
+function setModalState(open) {
+  document.body.classList.toggle('modal-open', Boolean(open));
+}
+
+function getSessionId() {
+  let id = localStorage.getItem(SESSION_KEY);
+  if (!id) {
+    id = 'SESSION-' + Date.now().toString(36).toUpperCase() + '-' + crypto.getRandomValues(new Uint32Array(1))[0].toString(36).toUpperCase();
+    localStorage.setItem(SESSION_KEY, id);
   }
+  return id;
 }
 
-function storeLead(formData, source = 'visitor-gate') {
-  const lead = { id: uid('LEAD'), createdAt: new Date().toISOString(), status: 'new', source, name: formData.get('name') || '', phone: formData.get('phone') || '', location: formData.get('location') || '', interest: formData.get('interest') || 'General enquiry', consent: true };
-  const leads = readStore(STORAGE.leads);
-  leads.unshift(lead);
-  writeStore(STORAGE.leads, leads.slice(0, 100));
-  trackEvent('lead_captured', { leadId: lead.id, location: lead.location, interest: lead.interest });
-  postToEndpoint({ type: 'lead_captured', id: lead.id, lead });
-  return lead;
-}
-
-function saveBooking(input, source = 'website') {
-  const booking = { id: uid('BOOK'), createdAt: new Date().toISOString(), status: 'new', source, ...input };
-  const bookings = readStore(STORAGE.bookings);
-  bookings.unshift(booking);
-  writeStore(STORAGE.bookings, bookings.slice(0, 250));
-  trackEvent('booking_started', { bookingId: booking.id, crop: booking.crop, location: booking.location });
-  postToEndpoint({ type: 'booking_created', id: booking.id, booking });
-  return booking;
-}
-
-function bookingMessage(booking) {
-  return [
-    'Hello Ram Chand & Sons, I would like to book a New Hira combine harvester.',
-    '',
-    `Name: ${booking.name || 'Not shared'}`,
-    `Phone: ${booking.phone || 'Not shared'}`,
-    `Village / district: ${booking.location || 'Not shared'}`,
-    `Crop: ${booking.crop || 'Not shared'}`,
-    `Preferred date: ${localDate(booking.date)}`,
-    `Approx. acreage: ${booking.acreage || 'Not shared'}`,
-    `Machine preference: ${booking.machine || 'Help me choose'}`,
-    booking.notes ? `Notes: ${booking.notes}` : '',
-    '',
-    `Booking reference: ${booking.id}`
-  ].filter(Boolean).join('\n');
-}
-
-function setModel(modelId) {
-  const model = MODELS[modelId];
-  if (!model) return;
-  currentModel = modelId;
-  $$('.fleet-tab').forEach((tab) => {
-    const active = tab.dataset.modelTab === modelId;
-    tab.classList.toggle('is-active', active);
-    tab.setAttribute('aria-selected', String(active));
-  });
-  const image = $('#machineImage');
-  if (image) {
-    image.classList.add('is-switching');
-    setTimeout(() => { image.src = model.image; image.alt = `${model.name} combine harvester image`; image.classList.remove('is-switching'); }, 180);
+async function api(path, options = {}, admin = false) {
+  const requestOptions = { ...options };
+  requestOptions.headers = { ...(options.headers || {}) };
+  if (admin && adminState.token) requestOptions.headers.Authorization = 'Bearer ' + adminState.token;
+  if (options.body && !(options.body instanceof FormData) && typeof options.body !== 'string') {
+    requestOptions.headers['Content-Type'] = 'application/json';
+    requestOptions.body = JSON.stringify(options.body);
   }
-  const heroImage = $('#heroMachineImage');
-  if (heroImage) {
-    heroImage.classList.add('is-switching');
-    setTimeout(() => { heroImage.src = model.image; heroImage.alt = `${model.name} combine harvester image`; heroImage.classList.remove('is-switching'); }, 180);
+  const response = await fetch(API_ROOT + path, requestOptions);
+  const payload = await response.json().catch(() => ({ ok: false, error: 'The service returned an unreadable response.' }));
+  if (!response.ok || payload.ok === false) {
+    const error = new Error(payload.error || 'Request failed.');
+    error.status = response.status;
+    throw error;
   }
-  const heroModelTag = $('#heroModelTag');
-  if (heroModelTag) heroModelTag.textContent = model.id;
-  const heroCutter = $('.showcase-card-mini strong');
-  if (heroCutter) heroCutter.textContent = `${model.width} m`;
-  const heroCutterNote = $('.showcase-card-mini small');
-  if (heroCutterNote) heroCutterNote.textContent = `${model.name} working width`;
-  const heroBottomline = $('.showcase-bottomline span:last-child');
-  if (heroBottomline) heroBottomline.textContent = `${model.number} / 02`;
-  $('#machineNumber').textContent = model.number;
-  $('#machineCaption').textContent = model.caption;
-  $('#machineEyebrow').textContent = model.eyebrow;
-  $('#machineTitle').innerHTML = `New Hira <em>${model.id}</em>`;
-  $('#machineCopy').textContent = model.copy;
-  $('#machineWidth').innerHTML = `${model.width}<span>m</span>`;
-  $('#machineTank').innerHTML = `${model.tank}<span>kg</span>`;
-  $('#machineWalkers').textContent = model.walkers;
-  $('#machineSpecList').innerHTML = model.specs.map(([label, value]) => `<div class="spec-line"><span>${escapeHtml(label)}</span><b>${escapeHtml(value)}</b></div>`).join('');
-  const button = $('#machineBookButton');
-  if (button) button.dataset.machine = model.name;
+  return payload;
 }
 
-function handleBookingSubmit(event) {
-  event.preventDefault();
-  const form = event.currentTarget;
-  const booking = saveBooking(Object.fromEntries(new FormData(form).entries()));
-  const link = $('#whatsappLink');
-  link.href = `https://wa.me/919216107700?text=${encodeURIComponent(bookingMessage(booking))}`;
-  $('#bookingForm').hidden = true;
-  $('#bookingSuccess').hidden = false;
-  trackEvent('booking_form_submitted', { bookingId: booking.id });
-  showToast('Booking request saved on this device.');
+function deviceType() {
+  const width = window.innerWidth;
+  if (width < 680) return 'mobile';
+  if (width < 1100) return 'tablet';
+  return 'desktop';
 }
 
-function handleQuickBooking(event) {
-  event.preventDefault();
-  const data = Object.fromEntries(new FormData(event.currentTarget).entries());
-  $('#bookingForm [name="name"]').value = data.name;
-  $('#bookingForm [name="location"]').value = data.location;
-  $('#bookingForm [name="crop"]').value = data.crop;
-  $('#bookingForm [name="machine"]').value = currentModel === '985' ? 'New Hira 985' : 'New Hira 785';
-  document.querySelector('#booking').scrollIntoView({ behavior: 'smooth' });
-  trackEvent('quick_booking_opened', { crop: data.crop, location: data.location });
-}
-
-function setupVisitorGate() {
-  const modal = $('#visitorModal');
-  if (!modal || localStorage.getItem(VISITOR_GATE_KEY) === 'yes') return;
-  const closeGate = (eventName = '') => {
-    localStorage.setItem(VISITOR_GATE_KEY, 'yes');
-    modal.hidden = true;
-    document.body.classList.remove('modal-open');
-    if (eventName) trackEvent(eventName);
+function trackEvent(name, metadata = {}) {
+  const payload = {
+    eventName: name,
+    sessionId: getSessionId(),
+    path: location.pathname,
+    referrer: document.referrer || '',
+    device: deviceType(),
+    metadata
   };
-  const showGate = () => {
-    modal.hidden = false;
-    document.body.classList.add('modal-open');
-    trackEvent('visitor_gate_shown');
-    window.setTimeout(() => $('#leadCaptureForm input[name="name"]')?.focus(), 80);
+  fetch(API_ROOT + '/events', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    keepalive: true
+  }).catch(() => {});
+}
+
+function setupLoader() {
+  const count = $('#loaderCount');
+  let value = 0;
+  const timer = window.setInterval(() => {
+    value = Math.min(99, value + Math.ceil((100 - value) / 9));
+    if (count) count.textContent = String(value).padStart(2, '0');
+  }, 90);
+  const finish = () => {
+    window.clearInterval(timer);
+    if (count) count.textContent = '100';
+    window.setTimeout(() => {
+      $('#siteLoader')?.classList.add('is-hidden');
+      document.body.classList.add('is-ready');
+      document.dispatchEvent(new Event('newhira:ready'));
+    }, 220);
   };
-  window.setTimeout(showGate, 1850);
-  $('#skipVisitorGate')?.addEventListener('click', () => closeGate('visitor_gate_skipped'));
-  $('#visitorModalClose')?.addEventListener('click', () => closeGate());
-  modal.addEventListener('click', (event) => { if (event.target === modal) closeGate('visitor_gate_dismissed'); });
-  $('#leadCaptureForm')?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const lead = storeLead(new FormData(event.currentTarget));
-    closeGate();
-    showToast(`Thanks ${lead.name.split(' ')[0] || ''} — we’ll keep your field in mind.`);
+  if (document.readyState === 'complete') window.setTimeout(finish, 950);
+  else window.addEventListener('load', () => window.setTimeout(finish, 950), { once: true });
+  window.setTimeout(finish, 2400);
+}
+
+function setupNavigation() {
+  const toggle = $('#menuToggle');
+  const nav = $('#siteNav');
+  const scrim = $('#navScrim');
+  const close = () => {
+    toggle?.classList.remove('is-open');
+    nav?.classList.remove('is-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+    if (scrim) scrim.hidden = true;
+    document.body.classList.remove('nav-open');
+  };
+  toggle?.addEventListener('click', () => {
+    const open = !nav.classList.contains('is-open');
+    toggle.classList.toggle('is-open', open);
+    nav.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    if (scrim) scrim.hidden = !open;
+    document.body.classList.toggle('nav-open', open);
   });
-}
-
-function renderBoard() {
-  const board = $('#bookingBoard');
-  if (!board) return;
-  const bookings = readStore(STORAGE.bookings);
-  const filter = $('#bookingFilter')?.value || 'all';
-  const visible = filter === 'all' ? bookings : bookings.filter((booking) => booking.status === filter);
-  $('#totalBookings').textContent = bookings.length;
-  $('#newBookings').textContent = bookings.filter((booking) => booking.status === 'new').length;
-  $('#confirmedBookings').textContent = bookings.filter((booking) => booking.status === 'confirmed').length;
-  if (!visible.length) { board.innerHTML = '<div class="board-empty">No requests here yet. New WhatsApp bookings will appear after the form is submitted from this browser.</div>'; return; }
-  board.innerHTML = visible.map((booking) => `<article class="booking-row" data-booking-id="${escapeHtml(booking.id)}"><div><b>${escapeHtml(booking.name || 'Unnamed farmer')}</b><small>${escapeHtml(booking.phone || 'No phone')} · ${eventDate(booking.createdAt)}</small></div><div><b>${escapeHtml(booking.location || 'Location not shared')}</b><small>${escapeHtml(booking.crop || 'Crop not shared')} · ${localDate(booking.date)}</small></div><div><small>MACHINE</small><b>${escapeHtml(booking.machine || 'Help me choose')}</b></div><div><select data-booking-status aria-label="Change booking status"><option value="new" ${booking.status === 'new' ? 'selected' : ''}>New</option><option value="confirmed" ${booking.status === 'confirmed' ? 'selected' : ''}>Confirmed</option><option value="completed" ${booking.status === 'completed' ? 'selected' : ''}>Completed</option></select></div><button class="row-delete" data-delete-booking type="button" aria-label="Delete ${escapeHtml(booking.name || 'booking')}">×</button></article>`).join('');
-  $$('[data-booking-status]', board).forEach((select) => select.addEventListener('change', (event) => updateBookingStatus(event.target.closest('[data-booking-id]').dataset.bookingId, event.target.value)));
-  $$('[data-delete-booking]', board).forEach((button) => button.addEventListener('click', () => deleteBooking(button.closest('[data-booking-id]').dataset.bookingId)));
-}
-
-function updateBookingStatus(id, status) {
-  const bookings = readStore(STORAGE.bookings).map((booking) => booking.id === id ? { ...booking, status } : booking);
-  writeStore(STORAGE.bookings, bookings); renderBoard(); showToast(`Booking marked ${status}.`);
-}
-
-function deleteBooking(id) {
-  if (!window.confirm('Remove this booking from the local board?')) return;
-  writeStore(STORAGE.bookings, readStore(STORAGE.bookings).filter((booking) => booking.id !== id)); renderBoard(); showToast('Booking removed from this device.');
-}
-
-function renderLeads() {
-  const leads = readStore(STORAGE.leads);
-  const visitors = readStore(STORAGE.visitors);
-  $('#leadCount').textContent = leads.length;
-  $('#leadCountSummary').textContent = leads.length;
-  $('#visitorCount').textContent = visitors.length;
-  $('#pulseCount').textContent = visitors.filter((item) => Date.now() - new Date(item.createdAt).getTime() < 24 * 60 * 60 * 1000).length;
-  $('#leadBoard').innerHTML = leads.length ? leads.map((lead) => `<article class="lead-row"><div class="lead-avatar">${escapeHtml((lead.name || 'F').slice(0, 1).toUpperCase())}</div><div><b>${escapeHtml(lead.name || 'Unknown visitor')}</b><small>${escapeHtml(lead.phone || 'No phone')} · ${escapeHtml(lead.location || 'Location not shared')}</small></div><div><small>INTEREST</small><b>${escapeHtml(lead.interest)}</b></div><div><small>${eventDate(lead.createdAt)}</small><a href="https://wa.me/91${escapeHtml((lead.phone || '').replace(/\D/g, '').slice(-10))}" target="_blank" rel="noopener">WhatsApp ↗</a></div></article>`).join('') : '<div class="board-empty">No signups yet. Visitors who complete the welcome form will appear here.</div>';
-  $('#visitorPulseBoard').innerHTML = visitors.length ? visitors.slice(0, 14).map((visitor) => `<div class="pulse-row"><span class="pulse-dot"></span><div><b>${escapeHtml(visitor.type.replaceAll('_', ' '))}</b><small>${escapeHtml(visitor.device)} · ${eventDate(visitor.createdAt)}</small></div><span>${escapeHtml(visitor.path)}</span></div>`).join('') : '<div class="board-empty">Visitor pulses will appear as people explore this browser.</div>';
-}
-
-function renderAssets() {
-  const assets = readStore(STORAGE.assets);
-  $('#assetBoard').innerHTML = assets.length ? assets.map((asset) => `<article class="asset-card"><div class="asset-preview">${asset.type.startsWith('video') ? `<video src="${asset.dataUrl}" muted></video>` : `<img src="${asset.dataUrl}" alt="${escapeHtml(asset.name)}" />`}</div><div><b>${escapeHtml(asset.name)}</b><small>${escapeHtml(asset.slot)} · ${Math.round(asset.size / 1024)} KB</small></div><button type="button" data-delete-asset="${escapeHtml(asset.id)}">Remove</button></article>`).join('') : '<div class="board-empty">No custom assets uploaded. The default brochure imagery is active.</div>';
-  $$('[data-delete-asset]', $('#assetBoard')).forEach((button) => button.addEventListener('click', () => { writeStore(STORAGE.assets, readStore(STORAGE.assets).filter((asset) => asset.id !== button.dataset.deleteAsset)); renderAssets(); applyCustomAssets(); showToast('Asset removed.'); }));
-}
-
-function applyCustomAssets() {
-  const assets = readStore(STORAGE.assets);
-  const hero = assets.find((asset) => asset.slot === 'Hero backdrop');
-  const poster = assets.find((asset) => asset.slot === 'Booking poster');
-  if (hero) $('.hero-backdrop').style.backgroundImage = `linear-gradient(90deg, rgba(16,23,19,.97) 0%, rgba(16,23,19,.8) 40%, rgba(16,23,19,.2) 100%), url("${hero.dataUrl}")`;
-  if (poster) $('.booking-bg').style.backgroundImage = `linear-gradient(90deg, var(--ink) 10%, transparent), url("${poster.dataUrl}")`;
-}
-
-function exportBookings() {
-  const rows = readStore(STORAGE.bookings);
-  const headers = ['id', 'createdAt', 'status', 'source', 'name', 'phone', 'location', 'crop', 'date', 'acreage', 'machine', 'notes'];
-  const csv = [headers.join(','), ...rows.map((row) => headers.map((header) => `"${String(row[header] || '').replaceAll('"', '""')}"`).join(','))].join('\n');
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-  const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `fieldcraft-bookings-${new Date().toISOString().slice(0, 10)}.csv`; link.click(); URL.revokeObjectURL(link.href);
-  showToast('Booking board exported.');
-}
-
-function setupDesk() {
-  const modal = $('#deskModal');
-  $$('[data-open-desk]').forEach((button) => button.addEventListener('click', () => { modal.hidden = false; document.body.classList.add('modal-open'); $('#deskGate').hidden = false; $('#deskApp').hidden = true; $('#deskPin').focus(); }));
-  $$('[data-close-desk]').forEach((button) => button.addEventListener('click', () => { modal.hidden = true; document.body.classList.remove('modal-open'); }));
-  modal?.addEventListener('click', (event) => { if (event.target === modal) { modal.hidden = true; document.body.classList.remove('modal-open'); } });
-  $('#deskLoginForm')?.addEventListener('submit', (event) => { event.preventDefault(); if ($('#deskPin').value !== OWNER_PIN) { showToast('That owner PIN does not match.'); return; } $('#deskGate').hidden = true; $('#deskApp').hidden = false; $('#deskPin').value = ''; renderBoard(); renderLeads(); renderAssets(); });
-  $('#bookingFilter')?.addEventListener('change', renderBoard);
-  $('#deskAddBooking')?.addEventListener('click', () => { $('#deskAddForm').hidden = false; $('#deskAddForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
-  $('#cancelDeskAdd')?.addEventListener('click', () => { $('#deskAddForm').hidden = true; });
-  $('#operatorBookingForm')?.addEventListener('submit', (event) => { event.preventDefault(); saveBooking(Object.fromEntries(new FormData(event.currentTarget).entries()), 'owner desk'); event.currentTarget.reset(); $('#deskAddForm').hidden = true; renderBoard(); showToast('Booking added to the field list.'); });
-  $('#exportBookings')?.addEventListener('click', exportBookings);
-  $$('.desk-tab').forEach((tab) => tab.addEventListener('click', () => { $$('.desk-tab').forEach((item) => item.classList.toggle('is-active', item === tab)); $$('.desk-view').forEach((view) => view.hidden = view.id !== `deskView-${tab.dataset.deskView}`); if (tab.dataset.deskView === 'leads') renderLeads(); if (tab.dataset.deskView === 'content') renderAssets(); }));
-  $('#assetUploadForm')?.addEventListener('submit', handleAssetUpload);
-  $('#brandSettingsForm')?.addEventListener('submit', saveBrandSettings);
-}
-
-function handleAssetUpload(event) {
-  event.preventDefault();
-  const file = $('#assetFile').files[0];
-  if (!file) return showToast('Choose an image or video first.');
-  if (file.size > 1500000) return showToast('For GitHub-ready browser storage, keep the file under 1.5 MB.');
-  const reader = new FileReader();
-  reader.onload = () => { const assets = readStore(STORAGE.assets); assets.unshift({ id: uid('ASSET'), createdAt: new Date().toISOString(), name: file.name, type: file.type, size: file.size, slot: $('#assetSlot').value, dataUrl: reader.result }); writeStore(STORAGE.assets, assets.slice(0, 8)); event.currentTarget.reset(); renderAssets(); applyCustomAssets(); showToast('Asset saved to this browser.'); };
-  reader.readAsDataURL(file);
-}
-
-function saveBrandSettings(event) {
-  event.preventDefault();
-  const settings = Object.fromEntries(new FormData(event.currentTarget).entries());
-  writeStore(STORAGE.settings, settings);
-  showToast('Brand settings saved for this browser.');
-}
-
-function setupMobileNav() {
-  const toggle = $('#menuToggle'); const nav = $('#siteNav');
-  const close = () => { toggle?.classList.remove('is-open'); nav?.classList.remove('is-open'); toggle?.setAttribute('aria-expanded', 'false'); document.body.classList.remove('nav-open'); };
-  toggle?.addEventListener('click', () => { const open = !nav.classList.contains('is-open'); toggle.classList.toggle('is-open', open); nav.classList.toggle('is-open', open); toggle.setAttribute('aria-expanded', String(open)); document.body.classList.toggle('nav-open', open); });
+  scrim?.addEventListener('click', close);
   $$('#siteNav a, #siteNav button').forEach((item) => item.addEventListener('click', close));
-  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') close();
+  });
 }
 
-function setupReveal() {
-  const items = $$('.reveal');
-  const showInView = () => {
-    const viewportBottom = window.innerHeight * .95;
-    items.forEach((item) => {
-      const rect = item.getBoundingClientRect();
-      if (rect.top < viewportBottom && rect.bottom > -40) item.classList.add('is-visible');
-    });
-  };
-  let started = false;
-  const start = () => {
-    if (started) { showInView(); return; }
-    started = true;
-    showInView();
-    if (typeof window.IntersectionObserver !== 'function') {
-      window.addEventListener('scroll', showInView, { passive: true });
-      window.addEventListener('resize', showInView, { passive: true });
-      return;
-    }
-    const observer = new window.IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .12, rootMargin: '0px 0px -8% 0px' });
-    items.forEach((item, index) => { item.style.setProperty('--reveal-delay', `${Math.min(index % 5, 4) * 75}ms`); observer.observe(item); });
-  };
-  if (document.body.classList.contains('is-ready')) start();
-  else document.addEventListener('fieldcraft:ready', start, { once: true });
-  window.setTimeout(() => { start(); showInView(); }, 1450);
-}
-
-function setupScrollPolish() {
+function setupScrollEffects() {
   const root = document.documentElement;
   let frame = 0;
   const update = () => {
-    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    const progress = Math.min(100, Math.max(0, (window.scrollY / max) * 100));
-    root.style.setProperty('--scroll-progress', `${progress}%`);
-    document.body.classList.toggle('is-scrolled', window.scrollY > 28);
-    const backdrop = $('.hero-backdrop');
-    if (backdrop) backdrop.style.setProperty('--hero-shift', `${Math.min(window.scrollY * .12, 72)}px`);
+    const max = Math.max(1, root.scrollHeight - window.innerHeight);
+    root.style.setProperty('--scroll-progress', Math.min(100, (window.scrollY / max) * 100) + '%');
+    document.body.classList.toggle('is-scrolled', window.scrollY > 30);
+    const field = $('.hero-field');
+    if (field && window.innerWidth > 680) field.style.setProperty('--hero-shift', Math.min(70, window.scrollY * .12) + 'px');
     frame = 0;
   };
-  const requestUpdate = () => { if (!frame) frame = requestAnimationFrame(update); };
+  const requestUpdate = () => {
+    if (!frame) frame = requestAnimationFrame(update);
+  };
   window.addEventListener('scroll', requestUpdate, { passive: true });
   window.addEventListener('resize', requestUpdate, { passive: true });
   update();
 }
 
-function setupParallax() {
-  const showcase = $('#heroShowcase');
-  if (!showcase) return;
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const tiltAmplitude = reducedMotion ? .95 : 2.4;
-  const depthAmplitude = reducedMotion ? .7 : 1.8;
-  let pointerActive = false;
-  let phase = 0;
-  let frame = 0;
-  const setTilt = (x, y) => { showcase.style.setProperty('--tilt-x', `${y}deg`); showcase.style.setProperty('--tilt-y', `${x}deg`); };
-  const tick = () => {
-    if (!pointerActive) {
-      phase += .012;
-      setTilt(Math.sin(phase) * tiltAmplitude, Math.cos(phase * .82) * depthAmplitude);
-    }
-    frame = requestAnimationFrame(tick);
-  };
-  showcase.addEventListener('pointermove', (event) => { pointerActive = true; const rect = showcase.getBoundingClientRect(); const x = (event.clientX - rect.left) / rect.width - .5; const y = (event.clientY - rect.top) / rect.height - .5; setTilt(y * -5, x * 7); });
-  showcase.addEventListener('pointerleave', () => { pointerActive = false; });
-  tick();
-  window.addEventListener('pagehide', () => cancelAnimationFrame(frame), { once: true });
-}
-
-function setupFleetCarousel() {
-  const tabs = $$('.fleet-tab');
-  if (!tabs.length) return;
-  const sequence = ['985', '785'];
-  const pauseTargets = [$('#heroShowcase'), $('#machineDetail')].filter(Boolean);
-  const rotate = () => {
-    const index = sequence.indexOf(currentModel);
-    setModel(sequence[(index + 1) % sequence.length]);
-  };
-  const start = () => {
-    window.clearInterval(fleetCarouselTimer);
-    fleetCarouselTimer = window.setInterval(rotate, 5200);
-  };
-  const pause = () => window.clearInterval(fleetCarouselTimer);
-  tabs.forEach((tab) => tab.addEventListener('click', start));
-  pauseTargets.forEach((target) => {
-    target.addEventListener('mouseenter', pause);
-    target.addEventListener('mouseleave', start);
-    target.addEventListener('focusin', pause);
-    target.addEventListener('focusout', (event) => { if (!target.contains(event.relatedTarget)) start(); });
-  });
-  start();
-  window.addEventListener('pagehide', () => window.clearInterval(fleetCarouselTimer), { once: true });
-}
-
-function setupFieldGallery() {
-  const gallery = $('#productGallery');
-  if (!gallery) return;
-  const slides = $$('.gallery-slide', gallery);
-  const thumbs = $$('.gallery-thumb', gallery);
-  const dots = $('#galleryDots', gallery);
-  const counter = $('#galleryCounter', gallery);
-  const progress = $('#galleryProgress', gallery);
-  const fallback = 'assets/cutout-985-three-quarter.png';
-  let active = 0;
-  let timer;
-  let progressTimer;
-  let pointerStartX = 0;
-  let pointerDeltaX = 0;
-  let isDragging = false;
-
-  gallery.querySelectorAll('img').forEach((image) => {
-    image.addEventListener('error', () => {
-      if (image.dataset.fallbackApplied) return;
-      image.dataset.fallbackApplied = 'true';
-      image.src = fallback;
-    });
-  });
-
-  if (dots) {
-    dots.innerHTML = slides.map((_, index) => `<button type="button" class="gallery-dot${index === 0 ? ' is-active' : ''}" data-gallery-dot="${index}" aria-label="Show product view ${index + 1}" aria-pressed="${index === 0}"></button>`).join('');
+function setupReveal() {
+  const items = $$('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    items.forEach((item) => item.classList.add('is-visible'));
+    return;
   }
-
-  const restartProgress = () => {
-    if (!progress) return;
-    progress.style.animation = 'none';
-    progress.offsetHeight;
-    progress.style.animation = 'gallery-progress 4.8s linear forwards';
-  };
-
-  const update = (next, announce = true) => {
-    active = (next + slides.length) % slides.length;
-    const prevIndex = (active - 1 + slides.length) % slides.length;
-    const nextIndex = (active + 1) % slides.length;
-    slides.forEach((slide, index) => {
-      const current = index === active;
-      const previous = index === prevIndex;
-      const nextSlide = index === nextIndex;
-      slide.classList.toggle('is-active', current);
-      slide.classList.toggle('is-prev', previous);
-      slide.classList.toggle('is-next', nextSlide);
-      slide.classList.toggle('is-distant', !current && !previous && !nextSlide);
-      slide.setAttribute('aria-hidden', String(!current));
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
     });
-    thumbs.forEach((thumb, index) => {
-      const current = index === active;
-      thumb.classList.toggle('is-active', current);
-      thumb.setAttribute('aria-current', current ? 'true' : 'false');
-    });
-    $$('.gallery-dot', gallery).forEach((dot, index) => {
-      const current = index === active;
-      dot.classList.toggle('is-active', current);
-      dot.setAttribute('aria-pressed', String(current));
-    });
-    if (counter) counter.textContent = `${String(active + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
-    if (announce) gallery.classList.add('is-updating');
-    window.setTimeout(() => gallery.classList.remove('is-updating'), 420);
-    restartProgress();
-  };
-
-  const restart = () => {
-    window.clearInterval(timer);
-    timer = window.setInterval(() => update(active + 1), 4800);
-  };
-  const go = (index) => { update(index); restart(); };
-
-  thumbs.forEach((thumb, index) => thumb.addEventListener('click', () => go(index)));
-  $$('.gallery-dot', gallery).forEach((dot, index) => dot.addEventListener('click', () => go(index)));
-  $('[data-gallery-prev]', gallery)?.addEventListener('click', () => go(active - 1));
-  $('[data-gallery-next]', gallery)?.addEventListener('click', () => go(active + 1));
-  gallery.addEventListener('mouseenter', () => { window.clearInterval(timer); if (progress) progress.style.animationPlayState = 'paused'; });
-  gallery.addEventListener('mouseleave', () => { restart(); if (progress) progress.style.animationPlayState = 'running'; });
-  gallery.addEventListener('focusin', () => { window.clearInterval(timer); if (progress) progress.style.animationPlayState = 'paused'; });
-  gallery.addEventListener('focusout', (event) => { if (!gallery.contains(event.relatedTarget)) { restart(); if (progress) progress.style.animationPlayState = 'running'; } });
-  gallery.addEventListener('touchstart', () => { window.clearInterval(timer); if (progress) progress.style.animationPlayState = 'paused'; }, { passive: true });
-  gallery.addEventListener('touchend', () => { restart(); if (progress) progress.style.animationPlayState = 'running'; }, { passive: true });
-  gallery.addEventListener('pointerdown', (event) => {
-    if (event.pointerType === 'mouse' && event.button !== 0) return;
-    isDragging = true;
-    pointerStartX = event.clientX;
-    pointerDeltaX = 0;
-    gallery.classList.add('is-dragging');
-    gallery.setPointerCapture?.(event.pointerId);
-    window.clearInterval(timer);
-    if (progress) progress.style.animationPlayState = 'paused';
+  }, { threshold: .1, rootMargin: '0px 0px -8% 0px' });
+  items.forEach((item, index) => {
+    item.style.setProperty('--reveal-delay', Math.min(index % 4, 3) * 80 + 'ms');
+    observer.observe(item);
   });
-  gallery.addEventListener('pointermove', (event) => {
-    if (!isDragging) return;
-    pointerDeltaX = event.clientX - pointerStartX;
-    gallery.style.setProperty('--gallery-drag', `${Math.max(-44, Math.min(44, pointerDeltaX / 7))}px`);
-  });
-  const finishDrag = (event) => {
-    if (!isDragging) return;
-    isDragging = false;
-    gallery.classList.remove('is-dragging');
-    gallery.style.removeProperty('--gallery-drag');
-    gallery.releasePointerCapture?.(event.pointerId);
-    if (Math.abs(pointerDeltaX) > 48) go(active + (pointerDeltaX < 0 ? 1 : -1));
-    else restart();
-    if (progress) progress.style.animationPlayState = 'running';
-  };
-  gallery.addEventListener('pointerup', finishDrag);
-  gallery.addEventListener('pointercancel', finishDrag);
-  gallery.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowLeft') { event.preventDefault(); go(active - 1); }
-    if (event.key === 'ArrowRight') { event.preventDefault(); go(active + 1); }
-  });
-  update(0, false);
-  restart();
-  window.addEventListener('pagehide', () => { window.clearInterval(timer); window.clearTimeout(progressTimer); }, { once: true });
+  window.setTimeout(() => {
+    items.filter((item) => item.getBoundingClientRect().top < window.innerHeight).forEach((item) => item.classList.add('is-visible'));
+  }, 1600);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function setupSectionAnalytics() {
+  if (!('IntersectionObserver' in window)) return;
+  const seen = new Set();
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting || seen.has(entry.target.id)) return;
+      seen.add(entry.target.id);
+      trackEvent('section_view', { section: entry.target.id });
+    });
+  }, { threshold: .42 });
+  $$('main section[id]').forEach((section) => observer.observe(section));
+}
+
+function updateHero(model) {
+  const data = MODELS[model];
+  const product = $('#heroProduct');
+  if (!data || !product) return;
+  product.classList.add('is-changing');
+  window.setTimeout(() => {
+    $('#heroMachine').src = data.image;
+    $('#heroMachine').alt = 'New Hira ' + data.name + ' combine harvester';
+    $('.hero-model-code').textContent = data.name;
+    $('#heroWidth').textContent = data.width + ' M';
+    $('#heroTank').textContent = data.tank + ' KG';
+    $$('[data-hero-model]').forEach((button) => {
+      const active = button.dataset.heroModel === model;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    product.classList.remove('is-changing');
+  }, 260);
+  trackEvent('hero_model_change', { model });
+}
+
+function setupHero() {
+  $$('[data-hero-model]').forEach((button) => button.addEventListener('click', () => updateHero(button.dataset.heroModel)));
+  const product = $('#heroProduct');
+  if (!product || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  product.addEventListener('pointermove', (event) => {
+    if (event.pointerType === 'touch') return;
+    const rect = product.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - .5;
+    const y = (event.clientY - rect.top) / rect.height - .5;
+    product.style.setProperty('--hero-x', x * 10 + 'px');
+    product.style.setProperty('--hero-y', y * 8 + 'px');
+    product.style.setProperty('--hero-ry', x * 5 - 3 + 'deg');
+  });
+  product.addEventListener('pointerleave', () => {
+    product.style.setProperty('--hero-x', '0px');
+    product.style.setProperty('--hero-y', '0px');
+    product.style.setProperty('--hero-ry', '-3deg');
+  });
+}
+
+function updateFleet(model, track = true) {
+  const data = MODELS[model];
+  const stage = $('#fleetStage');
+  if (!data || !stage) return;
+  stage.classList.add('is-changing');
+  window.setTimeout(() => {
+    $('#fleetImage').src = data.image;
+    $('#fleetImage').alt = 'New Hira ' + data.name + ' combine harvester cutout';
+    $('#fleetGiant').textContent = data.name;
+    $('#fleetEyebrow').textContent = data.eyebrow;
+    $('#fleetName').textContent = data.name;
+    $('#fleetDescription').textContent = data.description;
+    $('#fleetWidth').innerHTML = escapeHtml(data.width) + '<small>m</small>';
+    $('#fleetTank').innerHTML = escapeHtml(data.tank) + '<small>kg</small>';
+    $('#fleetWalkers').textContent = data.walkers;
+    $('#fleetSpecList').innerHTML = data.specs.map((spec) => '<div><span>' + escapeHtml(spec[0]) + '</span><b>' + escapeHtml(spec[1]) + '</b></div>').join('');
+    $('#fleetBook').dataset.machine = 'New Hira ' + data.name;
+    $$('[data-model]').forEach((button) => {
+      const active = button.dataset.model === model;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-selected', String(active));
+    });
+    stage.dataset.model = model;
+    stage.classList.remove('is-changing');
+  }, 290);
+  if (track) trackEvent('fleet_model_change', { model });
+}
+
+function setupFleet() {
+  updateFleet('985', false);
+  $$('[data-model]').forEach((button) => button.addEventListener('click', () => updateFleet(button.dataset.model)));
+  $('#fleetBook')?.addEventListener('click', (event) => {
+    const value = event.currentTarget.dataset.machine || 'New Hira 985';
+    const radio = $('#bookingForm input[name="machine"][value="' + value + '"]');
+    if (radio) radio.checked = true;
+  });
+  $('#viewBrochure')?.addEventListener('click', () => {
+    const model = $('#fleetStage')?.dataset.model || '985';
+    openBrochure(model);
+  });
+}
+
+function openBrochure(model) {
+  const data = MODELS[model] || MODELS['985'];
+  $('#brochureImage').src = data.brochure;
+  $('#brochureImage').alt = 'New Hira ' + data.name + ' technical brochure';
+  $$('[data-brochure-model]').forEach((button) => button.classList.toggle('is-active', button.dataset.brochureModel === model));
+  $('#brochureModal').hidden = false;
+  setModalState(true);
+}
+
+function setupBrochure() {
+  $$('[data-brochure-model]').forEach((button) => button.addEventListener('click', () => openBrochure(button.dataset.brochureModel)));
+  const close = () => {
+    $('#brochureModal').hidden = true;
+    setModalState(false);
+  };
+  $('#brochureClose')?.addEventListener('click', close);
+  $('#brochureModal')?.addEventListener('click', (event) => {
+    if (event.target === $('#brochureModal')) close();
+  });
+}
+
+function createPerspectiveCarousel(options) {
+  const root = $(options.root);
+  if (!root) return null;
+  let items = $$(options.item, root);
+  let active = 0;
+  let timer = 0;
+  let startX = 0;
+  let deltaX = 0;
+  let dragging = false;
+  const getItems = () => {
+    items = $$(options.item, root);
+    return items;
+  };
+  const classes = ['is-active', 'is-prev', 'is-next', 'is-far-prev', 'is-far-next', 'is-hidden'];
+  const update = (next, user = false) => {
+    getItems();
+    const length = items.length;
+    if (!length) return;
+    active = (next + length) % length;
+    items.forEach((item, index) => {
+      classes.forEach((className) => item.classList.remove(className));
+      const offset = (index - active + length) % length;
+      if (offset === 0) item.classList.add('is-active');
+      else if (offset === 1) item.classList.add('is-next');
+      else if (offset === length - 1) item.classList.add('is-prev');
+      else if (offset === 2) item.classList.add('is-far-next');
+      else if (offset === length - 2) item.classList.add('is-far-prev');
+      else item.classList.add('is-hidden');
+      item.setAttribute('aria-hidden', String(offset !== 0));
+    });
+    const counter = $(options.counter);
+    if (counter) counter.textContent = String(active + 1).padStart(2, '0') + ' / ' + String(length).padStart(2, '0');
+    if (options.dots) {
+      const dots = $(options.dots);
+      if (dots && dots.children.length !== length) {
+        dots.innerHTML = items.map((item, index) => '<button type="button" data-carousel-dot="' + index + '" aria-label="Show item ' + (index + 1) + '"></button>').join('');
+        $$('[data-carousel-dot]', dots).forEach((dot) => dot.addEventListener('click', () => go(Number(dot.dataset.carouselDot), true)));
+      }
+      $$('[data-carousel-dot]', dots).forEach((dot, index) => dot.classList.toggle('is-active', index === active));
+    }
+    if (options.progress) {
+      const progress = $(options.progress);
+      if (progress) {
+        progress.style.animation = 'none';
+        progress.offsetHeight;
+        progress.style.animation = 'carousel-progress ' + (options.interval / 1000) + 's linear forwards';
+      }
+    }
+    if (user) trackEvent(options.eventName || 'carousel_change', { index: active + 1 });
+  };
+  const stop = () => window.clearInterval(timer);
+  const start = () => {
+    stop();
+    timer = window.setInterval(() => update(active + 1), options.interval);
+  };
+  const go = (index, user = false) => {
+    update(index, user);
+    start();
+  };
+  $(options.prev, root)?.addEventListener('click', () => go(active - 1, true));
+  $(options.next, root)?.addEventListener('click', () => go(active + 1, true));
+  root.addEventListener('click', (event) => {
+    const item = event.target.closest(options.item);
+    if (!item || item.classList.contains('is-active')) return;
+    const index = getItems().indexOf(item);
+    if (index >= 0) go(index, true);
+  });
+  root.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    dragging = true;
+    startX = event.clientX;
+    deltaX = 0;
+    root.classList.add('is-dragging');
+    root.setPointerCapture?.(event.pointerId);
+    stop();
+  });
+  root.addEventListener('pointermove', (event) => {
+    if (dragging) deltaX = event.clientX - startX;
+  });
+  const finish = (event) => {
+    if (!dragging) return;
+    dragging = false;
+    root.classList.remove('is-dragging');
+    root.releasePointerCapture?.(event.pointerId);
+    if (Math.abs(deltaX) > 45) go(active + (deltaX < 0 ? 1 : -1), true);
+    else start();
+  };
+  root.addEventListener('pointerup', finish);
+  root.addEventListener('pointercancel', finish);
+  root.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      go(active - 1, true);
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      go(active + 1, true);
+    }
+  });
+  root.addEventListener('mouseenter', stop);
+  root.addEventListener('mouseleave', start);
+  root.addEventListener('focusin', stop);
+  root.addEventListener('focusout', (event) => {
+    if (!root.contains(event.relatedTarget)) start();
+  });
+  update(0);
+  start();
+  return { update, refresh: () => update(active), destroy: stop };
+}
+
+async function loadPublicMedia() {
+  try {
+    const data = await api('/media?active=1');
+    const media = data.media || [];
+    const hero = media.find((item) => item.slot === 'hero' && item.kind === 'image');
+    const booking = media.find((item) => item.slot === 'booking' && item.kind === 'image');
+    if (hero) {
+      $('.hero-field').style.backgroundImage = 'linear-gradient(90deg, rgba(7,14,10,.95), rgba(7,14,10,.3)), url("' + hero.url.replaceAll('"', '') + '")';
+    }
+    if (booking) {
+      $('#bookingBackdrop').style.backgroundImage = 'linear-gradient(90deg, rgba(6,13,9,.96), rgba(6,13,9,.55)), url("' + booking.url.replaceAll('"', '') + '")';
+    }
+    const gallery = media.filter((item) => item.slot === 'gallery').slice(0, 8);
+    const stage = $('.field-reel-stage');
+    gallery.forEach((item, offset) => {
+      const figure = document.createElement('figure');
+      figure.className = 'field-frame is-hidden';
+      figure.dataset.fieldIndex = String($$('.field-frame', stage).length);
+      const visual = item.kind === 'video' ? document.createElement('video') : document.createElement('img');
+      visual.src = item.url;
+      if (item.kind === 'video') {
+        visual.muted = true;
+        visual.loop = true;
+        visual.playsInline = true;
+        visual.autoplay = true;
+      } else {
+        visual.alt = item.alt || item.title || 'New Hira campaign image';
+      }
+      const caption = document.createElement('figcaption');
+      caption.innerHTML = '<span>CAMPAIGN / ' + String(offset + 1).padStart(2, '0') + '</span><b>' + escapeHtml(item.title || 'Field update') + '</b>';
+      figure.append(visual, caption);
+      stage.appendChild(figure);
+    });
+  } catch (error) {
+    /* Static GitHub preview: built-in imagery remains available. */
+  }
+}
+
+function setupCarousels() {
+  createPerspectiveCarousel({
+    root: '#depthCarousel',
+    item: '.depth-card',
+    prev: '[data-depth-prev]',
+    next: '[data-depth-next]',
+    counter: '#depthCounter',
+    progress: '#depthProgress',
+    interval: 5600,
+    eventName: 'product_carousel_change'
+  });
+  createPerspectiveCarousel({
+    root: '#fieldReel',
+    item: '.field-frame',
+    prev: '[data-field-prev]',
+    next: '[data-field-next]',
+    counter: '#fieldCounter',
+    dots: '#fieldDots',
+    interval: 6200,
+    eventName: 'field_carousel_change'
+  });
+}
+
+let bookingStep = 0;
+
+function showBookingStep(index) {
+  const steps = $$('.booking-step');
+  bookingStep = Math.max(0, Math.min(steps.length - 1, index));
+  steps.forEach((step, stepIndex) => {
+    const active = stepIndex === bookingStep;
+    step.hidden = !active;
+    step.classList.toggle('is-active', active);
+  });
+  $$('.booking-stepper i').forEach((item, itemIndex) => item.classList.toggle('is-active', itemIndex <= bookingStep));
+  $('#bookingStepLabel').textContent = 'STEP ' + String(bookingStep + 1).padStart(2, '0') + ' OF 03';
+  trackEvent('booking_step_view', { step: bookingStep + 1 });
+}
+
+function validateStep(step) {
+  const fields = $$('input, select, textarea', step).filter((field) => !field.disabled);
+  for (const field of fields) {
+    if (!field.checkValidity()) {
+      field.reportValidity();
+      field.focus();
+      return false;
+    }
+    if (field.name === 'phone' && cleanPhone(field.value).length !== 10) {
+      field.setCustomValidity('Enter a valid 10-digit mobile number.');
+      field.reportValidity();
+      field.addEventListener('input', () => field.setCustomValidity(''), { once: true });
+      return false;
+    }
+  }
+  return true;
+}
+
+function bookingMessage(booking) {
+  return [
+    'NEW HIRA HARVEST BOOKING',
+    '',
+    'Reference: ' + booking.reference,
+    'Name: ' + booking.name,
+    'Phone: ' + booking.phone,
+    'Village: ' + booking.village,
+    'District / town: ' + booking.location,
+    'Crop: ' + booking.crop,
+    'Approx. acreage: ' + booking.acreage,
+    'Preferred date: ' + dateLabel(booking.date),
+    'Date flexibility: ' + booking.flexibility,
+    'Field access: ' + booking.access,
+    'Machine: ' + booking.machine,
+    booking.notes ? 'Notes: ' + booking.notes : '',
+    '',
+    'Please confirm machine availability and the harvest window.'
+  ].filter(Boolean).join('\n');
+}
+
+function savePendingBooking(booking) {
+  const current = JSON.parse(localStorage.getItem(PENDING_BOOKINGS_KEY) || '[]');
+  current.unshift(booking);
+  localStorage.setItem(PENDING_BOOKINGS_KEY, JSON.stringify(current.slice(0, 20)));
+}
+
+async function submitBooking(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const finalStep = $('.booking-step[data-booking-step="2"]');
+  if (!validateStep(finalStep)) return;
+  const submit = $('#bookingSubmit');
+  submit.disabled = true;
+  submit.textContent = 'Sending reservation...';
+  const values = Object.fromEntries(new FormData(form).entries());
+  values.phone = cleanPhone(values.phone);
+  values.source = 'website';
+  let booking;
+  let shared = true;
+  try {
+    const response = await api('/bookings', { method: 'POST', body: values });
+    booking = response.booking;
+  } catch (error) {
+    shared = false;
+    booking = {
+      ...values,
+      id: 'LOCAL-' + Date.now().toString(36).toUpperCase(),
+      reference: 'NH-' + new Date().toISOString().slice(2, 10).replaceAll('-', '') + '-' + String(Date.now()).slice(-4),
+      createdAt: new Date().toISOString(),
+      status: 'new'
+    };
+    savePendingBooking(booking);
+  }
+  $('#bookingForm').hidden = true;
+  $('#bookingSuccess').hidden = false;
+  $('#bookingReference').textContent = booking.reference;
+  $('#bookingSuccessCopy').textContent = shared
+    ? 'The request is saved in the private booking desk. Confirm once on WhatsApp so the team can reply in the same conversation.'
+    : 'The Cloudflare booking service is not connected on this host yet. Your request is prepared locally; send it on WhatsApp to reach the desk now.';
+  $('#bookingWhatsApp').href = 'https://wa.me/' + CONTACT_PHONE + '?text=' + encodeURIComponent(bookingMessage(booking));
+  trackEvent('booking_submitted', { crop: booking.crop, machine: booking.machine, shared });
+  showToast(shared ? 'Reservation saved. Reference ' + booking.reference : 'Reservation prepared. Please finish on WhatsApp.');
+  submit.disabled = false;
+  submit.innerHTML = 'Send reservation <b>&nearr;</b>';
+}
+
+function setupBooking() {
+  const form = $('#bookingForm');
+  if (!form) return;
+  const today = new Date();
+  today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+  const dateField = form.elements.date;
+  if (dateField) dateField.min = today.toISOString().slice(0, 10);
+  $$('[data-booking-next]').forEach((button) => button.addEventListener('click', () => {
+    const step = button.closest('.booking-step');
+    if (!validateStep(step)) return;
+    showBookingStep(bookingStep + 1);
+  }));
+  $$('[data-booking-prev]').forEach((button) => button.addEventListener('click', () => showBookingStep(bookingStep - 1)));
+  form.addEventListener('submit', submitBooking);
+  $('#newBookingButton')?.addEventListener('click', () => {
+    form.reset();
+    $('#bookingSuccess').hidden = true;
+    form.hidden = false;
+    showBookingStep(0);
+  });
+  $('#quickBookingForm')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const values = Object.fromEntries(new FormData(event.currentTarget).entries());
+    form.elements.name.value = values.name || '';
+    form.elements.location.value = values.location || '';
+    form.elements.crop.value = values.crop || '';
+    showBookingStep(0);
+    $('#booking').scrollIntoView({ behavior: 'smooth' });
+    trackEvent('quick_booking_started', { crop: values.crop });
+  });
+  showBookingStep(0);
+}
+
+function setupLeadGate() {
+  const modal = $('#leadModal');
+  if (!modal) return;
+  const close = (reason) => {
+    modal.hidden = true;
+    setModalState(false);
+    localStorage.setItem(LEAD_GATE_KEY, String(Date.now()));
+    if (reason) trackEvent(reason);
+  };
+  const lastSeen = Number(localStorage.getItem(LEAD_GATE_KEY) || 0);
+  const shouldShow = !lastSeen || Date.now() - lastSeen > 7 * 24 * 60 * 60 * 1000;
+  if (shouldShow) {
+    window.setTimeout(() => {
+      if (document.body.classList.contains('modal-open')) return;
+      modal.hidden = false;
+      setModalState(true);
+      trackEvent('lead_gate_shown');
+    }, 5200);
+  }
+  $('#leadClose')?.addEventListener('click', () => close('lead_gate_closed'));
+  $('#leadSkip')?.addEventListener('click', () => close('lead_gate_skipped'));
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) close('lead_gate_closed');
+  });
+  $('#leadForm')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const values = Object.fromEntries(new FormData(form).entries());
+    values.phone = cleanPhone(values.phone);
+    values.source = 'welcome_registration';
+    if (values.phone.length !== 10) {
+      form.elements.phone.setCustomValidity('Enter a valid 10-digit mobile number.');
+      form.elements.phone.reportValidity();
+      form.elements.phone.addEventListener('input', () => form.elements.phone.setCustomValidity(''), { once: true });
+      return;
+    }
+    const button = $('button[type="submit"]', form);
+    button.disabled = true;
+    button.textContent = 'Registering...';
+    try {
+      await api('/leads', { method: 'POST', body: values });
+      showToast('Registration saved. The booking desk can now contact you.');
+    } catch (error) {
+      showToast('Registration service is not connected yet. Please use the booking form or WhatsApp.');
+    }
+    trackEvent('lead_submitted', { interest: values.interest });
+    button.disabled = false;
+    button.innerHTML = 'Register my interest <span>&nearr;</span>';
+    close();
+  });
+}
+
+function openDesk() {
+  $('#deskModal').hidden = false;
+  setModalState(true);
+  checkBackend();
+  if (adminState.token) enterDesk();
+}
+
+function closeDesk() {
+  $('#deskModal').hidden = true;
+  setModalState(false);
+}
+
+async function checkBackend() {
+  const status = $('#deskBackendStatus');
+  if (!status) return;
+  try {
+    await api('/health');
+    status.textContent = 'Secure Cloudflare service online.';
+  } catch (error) {
+    status.textContent = 'Cloudflare backend not connected on this preview. Follow the included deployment guide to activate the owner desk.';
+  }
+}
+
+async function adminApi(path, options = {}) {
+  try {
+    return await api(path, options, true);
+  } catch (error) {
+    if (error.status === 401) {
+      adminState.token = '';
+      sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+      $('#deskGate').hidden = false;
+      $('#deskApp').hidden = true;
+      showToast('Owner session expired. Enter the PIN again.');
+    }
+    throw error;
+  }
+}
+
+async function enterDesk() {
+  $('#deskGate').hidden = true;
+  $('#deskApp').hidden = false;
+  $('#deskToday').textContent = new Intl.DateTimeFormat('en-IN', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).toUpperCase();
+  switchAdminView(adminState.activeView);
+}
+
+async function loginDesk(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = $('button[type="submit"]', form);
+  button.disabled = true;
+  button.textContent = 'Verifying...';
+  try {
+    const response = await api('/admin/login', { method: 'POST', body: { pin: $('#deskPin').value } });
+    adminState.token = response.token;
+    sessionStorage.setItem(ADMIN_TOKEN_KEY, response.token);
+    form.reset();
+    await enterDesk();
+    showToast('Owner desk unlocked.');
+  } catch (error) {
+    showToast(error.message || 'Owner authentication failed.');
+    $('#deskPin').focus();
+  } finally {
+    button.disabled = false;
+    button.innerHTML = 'Open operations <span>&nearr;</span>';
+  }
+}
+
+function switchAdminView(view) {
+  adminState.activeView = view;
+  $$('[data-admin-tab]').forEach((button) => button.classList.toggle('is-active', button.dataset.adminTab === view));
+  $$('[data-admin-view]').forEach((section) => {
+    const active = section.dataset.adminView === view;
+    section.hidden = !active;
+    section.classList.toggle('is-active', active);
+  });
+  if (view === 'overview') loadOverview();
+  if (view === 'bookings') loadBookings();
+  if (view === 'leads') loadLeads();
+  if (view === 'media') loadMedia();
+}
+
+function renderOverview(data) {
+  const summary = data.summary || {};
+  $('#metricBookings').textContent = summary.bookings || 0;
+  $('#metricToday').textContent = (summary.todayBookings || 0) + ' today';
+  $('#metricNew').textContent = summary.newBookings || 0;
+  $('#metricLeads').textContent = summary.leads || 0;
+  $('#metricVisits').textContent = summary.visits7d || 0;
+  $('#sidebarBookingCount').textContent = summary.newBookings || 0;
+  $('#sidebarLeadCount').textContent = summary.leads || 0;
+
+  const activity = data.activity || [];
+  const max = Math.max(1, ...activity.map((item) => Math.max(item.visits || 0, item.bookingStarts || 0)));
+  $('#activityChart').innerHTML = activity.map((item) => {
+    const visits = Math.max(2, ((item.visits || 0) / max) * 100);
+    const starts = Math.max(2, ((item.bookingStarts || 0) / max) * 100);
+    return '<div class="activity-day"><div class="activity-bars"><i style="height:' + visits + '%" title="' + escapeHtml(item.visits) + ' visits"></i><i style="height:' + starts + '%" title="' + escapeHtml(item.bookingStarts) + ' booking starts"></i></div><span>' + escapeHtml(item.label) + '</span></div>';
+  }).join('');
+
+  const crops = data.topCrops || [];
+  const cropMax = Math.max(1, ...crops.map((item) => item.count || 0));
+  $('#cropRank').innerHTML = crops.length ? crops.map((item) => '<div class="rank-item"><span>' + escapeHtml(item.crop) + '</span><b>' + escapeHtml(item.count) + '</b><i style="--rank-width:' + ((item.count / cropMax) * 100) + '%"></i></div>').join('') : '<div class="board-empty">Crop demand will appear after bookings arrive.</div>';
+
+  const devices = data.devices || [];
+  const totalDevices = Math.max(1, devices.reduce((total, item) => total + Number(item.count || 0), 0));
+  const mobileCount = devices.filter((item) => item.device === 'mobile').reduce((total, item) => total + Number(item.count || 0), 0);
+  const mobilePercent = Math.round((mobileCount / totalDevices) * 100);
+  $('#deviceMix').innerHTML = '<div class="device-ring" style="--mobile:' + mobilePercent + '%"><b>' + mobilePercent + '%</b><span>MOBILE</span></div>';
+
+  const recent = data.recentBookings || [];
+  $('#recentBookings').innerHTML = recent.length ? recent.map((booking) => '<article class="recent-row"><div><b>' + escapeHtml(booking.name) + '</b><small>' + escapeHtml(booking.phone) + '</small></div><div><b>' + escapeHtml(booking.village || booking.location) + '</b><small>' + escapeHtml(booking.crop) + ' / ' + escapeHtml(booking.acreage || '-') + ' acres</small></div><div><span class="status-pill status-' + escapeHtml(booking.status) + '">' + escapeHtml(booking.status) + '</span></div><small>' + escapeHtml(timeLabel(booking.createdAt)) + '</small></article>').join('') : '<div class="board-empty">New booking requests will appear here.</div>';
+}
+
+async function loadOverview() {
+  try {
+    const data = await adminApi('/admin/overview');
+    renderOverview(data);
+  } catch (error) {
+    if (error.status !== 401) showToast('Could not load overview: ' + error.message);
+  }
+}
+
+function renderBookings(bookings) {
+  const board = $('#bookingBoard');
+  if (!bookings.length) {
+    board.innerHTML = '<div class="board-empty">No bookings match this filter.</div>';
+    return;
+  }
+  board.innerHTML = bookings.map((booking) => {
+    const phone = cleanPhone(booking.phone);
+    return '<article class="booking-row" data-booking-id="' + escapeHtml(booking.id) + '"><div><b>' + escapeHtml(booking.name) + '</b><small>' + escapeHtml(booking.reference) + ' / ' + escapeHtml(booking.phone) + '</small></div><div><b>' + escapeHtml(booking.village || '-') + ', ' + escapeHtml(booking.location || '-') + '</b><small>' + escapeHtml(booking.crop) + ' / ' + escapeHtml(booking.acreage || '-') + ' acres / ' + escapeHtml(dateLabel(booking.date)) + '</small></div><div><b>' + escapeHtml(booking.machine || 'Help me choose') + '</b><small>' + escapeHtml(booking.source || 'website') + '</small></div><div><select data-booking-status aria-label="Booking status"><option value="new"' + (booking.status === 'new' ? ' selected' : '') + '>New</option><option value="contacted"' + (booking.status === 'contacted' ? ' selected' : '') + '>Contacted</option><option value="confirmed"' + (booking.status === 'confirmed' ? ' selected' : '') + '>Confirmed</option><option value="completed"' + (booking.status === 'completed' ? ' selected' : '') + '>Completed</option><option value="cancelled"' + (booking.status === 'cancelled' ? ' selected' : '') + '>Cancelled</option></select><small>' + escapeHtml(timeLabel(booking.createdAt)) + '</small></div><div class="row-actions"><a href="https://wa.me/91' + escapeHtml(phone) + '" target="_blank" rel="noopener" title="WhatsApp">W</a><button type="button" data-delete-booking title="Delete booking">&times;</button></div></article>';
+  }).join('');
+}
+
+async function loadBookings() {
+  const status = $('#bookingFilter')?.value || 'all';
+  const query = $('#bookingSearch')?.value || '';
+  const params = new URLSearchParams({ page: String(adminState.page), limit: '30' });
+  if (status !== 'all') params.set('status', status);
+  if (query) params.set('q', query);
+  try {
+    const data = await adminApi('/admin/bookings?' + params.toString());
+    adminState.bookings = data.bookings || [];
+    adminState.totalPages = data.totalPages || 1;
+    renderBookings(adminState.bookings);
+    $('#bookingsPage').textContent = 'Page ' + adminState.page + ' of ' + adminState.totalPages;
+    $('#bookingsPrev').disabled = adminState.page <= 1;
+    $('#bookingsNext').disabled = adminState.page >= adminState.totalPages;
+  } catch (error) {
+    if (error.status !== 401) showToast('Could not load bookings: ' + error.message);
+  }
+}
+
+async function updateBookingStatus(id, status) {
+  try {
+    await adminApi('/admin/bookings/' + encodeURIComponent(id), { method: 'PATCH', body: { status } });
+    showToast('Booking moved to ' + status + '.');
+    loadBookings();
+    loadOverview();
+  } catch (error) {
+    showToast('Status update failed: ' + error.message);
+  }
+}
+
+async function deleteBooking(id) {
+  if (!window.confirm('Delete this booking permanently?')) return;
+  try {
+    await adminApi('/admin/bookings/' + encodeURIComponent(id), { method: 'DELETE' });
+    showToast('Booking deleted.');
+    loadBookings();
+    loadOverview();
+  } catch (error) {
+    showToast('Delete failed: ' + error.message);
+  }
+}
+
+async function loadLeads() {
+  try {
+    const data = await adminApi('/admin/leads?limit=200');
+    adminState.leads = data.leads || [];
+    const board = $('#leadBoard');
+    board.innerHTML = adminState.leads.length ? adminState.leads.map((lead) => {
+      const phone = cleanPhone(lead.phone);
+      return '<article class="lead-row"><span class="lead-avatar">' + escapeHtml((lead.name || 'L').slice(0, 1).toUpperCase()) + '</span><div><b>' + escapeHtml(lead.name) + '</b><small>' + escapeHtml(lead.phone) + ' / ' + escapeHtml(lead.location || 'Location not shared') + '</small></div><div><b>' + escapeHtml(lead.interest || 'Harvest booking') + '</b><small>' + escapeHtml(lead.source || 'website') + '</small></div><div><b>' + escapeHtml(lead.status || 'new') + '</b><small>' + escapeHtml(timeLabel(lead.createdAt)) + '</small></div><a href="https://wa.me/91' + escapeHtml(phone) + '" target="_blank" rel="noopener">WHATSAPP &nearr;</a></article>';
+    }).join('') : '<div class="board-empty">No visitor has registered contact details yet.</div>';
+    $('#sidebarLeadCount').textContent = adminState.leads.length;
+  } catch (error) {
+    if (error.status !== 401) showToast('Could not load leads: ' + error.message);
+  }
+}
+
+function mediaVisual(item) {
+  if (item.kind === 'video') return '<video src="' + escapeHtml(item.url) + '" muted playsinline></video>';
+  return '<img src="' + escapeHtml(item.url) + '" alt="' + escapeHtml(item.alt || item.title) + '" />';
+}
+
+function renderMedia() {
+  const library = $('#mediaLibrary');
+  library.innerHTML = adminState.media.length ? adminState.media.map((item) => '<article class="media-card" data-media-id="' + escapeHtml(item.id) + '"><figure>' + mediaVisual(item) + '<span>' + escapeHtml(item.slot) + '</span></figure><div><b>' + escapeHtml(item.title) + '</b><small>' + escapeHtml(item.kind) + ' / ' + (item.active ? 'published' : 'hidden') + '</small><div class="media-actions"><button type="button" data-edit-media>Edit</button><button type="button" data-toggle-media="' + (item.active ? '0' : '1') + '">' + (item.active ? 'Hide' : 'Publish') + '</button><button type="button" data-delete-media>Delete</button></div><div class="media-editor" hidden><input data-media-title value="' + escapeHtml(item.title) + '" maxlength="100" aria-label="Media title" /><input data-media-alt value="' + escapeHtml(item.alt || '') + '" maxlength="180" aria-label="Media description" placeholder="Description / alt text" /><select data-media-slot aria-label="Media placement"><option value="gallery"' + (item.slot === 'gallery' ? ' selected' : '') + '>Campaign gallery</option><option value="hero"' + (item.slot === 'hero' ? ' selected' : '') + '>Hero background</option><option value="booking"' + (item.slot === 'booking' ? ' selected' : '') + '>Booking backdrop</option></select><button type="button" data-save-media>Save changes</button></div></div></article>').join('') : '<div class="board-empty">No uploaded campaign media yet. Built-in website assets remain active.</div>';
+}
+
+async function loadMedia() {
+  try {
+    const data = await adminApi('/admin/media');
+    adminState.media = data.media || [];
+    renderMedia();
+  } catch (error) {
+    if (error.status !== 401) showToast('Could not load media: ' + error.message);
+  }
+}
+
+async function uploadMedia(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = $('button[type="submit"]', form);
+  const file = form.elements.file.files[0];
+  if (!file) return;
+  if (file.size > 20 * 1024 * 1024) {
+    showToast('Please choose a file smaller than 20 MB.');
+    return;
+  }
+  const body = new FormData(form);
+  body.set('active', form.elements.active.checked ? '1' : '0');
+  button.disabled = true;
+  button.textContent = 'Uploading...';
+  try {
+    await adminApi('/admin/media', { method: 'POST', body });
+    form.reset();
+    form.elements.active.checked = true;
+    showToast('Campaign asset uploaded.');
+    loadMedia();
+  } catch (error) {
+    showToast('Upload failed: ' + error.message);
+  } finally {
+    button.disabled = false;
+    button.innerHTML = 'Upload to library <span>&uarr;</span>';
+  }
+}
+
+async function toggleMedia(id, active) {
+  try {
+    await adminApi('/admin/media/' + encodeURIComponent(id), { method: 'PATCH', body: { active } });
+    showToast(active ? 'Asset published.' : 'Asset hidden.');
+    loadMedia();
+  } catch (error) {
+    showToast('Media update failed: ' + error.message);
+  }
+}
+
+async function updateMediaDetails(card) {
+  const id = card.dataset.mediaId;
+  const body = {
+    title: $('[data-media-title]', card).value,
+    alt: $('[data-media-alt]', card).value,
+    slot: $('[data-media-slot]', card).value
+  };
+  if (!body.title.trim()) {
+    showToast('Media title cannot be empty.');
+    return;
+  }
+  try {
+    await adminApi('/admin/media/' + encodeURIComponent(id), { method: 'PATCH', body });
+    showToast('Media details updated.');
+    loadMedia();
+  } catch (error) {
+    showToast('Media edit failed: ' + error.message);
+  }
+}
+
+async function deleteMedia(id) {
+  if (!window.confirm('Delete this media file from Cloudflare storage?')) return;
+  try {
+    await adminApi('/admin/media/' + encodeURIComponent(id), { method: 'DELETE' });
+    showToast('Media file deleted.');
+    loadMedia();
+  } catch (error) {
+    showToast('Media delete failed: ' + error.message);
+  }
+}
+
+async function createAdminBooking(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const values = Object.fromEntries(new FormData(form).entries());
+  values.phone = cleanPhone(values.phone);
+  values.source = 'owner_desk';
+  try {
+    await adminApi('/admin/bookings', { method: 'POST', body: values });
+    form.reset();
+    $('#adminAddPanel').hidden = true;
+    showToast('Booking added to the shared board.');
+    loadBookings();
+    loadOverview();
+  } catch (error) {
+    showToast('Could not add booking: ' + error.message);
+  }
+}
+
+async function exportBookings() {
+  try {
+    const data = await adminApi('/admin/bookings?limit=1000&page=1');
+    const rows = data.bookings || [];
+    const columns = ['reference', 'createdAt', 'status', 'name', 'phone', 'village', 'location', 'crop', 'acreage', 'date', 'machine', 'source', 'notes'];
+    const quote = (value) => '"' + String(value == null ? '' : value).replaceAll('"', '""') + '"';
+    const csv = [columns.join(',')].concat(rows.map((row) => columns.map((column) => quote(row[column])).join(','))).join('\n');
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    link.download = 'new-hira-bookings-' + new Date().toISOString().slice(0, 10) + '.csv';
+    link.click();
+    URL.revokeObjectURL(link.href);
+  } catch (error) {
+    showToast('Export failed: ' + error.message);
+  }
+}
+
+function setupDesk() {
+  $$('[data-open-desk]').forEach((button) => button.addEventListener('click', openDesk));
+  $('#deskClose')?.addEventListener('click', closeDesk);
+  $('#deskModal')?.addEventListener('click', (event) => {
+    if (event.target === $('#deskModal')) closeDesk();
+  });
+  $('#deskLoginForm')?.addEventListener('submit', loginDesk);
+  $('#deskLogout')?.addEventListener('click', () => {
+    adminState.token = '';
+    sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+    $('#deskApp').hidden = true;
+    $('#deskGate').hidden = false;
+    showToast('Signed out of owner desk.');
+  });
+  $$('[data-admin-tab]').forEach((button) => button.addEventListener('click', () => switchAdminView(button.dataset.adminTab)));
+  $$('[data-jump-admin]').forEach((button) => button.addEventListener('click', () => switchAdminView(button.dataset.jumpAdmin)));
+  $$('[data-admin-refresh]').forEach((button) => button.addEventListener('click', () => switchAdminView(adminState.activeView)));
+  $('#adminAddToggle')?.addEventListener('click', () => {
+    switchAdminView('bookings');
+    $('#adminAddPanel').hidden = !$('#adminAddPanel').hidden;
+  });
+  $('#adminBookingForm')?.addEventListener('submit', createAdminBooking);
+  $('#bookingFilter')?.addEventListener('change', () => {
+    adminState.page = 1;
+    loadBookings();
+  });
+  let searchTimer = 0;
+  $('#bookingSearch')?.addEventListener('input', () => {
+    window.clearTimeout(searchTimer);
+    searchTimer = window.setTimeout(() => {
+      adminState.page = 1;
+      loadBookings();
+    }, 350);
+  });
+  $('#bookingsPrev')?.addEventListener('click', () => {
+    if (adminState.page > 1) {
+      adminState.page -= 1;
+      loadBookings();
+    }
+  });
+  $('#bookingsNext')?.addEventListener('click', () => {
+    if (adminState.page < adminState.totalPages) {
+      adminState.page += 1;
+      loadBookings();
+    }
+  });
+  $('#bookingBoard')?.addEventListener('change', (event) => {
+    const select = event.target.closest('[data-booking-status]');
+    if (!select) return;
+    const row = select.closest('[data-booking-id]');
+    updateBookingStatus(row.dataset.bookingId, select.value);
+  });
+  $('#bookingBoard')?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-delete-booking]');
+    if (!button) return;
+    deleteBooking(button.closest('[data-booking-id]').dataset.bookingId);
+  });
+  $('#exportBookings')?.addEventListener('click', exportBookings);
+  $('#mediaForm')?.addEventListener('submit', uploadMedia);
+  $('#mediaLibrary')?.addEventListener('click', (event) => {
+    const card = event.target.closest('[data-media-id]');
+    if (!card) return;
+    const edit = event.target.closest('[data-edit-media]');
+    const save = event.target.closest('[data-save-media]');
+    const toggle = event.target.closest('[data-toggle-media]');
+    const remove = event.target.closest('[data-delete-media]');
+    if (edit) {
+      const editor = $('.media-editor', card);
+      editor.hidden = !editor.hidden;
+    }
+    if (save) updateMediaDetails(card);
+    if (toggle) toggleMedia(card.dataset.mediaId, toggle.dataset.toggleMedia === '1');
+    if (remove) deleteMedia(card.dataset.mediaId);
+  });
+}
+
+function setupGlobalEscape() {
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (!$('#brochureModal').hidden) {
+      $('#brochureModal').hidden = true;
+      setModalState(false);
+    } else if (!$('#leadModal').hidden) {
+      $('#leadModal').hidden = true;
+      localStorage.setItem(LEAD_GATE_KEY, String(Date.now()));
+      setModalState(false);
+    } else if (!$('#deskModal').hidden) {
+      closeDesk();
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  setupLoader();
   $('#year').textContent = new Date().getFullYear();
-  setTimeout(() => {
-    $('#siteLoader')?.classList.add('is-hidden');
-    document.body.classList.add('is-ready');
-    if (typeof window.IntersectionObserver !== 'function') $$('.reveal').forEach((item) => item.classList.add('is-visible'));
-    document.dispatchEvent(new Event('fieldcraft:ready'));
-  }, 1250);
-  setModel(currentModel); setupMobileNav(); setupReveal(); setupScrollPolish(); setupParallax(); setupFieldGallery(); setupVisitorGate(); setupDesk(); applyCustomAssets();
-  trackEvent('page_view');
-  $$('.fleet-tab').forEach((tab) => tab.addEventListener('click', () => setModel(tab.dataset.modelTab)));
-  setupFleetCarousel();
-  $('#bookingForm')?.addEventListener('submit', handleBookingSubmit);
-  $('#quickBookingForm')?.addEventListener('submit', handleQuickBooking);
-  $('#newBookingButton')?.addEventListener('click', () => { $('#bookingSuccess').hidden = true; $('#bookingForm').hidden = false; $('#bookingForm').reset(); });
-  $('#machineBookButton')?.addEventListener('click', () => { $('#bookingForm [name="machine"]').value = `${MODELS[currentModel].name}`; });
+  setupNavigation();
+  setupScrollEffects();
+  setupReveal();
+  setupSectionAnalytics();
+  setupHero();
+  setupFleet();
+  setupBrochure();
+  setupBooking();
+  setupLeadGate();
+  setupDesk();
+  setupGlobalEscape();
+  await loadPublicMedia();
+  setupCarousels();
+  trackEvent('page_view', { title: document.title });
 });

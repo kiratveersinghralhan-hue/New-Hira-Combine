@@ -1,0 +1,15 @@
+name = "new-hira-fieldcraft"
+compatibility_date = "2026-07-01"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "new-hira-fieldcraft"
+database_id = "PASTE_YOUR_D1_DATABASE_ID"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "new-hira-fieldcraft-media"
+
+[vars]
+ALLOWED_ORIGINS = "https://YOUR-PROJECT.pages.dev,https://YOUR-DOMAIN.com"
