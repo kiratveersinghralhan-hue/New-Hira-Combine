@@ -3,6 +3,91 @@ const decoder = new TextDecoder();
 const BOOKING_STATUSES = new Set(['new', 'contacted', 'confirmed', 'completed', 'cancelled']);
 const MEDIA_SLOTS = new Set(['hero', 'booking', 'gallery']);
 const MAX_MEDIA_BYTES = 20 * 1024 * 1024;
+const SCHEMA_SQL = `
+CREATE TABLE IF NOT EXISTS bookings (
+  id TEXT PRIMARY KEY,
+  reference TEXT NOT NULL UNIQUE,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'new',
+  source TEXT NOT NULL DEFAULT 'website',
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  village TEXT NOT NULL,
+  location TEXT NOT NULL,
+  crop TEXT NOT NULL,
+  acreage REAL,
+  preferred_date TEXT,
+  flexibility TEXT,
+  access TEXT,
+  machine TEXT,
+  notes TEXT,
+  consent INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_bookings_created_at ON bookings(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_bookings_status ON bookings(status);
+CREATE INDEX IF NOT EXISTS idx_bookings_crop ON bookings(crop);
+CREATE INDEX IF NOT EXISTS idx_bookings_phone ON bookings(phone);
+CREATE TABLE IF NOT EXISTS leads (
+  id TEXT PRIMARY KEY,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'new',
+  source TEXT NOT NULL DEFAULT 'website',
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  location TEXT,
+  interest TEXT,
+  consent INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_leads_created_at ON leads(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
+CREATE INDEX IF NOT EXISTS idx_leads_phone ON leads(phone);
+CREATE TABLE IF NOT EXISTS events (
+  id TEXT PRIMARY KEY,
+  event_name TEXT NOT NULL,
+  session_id TEXT,
+  path TEXT,
+  referrer TEXT,
+  device TEXT,
+  created_at TEXT NOT NULL,
+  metadata TEXT NOT NULL DEFAULT '{}'
+);
+CREATE INDEX IF NOT EXISTS idx_events_created_at ON events(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_events_name ON events(event_name);
+CREATE INDEX IF NOT EXISTS idx_events_session ON events(session_id);
+CREATE TABLE IF NOT EXISTS media (
+  id TEXT PRIMARY KEY,
+  object_key TEXT NOT NULL UNIQUE,
+  title TEXT NOT NULL,
+  alt_text TEXT,
+  slot TEXT NOT NULL DEFAULT 'gallery',
+  kind TEXT NOT NULL,
+  mime_type TEXT NOT NULL,
+  size_bytes INTEGER NOT NULL,
+  active INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_media_slot_active ON media(slot, active);
+CREATE INDEX IF NOT EXISTS idx_media_created_at ON media(created_at DESC);
+CREATE TABLE IF NOT EXISTS request_limits (
+  limit_key TEXT PRIMARY KEY,
+  hits INTEGER NOT NULL,
+  window_started_at TEXT NOT NULL
+);
+`;
+let schemaReadyPromise;
+
+function ensureSchema(env) {
+  if (!schemaReadyPromise) {
+    schemaReadyPromise = env.DB.exec(SCHEMA_SQL).catch((error) => {
+      schemaReadyPromise = undefined;
+      throw error;
+    });
+  }
+  return schemaReadyPromise;
+}
 
 function corsHeaders(request, env) {
   const origin = request.headers.get('Origin') || '';
@@ -470,12 +555,13 @@ async function adminDeleteMedia(request, env, id) {
 }
 
 async function handle(request, env) {
-  if (!env.DB) return json(request, env, { ok: false, error: 'D1 database binding DB is not configured.' }, 503);
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(request, env) });
+  if (!env.DB) return json(request, env, { ok: false, error: 'D1 database binding DB is not configured.' }, 503);
+  await ensureSchema(env);
   const url = new URL(request.url);
   const path = url.pathname.replace(/\/+$/, '') || '/';
 
-  if (path === '/api/health' && request.method === 'GET') return json(request, env, { ok: true, service: 'new-hira-fieldcraft', version: '17' });
+  if (path === '/api/health' && request.method === 'GET') return json(request, env, { ok: true, service: 'new-hira-fieldcraft', version: '18.1-worker' });
   if (path === '/api/bookings' && request.method === 'POST') return publicBooking(request, env);
   if (path === '/api/leads' && request.method === 'POST') return publicLead(request, env);
   if (path === '/api/events' && request.method === 'POST') return publicEvent(request, env);
@@ -505,6 +591,11 @@ async function handle(request, env) {
 
 export default {
   async fetch(request, env) {
+    const url = new URL(request.url);
+    if (!url.pathname.startsWith('/api/')) {
+      if (env.ASSETS) return env.ASSETS.fetch(request);
+      return new Response('Not found', { status: 404 });
+    }
     try {
       return await handle(request, env);
     } catch (error) {

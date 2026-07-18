@@ -18,6 +18,7 @@ Premium responsive advertisement and harvest-booking website for Ram Chand & Son
 - Anonymous traffic, device, crop-demand and seven-day activity analysis.
 - Shared campaign image/video upload, publish, hide and delete controls.
 - Cloudflare Pages Functions, D1 database and R2 media-storage implementation.
+- Cloudflare Workers Static Assets full-stack configuration for the current `workers.dev` deployment model.
 - Graceful GitHub Pages fallback: booking details can still be sent by WhatsApp when the Cloudflare API is unavailable.
 
 ## Important security behavior
@@ -54,4 +55,4 @@ For the complete system, connect the repository to Cloudflare Pages and follow c
 
 ## Cache updates
 
-The current release uses asset version 20260718-field-v18. When manually replacing app.js or styles.css later, update that version in index.html so browsers and Cloudflare do not continue showing an older design.
+The current release uses asset version 20260718-worker-v181. When manually replacing app.js or styles.css later, update that version in index.html so browsers and Cloudflare do not continue showing an older design.

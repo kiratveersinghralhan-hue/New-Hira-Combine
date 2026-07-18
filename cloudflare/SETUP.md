@@ -1,108 +1,96 @@
-# Cloudflare setup for the complete booking system
+# Cloudflare setup for the New Hira full booking system
 
-The visual website works immediately as static files. These steps activate shared booking data, owner authentication, analytics and public media uploads.
+The `newhira...workers.dev` project shown in the Cloudflare dashboard is the correct project. It is currently an assets-only Worker, which is why the public website works but `/api/admin/login` does not.
 
-## 1. Put the website on GitHub
+The updated package contains `wrangler.jsonc`. It changes that same project into a full-stack Worker: static website files remain fast assets, while `/api/*` runs `cloudflare/worker.js`.
 
-1. Create a new GitHub repository.
-2. Upload the contents of this website folder to the repository root.
-3. Confirm index.html, functions, cloudflare and assets are all visible at the repository root.
+## 1. Replace the repository files
 
-## 2. Create the Cloudflare Pages project
+Extract the latest Worker-ready ZIP and replace the old files in the connected GitHub repository.
 
-1. Open Cloudflare Dashboard.
-2. Open Workers & Pages and choose Create application.
-3. Choose Pages, connect GitHub and select the repository.
-4. Use Production branch: main.
-5. Framework preset: None.
-6. Build command: leave blank.
-7. Build output directory: .
-8. Deploy once. This first deployment can show the website before database bindings exist.
+Confirm these are visible at the repository root:
 
-The file functions/api/[[path]].js makes every /api route run on Cloudflare Pages. The included _routes.json limits Function invocation to /api/* so static image, CSS and HTML requests remain static.
+- `index.html`
+- `app.js`
+- `styles.css`
+- `wrangler.jsonc`
+- `.assetsignore`
+- `cloudflare/worker.js`
 
-## 3. Create the D1 database
+Commit the replacement to the branch connected to Cloudflare. Do not upload the ZIP itself as the website.
 
-Install Node.js if it is not already installed, then open PowerShell in the repository folder.
+## 2. Check the Worker build settings
 
-Run:
+In Cloudflare, open **Workers & Pages > newhira > Settings > Build**.
 
-    npx wrangler login
+Use:
 
-    npx wrangler d1 create new-hira-fieldcraft
+- Root directory: `/`
+- Build command: leave blank
+- Deploy command: `npx wrangler deploy`
+- Production branch: `main` (or the branch containing the website)
 
-Run the saved schema against the new remote database:
+Push the repository or choose **New deployment**. Cloudflare will read `wrangler.jsonc`, deploy the API Worker and keep serving the website assets.
 
-    npx wrangler d1 execute new-hira-fieldcraft --remote --file=cloudflare/schema.sql
+The configuration requests two resource bindings:
 
-In Cloudflare Dashboard, open the Pages project, then Settings, Bindings, Add binding, D1 database.
+- `DB`: D1 database for bookings, leads, visitor events and admin data.
+- `MEDIA`: R2 bucket for owner-uploaded photographs and videos.
 
-- Variable name: DB
-- Database: new-hira-fieldcraft
+Current Wrangler versions can provision those resources automatically. After deployment, open the **Bindings** tab and confirm that `DB` and `MEDIA` appear.
 
-Save the binding for Production and Preview if both are offered.
+## 3. Add the private owner secrets
 
-## 4. Create R2 media storage
+Open **Settings > Variables and Secrets** and add these as encrypted secrets:
 
-In Cloudflare Dashboard open R2 Object Storage and create a bucket:
+- `ADMIN_PIN`: the same private six-digit owner PIN chosen for the project.
+- `ADMIN_SESSION_SECRET`: a random value at least 32 characters long.
+- `RATE_LIMIT_SECRET`: a different random value at least 32 characters long.
 
-- Bucket name: new-hira-fieldcraft-media
+Do not put these values in GitHub, `app.js`, `wrangler.jsonc` or any public file. Wrangler deployments preserve encrypted secrets.
 
-Return to the Pages project, open Settings, Bindings, Add binding, R2 bucket.
+Optional normal variable:
 
-- Variable name: MEDIA
-- Bucket: new-hira-fieldcraft-media
-
-R2 is used only for owner-uploaded campaign images and videos. Their searchable title, slot and publish status stay in D1.
-
-## 5. Add private owner secrets
-
-In the Pages project, open Settings, Variables and Secrets.
-
-Add these as encrypted secrets:
-
-- ADMIN_PIN: enter the same private six-digit PIN chosen for this project.
-- ADMIN_SESSION_SECRET: enter a long random value of at least 32 characters.
-- RATE_LIMIT_SECRET: enter a second long random value.
-
-Do not put these values in app.js, index.html, GitHub variables or the README.
-
-Add this as a normal environment variable:
-
-- ALLOWED_ORIGINS: your Pages address and custom domain separated by commas.
+- `ALLOWED_ORIGINS`: your Worker address and custom domain, separated by commas.
 
 Example format:
 
-    https://your-project.pages.dev,https://yourdomain.com,https://www.yourdomain.com
+    https://newhira.YOUR-SUBDOMAIN.workers.dev,https://yourdomain.com
 
-## 6. Redeploy and test
+If `ALLOWED_ORIGINS` is omitted, same-site use still works.
 
-Open Deployments in the Pages project and retry the latest deployment, or push a small GitHub commit.
+## 4. Test and initialize the database
 
-Test in this order:
+After the deployment succeeds, open:
 
-1. Open https://your-project.pages.dev/api/health.
-2. It should show an OK response with service new-hira-fieldcraft.
-3. Submit one public booking.
-4. Open Owner desk and enter the private PIN.
-5. Confirm the booking appears in Bookings and Overview.
-6. Upload a small test image in Media, select Campaign gallery, publish it, then reload the public website.
+    https://newhira.YOUR-SUBDOMAIN.workers.dev/api/health
 
-## 7. Connect a domain
+The first API request automatically creates the required D1 tables and indexes. A successful response contains:
 
-In the Pages project open Custom domains, choose Set up a custom domain and enter the domain. If the domain already uses Cloudflare DNS, Cloudflare can create the record automatically.
+    {"ok":true,"service":"new-hira-fieldcraft","version":"18.1-worker"}
 
-After the domain works, add it to ALLOWED_ORIGINS and redeploy.
+Then open the website, choose **Owner desk**, and enter the private owner PIN.
 
-## 8. Updating the website later
+## 5. If automatic bindings did not appear
 
-Edit the files in GitHub and push to main. Cloudflare Pages redeploys automatically. If styling appears unchanged, verify the version after styles.css?v= and app.js?v= in index.html was increased.
+Use the **Bindings** tab visible in the project screenshot:
+
+1. Select **Add binding**.
+2. Choose **D1 database**.
+3. Create or choose a database and set the variable name to `DB`.
+4. Add another binding, choose **R2 bucket**, create or choose a bucket and set the variable name to `MEDIA`.
+5. Redeploy, then open `/api/health` again.
+
+The owner desk needs `DB`. Only admin photo/video uploads need `MEDIA`.
+
+## Important hosting distinction
+
+GitHub remains the source repository. The working full website should be opened from the `workers.dev` address or your Cloudflare custom domain. A GitHub Pages address can display the static design but cannot run this owner API.
 
 ## Troubleshooting
 
-- Owner desk says backend is not connected: verify the Pages deployment includes the functions folder and DB binding.
-- API health says DB is not configured: add the D1 binding with the exact variable name DB and redeploy.
-- Upload says R2 is not configured: add the R2 binding with the exact variable name MEDIA and redeploy.
-- Owner login says secrets are not configured: add ADMIN_PIN and ADMIN_SESSION_SECRET as encrypted secrets.
-- Website is old after upload: purge Cloudflare cache once and hard-refresh the browser, then confirm the version query in index.html changed.
-- Booking works on WhatsApp but not in admin: the public site is running as static GitHub Pages or the /api Function is not deployed.
+- **Unreadable response:** old assets-only deployment is still live, or `wrangler.jsonc` was not deployed.
+- **D1 database binding DB is not configured:** add the D1 binding with the exact variable name `DB`.
+- **Owner authentication secrets are not configured:** add `ADMIN_PIN` and `ADMIN_SESSION_SECRET` as encrypted secrets.
+- **Media storage is not configured:** add the R2 binding with the exact variable name `MEDIA`.
+- **Old design remains visible:** confirm `index.html` contains `20260718-worker-v181`, redeploy, and hard-refresh once.

@@ -255,7 +255,17 @@ async function api(path, options = {}, admin = false) {
     requestOptions.body = JSON.stringify(options.body);
   }
   const response = await fetch(API_ROOT + path, requestOptions);
-  const payload = await response.json().catch(() => ({ ok: false, error: 'The service returned an unreadable response.' }));
+  let payload;
+  try {
+    payload = await response.json();
+  } catch (parseError) {
+    const message = response.status === 404
+      ? 'The Cloudflare API is not active on this deployment yet. Deploy the included Worker configuration and bindings.'
+      : 'Cloudflare returned a non-JSON response. Check the Worker deployment and bindings.';
+    const error = new Error(message);
+    error.status = response.status;
+    throw error;
+  }
   if (!response.ok || payload.ok === false) {
     const error = new Error(payload.error || 'Request failed.');
     error.status = response.status;
