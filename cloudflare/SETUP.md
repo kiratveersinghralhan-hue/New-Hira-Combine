@@ -1,96 +1,84 @@
-# Cloudflare setup for the New Hira full booking system
+# Cloudflare setup: New Hira 18.2
 
-The `newhira...workers.dev` project shown in the Cloudflare dashboard is the correct project. It is currently an assets-only Worker, which is why the public website works but `/api/admin/login` does not.
+The connected Cloudflare Worker should remain `newhira`. GitHub stores the source; the workers.dev address (and later your custom domain) serves the complete website and API.
 
-The updated package contains `wrangler.jsonc`. It changes that same project into a full-stack Worker: static website files remain fast assets, while `/api/*` runs `cloudflare/worker.js`.
+## 1. Replace the GitHub repository contents
 
-## 1. Replace the repository files
+Extract the final ZIP. Remove the old repository files, then upload the extracted contents—not the ZIP itself.
 
-Extract the latest Worker-ready ZIP and replace the old files in the connected GitHub repository.
+Confirm the repository root contains:
 
-Confirm these are visible at the repository root:
-
-- `index.html`
-- `app.js`
-- `styles.css`
-- `wrangler.jsonc`
-- `.assetsignore`
+- `public/index.html`
+- `public/styles.css`
+- `public/app.js`
+- `public/assets/`
 - `cloudflare/worker.js`
+- `wrangler.jsonc`
+- `package.json`
 
-Commit the replacement to the branch connected to Cloudflare. Do not upload the ZIP itself as the website.
+The public website now lives in `public/`. This is intentional: Cloudflare will not publish the database schema, Worker source or deployment files as static URLs.
 
-## 2. Check the Worker build settings
+## 2. Confirm the Worker build settings
 
-In Cloudflare, open **Workers & Pages > newhira > Settings > Build**.
+Open **Workers & Pages > newhira > Settings > Build**.
 
-Use:
-
+- Production branch: `main`
 - Root directory: `/`
 - Build command: leave blank
 - Deploy command: `npx wrangler deploy`
-- Production branch: `main` (or the branch containing the website)
 
-Push the repository or choose **New deployment**. Cloudflare will read `wrangler.jsonc`, deploy the API Worker and keep serving the website assets.
+Save and start a new deployment.
 
-The configuration requests two resource bindings:
+## 3. Confirm resource bindings
 
-- `DB`: D1 database for bookings, leads, visitor events and admin data.
-- `MEDIA`: R2 bucket for owner-uploaded photographs and videos.
+After a successful deployment, open **Bindings** and confirm:
 
-Current Wrangler versions can provision those resources automatically. After deployment, open the **Bindings** tab and confirm that `DB` and `MEDIA` appear.
+- `DB` is a D1 database.
+- `MEDIA` is an R2 bucket.
 
-## 3. Add the private owner secrets
+The public booking and owner desk need `DB`. Owner photo/video uploads need `MEDIA`.
+
+If either is missing, choose **Add binding**, select its resource type, and use the exact variable name shown above. Redeploy after saving.
+
+## 4. Add private owner secrets
 
 Open **Settings > Variables and Secrets** and add these as encrypted secrets:
 
-- `ADMIN_PIN`: the same private six-digit owner PIN chosen for the project.
-- `ADMIN_SESSION_SECRET`: a random value at least 32 characters long.
-- `RATE_LIMIT_SECRET`: a different random value at least 32 characters long.
+- `ADMIN_PIN`: the existing private six-digit owner PIN.
+- `ADMIN_SESSION_SECRET`: a random value of at least 32 characters.
+- `RATE_LIMIT_SECRET`: a different random value of at least 32 characters.
 
-Do not put these values in GitHub, `app.js`, `wrangler.jsonc` or any public file. Wrangler deployments preserve encrypted secrets.
+Do not add these values to GitHub or any file in `public/`.
 
 Optional normal variable:
 
-- `ALLOWED_ORIGINS`: your Worker address and custom domain, separated by commas.
+- `ALLOWED_ORIGINS`: comma-separated live origins, for example `https://newhira.YOUR-SUBDOMAIN.workers.dev,https://yourdomain.com`.
 
-Example format:
+## 5. Verify the API
 
-    https://newhira.YOUR-SUBDOMAIN.workers.dev,https://yourdomain.com
+Open:
 
-If `ALLOWED_ORIGINS` is omitted, same-site use still works.
+```text
+https://newhira.YOUR-SUBDOMAIN.workers.dev/api/health
+```
 
-## 4. Test and initialize the database
+Expected result:
 
-After the deployment succeeds, open:
+```json
+{"ok":true,"service":"new-hira-fieldcraft","version":"18.2-worker","database":"ready","media":"ready"}
+```
 
-    https://newhira.YOUR-SUBDOMAIN.workers.dev/api/health
+Then submit one test booking and open **Owner desk** to confirm it appears.
 
-The first API request automatically creates the required D1 tables and indexes. A successful response contains:
+## Error guide
 
-    {"ok":true,"service":"new-hira-fieldcraft","version":"18.1-worker"}
+- `DB_INIT_FAILED`: the response now includes a safe diagnostic. Confirm the `DB` binding points to D1 and redeploy.
+- `D1 database binding DB is not configured`: add the binding with variable name `DB`.
+- `Owner authentication secrets are not configured`: add `ADMIN_PIN` and `ADMIN_SESSION_SECRET` as encrypted secrets.
+- `Media storage is not configured`: add the R2 binding with variable name `MEDIA`.
+- Old layout remains visible: confirm `public/index.html` contains `20260718-worker-v182`, redeploy, then hard-refresh once.
+- GitHub check fails while Cloudflare is green: open the Cloudflare check details; the live site follows the Cloudflare Worker deployment, not GitHub Pages.
 
-Then open the website, choose **Owner desk**, and enter the private owner PIN.
+## Custom domain later
 
-## 5. If automatic bindings did not appear
-
-Use the **Bindings** tab visible in the project screenshot:
-
-1. Select **Add binding**.
-2. Choose **D1 database**.
-3. Create or choose a database and set the variable name to `DB`.
-4. Add another binding, choose **R2 bucket**, create or choose a bucket and set the variable name to `MEDIA`.
-5. Redeploy, then open `/api/health` again.
-
-The owner desk needs `DB`. Only admin photo/video uploads need `MEDIA`.
-
-## Important hosting distinction
-
-GitHub remains the source repository. The working full website should be opened from the `workers.dev` address or your Cloudflare custom domain. A GitHub Pages address can display the static design but cannot run this owner API.
-
-## Troubleshooting
-
-- **Unreadable response:** old assets-only deployment is still live, or `wrangler.jsonc` was not deployed.
-- **D1 database binding DB is not configured:** add the D1 binding with the exact variable name `DB`.
-- **Owner authentication secrets are not configured:** add `ADMIN_PIN` and `ADMIN_SESSION_SECRET` as encrypted secrets.
-- **Media storage is not configured:** add the R2 binding with the exact variable name `MEDIA`.
-- **Old design remains visible:** confirm `index.html` contains `20260718-worker-v181`, redeploy, and hard-refresh once.
+When the workers.dev site is healthy, open **Domains** in the Worker, choose **Add custom domain**, enter your domain, and let Cloudflare create the route. No code change is required. Add the final origin to `ALLOWED_ORIGINS` if you use that variable.

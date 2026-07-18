@@ -1,58 +1,79 @@
-# New Hira Harvest Systems
+# New Hira Harvest Booking
 
-Premium responsive advertisement and harvest-booking website for Ram Chand & Sons.
+Responsive New Hira advertisement, field-booking system and private owner desk for Ram Chand & Sons.
 
-## Included
+## Release 18.2
 
-- Full-screen New Hira campaign hero with large desktop and mobile product art.
-- Language-first welcome in English, Hindi and Punjabi, followed by the callback registration panel and cinematic field intro.
-- New crop-star identity, floating glass navigation and replaying scroll-reveal motion.
-- Brochure-verified live counters and an animated CUT / THRESH / CLEAN / COLLECT crop-flow theatre.
-- Background-free New Hira 985 and brochure-matched 785 product stages.
-- Autoplay perspective carousel with large active machine and visible 3D side previews.
-- Real field-photography carousel using the supplied New Hira images.
-- Brochure-derived 985 and 785 specifications.
-- Three-step public booking form with reference numbers and WhatsApp confirmation.
-- Mobile registration popup for contactable callback leads.
-- Secure owner desk with shared bookings, pipeline status, search, CSV export and manual bookings.
-- Anonymous traffic, device, crop-demand and seven-day activity analysis.
-- Shared campaign image/video upload, publish, hide and delete controls.
-- Cloudflare Pages Functions, D1 database and R2 media-storage implementation.
-- Cloudflare Workers Static Assets full-stack configuration for the current `workers.dev` deployment model.
-- Graceful GitHub Pages fallback: booking details can still be sent by WhatsApp when the Cloudflare API is unavailable.
+- Precise desktop, tablet and mobile header/hero layouts with no overlapping copy, machine controls or field metadata.
+- Responsive registration, booking and owner-desk interfaces.
+- English, Hindi and Punjabi onboarding.
+- New Hira 985 and 785 machine stages, brochure facts, crop-flow animation and two perspective carousels.
+- D1-backed bookings, leads, visitor events and owner analytics.
+- R2-backed owner photo/video library.
+- WhatsApp confirmation fallback if the API is temporarily unavailable.
+- Cloudflare-safe batched schema initialization and a diagnostic health route.
+- Only `public/` is exposed as static content; backend source and configuration are not public assets.
 
-## Important security behavior
+## Repository structure
 
-The owner PIN is not present in index.html, app.js, the README or any public browser file. The same private six-digit PIN requested for this project must be added as a Cloudflare secret named ADMIN_PIN. The owner desk verifies it only inside the Cloudflare Function.
+```text
+new-hira-booking/
+|-- public/
+|   |-- assets/
+|   |-- index.html
+|   |-- styles.css
+|   `-- app.js
+|-- cloudflare/
+|   |-- worker.js
+|   |-- schema.sql
+|   `-- SETUP.md
+|-- package.json
+|-- wrangler.jsonc
+|-- index.html (GitHub Pages preview redirect)
+|-- .gitignore
+`-- README.md
+```
 
-Also create ADMIN_SESSION_SECRET as a long random secret. It signs temporary eight-hour owner sessions.
+## Cloudflare deployment
 
-## Publish
+GitHub is the source repository. Cloudflare Workers is the live host and API runtime.
 
-Upload everything in this folder to the root of one GitHub repository. Keep index.html at the root and do not remove the functions or cloudflare folders.
+The small root `index.html` only redirects a GitHub Pages preview into `public/`. Cloudflare ignores that redirect file and serves `public/index.html` directly.
 
-For a visual-only GitHub Pages deployment, enable GitHub Pages from the main branch and root folder. Public booking still produces a pre-filled WhatsApp message, but shared bookings, admin analytics and media management require Cloudflare.
+1. Replace the old repository contents with this release.
+2. In Cloudflare use root directory `/`, no build command, and deploy command `npx wrangler deploy`.
+3. Keep the D1 binding named `DB` and R2 binding named `MEDIA`.
+4. Add encrypted secrets `ADMIN_PIN`, `ADMIN_SESSION_SECRET` and `RATE_LIMIT_SECRET`.
+5. Deploy and open `/api/health` on the workers.dev address.
 
-For the complete system, connect the repository to Cloudflare Pages and follow cloudflare/SETUP.md.
+Expected health response:
 
-## Contact and brochure facts
+```json
+{"ok":true,"service":"new-hira-fieldcraft","version":"18.2-worker","database":"ready","media":"ready"}
+```
 
-- Ram Chand & Sons, Patiala Road, Nabha, Punjab 147201.
-- Booking contact: +91 92161 07700.
+See [cloudflare/SETUP.md](cloudflare/SETUP.md) for the exact dashboard sequence and troubleshooting.
+
+## Local development
+
+Use Node.js 22 or newer:
+
+```powershell
+npm install
+npm run dev
+```
+
+Open `http://localhost:8787`. Local private values belong in a root `.dev.vars` file and must never be committed.
+
+## Security
+
+The owner PIN and session secrets are not stored in public HTML, JavaScript, documentation or GitHub configuration. The Worker reads them only from encrypted Cloudflare secrets. Uploaded site assets receive restrictive security headers from the Worker.
+
+## Verified brochure facts
+
 - New Hira 985: 4.4 m cutter bar, 4.28 m effective cutter width, 1,800 kg wheat grain tank and 5 straw walkers.
 - New Hira 785: 3.7 m cutter bar, 3.6 m effective cutter width, 1,600 kg wheat grain tank and 4 straw walkers.
-- Crops: wheat, paddy, sunflower, soyabean, gram and pulses.
+- Supported crops: wheat, paddy, sunflower, soyabean, gram and pulses.
+- Ram Chand & Sons, Patiala Road, Nabha, Punjab 147201.
 
-## Files
-
-- index.html: public website, booking forms, registration and owner-desk interface.
-- styles.css: complete responsive visual system and motion.
-- app.js: interactions, forms, analytics and admin client.
-- functions/api/[[path]].js: Cloudflare Pages API entry point.
-- cloudflare/worker.js: booking, lead, analytics, admin and media API.
-- cloudflare/schema.sql: D1 database schema.
-- cloudflare/SETUP.md: copy-paste deployment guidance.
-
-## Cache updates
-
-The current release uses asset version 20260718-worker-v181. When manually replacing app.js or styles.css later, update that version in index.html so browsers and Cloudflare do not continue showing an older design.
+The current cache marker is `20260718-worker-v182`.

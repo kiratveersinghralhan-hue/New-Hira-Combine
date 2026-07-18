@@ -81,12 +81,26 @@ let schemaReadyPromise;
 
 function ensureSchema(env) {
   if (!schemaReadyPromise) {
-    schemaReadyPromise = env.DB.exec(SCHEMA_SQL).catch((error) => {
+    const statements = SCHEMA_SQL
+      .split(';')
+      .map((statement) => statement.trim())
+      .filter(Boolean)
+      .map((statement) => env.DB.prepare(statement));
+
+    // D1 exec() treats newline-delimited input as separate queries. That makes
+    // multiline CREATE TABLE statements fail in production. Prepared batch
+    // statements preserve every declaration exactly and remain idempotent.
+    schemaReadyPromise = env.DB.batch(statements).catch((error) => {
       schemaReadyPromise = undefined;
       throw error;
     });
   }
   return schemaReadyPromise;
+}
+
+function diagnosticMessage(error) {
+  const message = error && typeof error.message === 'string' ? error.message : String(error || 'Unknown database error');
+  return message.replace(/[\r\n]+/g, ' ').slice(0, 240);
 }
 
 function corsHeaders(request, env) {
@@ -557,11 +571,32 @@ async function adminDeleteMedia(request, env, id) {
 async function handle(request, env) {
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(request, env) });
   if (!env.DB) return json(request, env, { ok: false, error: 'D1 database binding DB is not configured.' }, 503);
-  await ensureSchema(env);
   const url = new URL(request.url);
   const path = url.pathname.replace(/\/+$/, '') || '/';
 
-  if (path === '/api/health' && request.method === 'GET') return json(request, env, { ok: true, service: 'new-hira-fieldcraft', version: '18.1-worker' });
+  if (path === '/api/health' && request.method === 'GET') {
+    try {
+      await ensureSchema(env);
+      const probe = await env.DB.prepare('SELECT 1 AS ready').first();
+      return json(request, env, {
+        ok: Boolean(probe && probe.ready === 1),
+        service: 'new-hira-fieldcraft',
+        version: '18.2-worker',
+        database: 'ready',
+        media: env.MEDIA ? 'ready' : 'not-configured'
+      });
+    } catch (error) {
+      console.error('New Hira database initialization error', error);
+      return json(request, env, {
+        ok: false,
+        code: 'DB_INIT_FAILED',
+        error: 'The booking database could not be initialized.',
+        diagnostic: diagnosticMessage(error)
+      }, 500);
+    }
+  }
+
+  await ensureSchema(env);
   if (path === '/api/bookings' && request.method === 'POST') return publicBooking(request, env);
   if (path === '/api/leads' && request.method === 'POST') return publicLead(request, env);
   if (path === '/api/events' && request.method === 'POST') return publicEvent(request, env);
@@ -589,18 +624,40 @@ async function handle(request, env) {
   return json(request, env, { ok: false, error: 'Route not found.' }, 404);
 }
 
+async function serveAsset(request, env) {
+  if (!env.ASSETS) return new Response('Not found', { status: 404 });
+  const response = await env.ASSETS.fetch(request);
+  const headers = new Headers(response.headers);
+  headers.set('X-Content-Type-Options', 'nosniff');
+  headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  headers.set('X-Frame-Options', 'DENY');
+  headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  headers.set('Content-Security-Policy', "default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self' https://fonts.gstatic.com; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: blob:; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; upgrade-insecure-requests");
+  if ((headers.get('Content-Type') || '').includes('text/html')) headers.set('Cache-Control', 'no-cache');
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (!url.pathname.startsWith('/api/')) {
-      if (env.ASSETS) return env.ASSETS.fetch(request);
-      return new Response('Not found', { status: 404 });
+      return serveAsset(request, env);
     }
     try {
       return await handle(request, env);
     } catch (error) {
-      console.error('New Hira API error', error);
-      return json(request, env, { ok: false, error: 'The booking service could not complete this request.' }, 500);
+      const requestId = crypto.randomUUID();
+      console.error('New Hira API error', requestId, error);
+      return json(request, env, {
+        ok: false,
+        code: 'BOOKING_SERVICE_ERROR',
+        error: 'The booking service could not complete this request.',
+        requestId
+      }, 500);
     }
   }
 };
