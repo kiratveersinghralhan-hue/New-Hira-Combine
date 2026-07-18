@@ -1,10 +1,13 @@
-# New Hira Fieldcraft
+# New Hira Harvest Systems
 
 Premium responsive advertisement and harvest-booking website for Ram Chand & Sons.
 
 ## Included
 
 - Full-screen New Hira campaign hero with large desktop and mobile product art.
+- Language-first welcome in English, Hindi and Punjabi, followed by the callback registration panel and cinematic field intro.
+- New crop-star identity, floating glass navigation and replaying scroll-reveal motion.
+- Brochure-verified live counters and an animated CUT / THRESH / CLEAN / COLLECT crop-flow theatre.
 - Background-free New Hira 985 and brochure-matched 785 product stages.
 - Autoplay perspective carousel with large active machine and visible 3D side previews.
 - Real field-photography carousel using the supplied New Hira images.
@@ -51,4 +54,4 @@ For the complete system, connect the repository to Cloudflare Pages and follow c
 
 ## Cache updates
 
-The current release uses asset version 20260717-field-v17. When manually replacing app.js or styles.css later, update that version in index.html so browsers and Cloudflare do not continue showing an older design.
+The current release uses asset version 20260718-field-v18. When manually replacing app.js or styles.css later, update that version in index.html so browsers and Cloudflare do not continue showing an older design.

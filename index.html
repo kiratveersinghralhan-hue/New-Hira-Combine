@@ -3,28 +3,73 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0b130f" />
+    <meta name="theme-color" content="#07110b" />
     <meta name="description" content="Reserve New Hira 985 and 785 multicrop combine harvesters with Ram Chand & Sons in Nabha, Patiala and surrounding fields." />
-    <meta property="og:title" content="New Hira Fieldcraft | Combine Harvester Booking" />
+    <meta property="og:title" content="New Hira | Combine Harvester Booking" />
     <meta property="og:description" content="Premium New Hira harvest coordination. Choose your machine, share your field and reserve your harvest window." />
     <meta property="og:image" content="assets/field-05-three-quarter.jpg" />
-    <title>New Hira Fieldcraft | Harvest Booking</title>
+    <title>New Hira | Harvest Booking</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260717-field-v17" />
-    <script defer src="app.js?v=20260717-field-v17"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Gurmukhi:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=20260718-field-v18" />
+    <script defer src="app.js?v=20260718-field-v18"></script>
   </head>
-  <body>
-    <div class="site-loader" id="siteLoader" aria-label="Loading New Hira Fieldcraft">
+  <body class="onboarding-active">
+    <div class="site-loader" id="siteLoader" aria-label="Loading New Hira">
       <div class="loader-grid" aria-hidden="true"></div>
       <div class="loader-core">
         <div class="brand-emblem brand-emblem-large" aria-hidden="true"><span></span><i></i><b></b></div>
-        <p>RAM CHAND &amp; SONS / NABHA</p>
-        <h1>NEW HIRA</h1>
+        <p>RAM CHAND &amp; SONS / NABHA / INDIA</p>
+        <h1>NEW HIRA<span>®</span></h1>
         <div class="loader-rule"><span></span></div>
         <small>PREPARING THE FIELD / <b id="loaderCount">00</b></small>
       </div>
+    </div>
+
+    <div class="language-gate" id="languageGate" hidden>
+      <div class="language-gate-media" aria-hidden="true">
+        <div class="language-field"></div>
+        <img src="assets/cutout-985-three-quarter.png" alt="" />
+        <span class="language-giant">NEW HIRA</span>
+      </div>
+      <section class="language-card" role="dialog" aria-modal="true" aria-labelledby="languageTitle">
+        <div class="brand language-brand">
+          <span class="brand-emblem" aria-hidden="true"><span></span><i></i><b></b></span>
+          <span class="brand-words"><strong>NEW HIRA</strong><small>HARVEST SYSTEMS / INDIA</small></span>
+        </div>
+        <span class="gate-step">WELCOME / 01</span>
+        <h2 id="languageTitle">Choose your<br /><em>field language.</em></h2>
+        <p>Select the language you want for machine details and harvest booking.</p>
+        <div class="language-choices" role="group" aria-label="Choose language">
+          <button type="button" data-select-language="en"><span>EN</span><b>English</b><small>Continue in English</small><i>&nearr;</i></button>
+          <button type="button" data-select-language="hi"><span>हि</span><b>हिन्दी</b><small>हिन्दी में जारी रखें</small><i>&nearr;</i></button>
+          <button type="button" data-select-language="pa"><span>ਪੰ</span><b>ਪੰਜਾਬੀ</b><small>ਪੰਜਾਬੀ ਵਿੱਚ ਜਾਰੀ ਰੱਖੋ</small><i>&nearr;</i></button>
+        </div>
+        <small class="gate-note">You can change this later from the navigation.</small>
+      </section>
+    </div>
+
+    <div class="brand-intro" id="brandIntro" hidden aria-label="New Hira introduction">
+      <div class="intro-scene" aria-hidden="true">
+        <div class="intro-sky"></div>
+        <div class="intro-sun"></div>
+        <div class="intro-field-lines"></div>
+        <div class="intro-crop-line"></div>
+        <img class="intro-machine" src="assets/cutout-985-three-quarter.png" alt="" />
+      </div>
+      <div class="intro-copy">
+        <div class="brand intro-brand">
+          <span class="brand-emblem brand-emblem-large" aria-hidden="true"><span></span><i></i><b></b></span>
+          <span class="brand-words"><strong>NEW HIRA</strong><small>HARVEST SYSTEMS / INDIA</small></span>
+        </div>
+        <span class="intro-overline">RAM CHAND &amp; SONS / NABHA</span>
+        <h2 data-i18n="introTitle">The season waits<br />for <em>no one.</em></h2>
+        <p data-i18n="introCopy">Step into the New Hira harvest experience.</p>
+        <button class="intro-enter" id="introEnter" type="button"><span data-i18n="enterField">Enter the field</span><i>&nearr;</i></button>
+      </div>
+      <button class="intro-skip" id="introSkip" type="button" data-i18n="skipIntro">Skip introduction</button>
+      <div class="intro-progress" aria-hidden="true"><span></span></div>
     </div>
 
     <div class="scroll-progress" aria-hidden="true"><span></span></div>
@@ -32,9 +77,9 @@
 
     <header class="site-header" id="top">
       <div class="header-inner">
-        <a class="brand" href="#home" aria-label="New Hira Fieldcraft home">
+        <a class="brand" href="#home" aria-label="New Hira home">
           <span class="brand-emblem" aria-hidden="true"><span></span><i></i><b></b></span>
-          <span class="brand-words"><strong>NEW HIRA</strong><small>FIELDCRAFT / BOOKING DESK</small></span>
+          <span class="brand-words"><strong>NEW HIRA</strong><small>HARVEST SYSTEMS / INDIA</small></span>
         </a>
 
         <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-controls="siteNav" aria-expanded="false">
@@ -42,33 +87,56 @@
         </button>
 
         <nav class="site-nav" id="siteNav" aria-label="Primary navigation">
-          <a href="#machines"><span>01</span> Machines</a>
-          <a href="#experience"><span>02</span> In the field</a>
-          <a href="#booking"><span>03</span> Book harvest</a>
-          <button type="button" data-open-desk><span>04</span> Owner desk</button>
+          <a href="#machines"><span>01</span> <b data-i18n="navMachines">Machines</b></a>
+          <a href="#product-stage"><span>02</span> <b data-i18n="navTechnology">Technology</b></a>
+          <a href="#experience"><span>03</span> <b data-i18n="navField">In the field</b></a>
+          <a href="#booking"><span>04</span> <b data-i18n="navBooking">Book harvest</b></a>
+          <button type="button" data-open-desk><span>05</span> <b data-i18n="navOwner">Owner desk</b></button>
+          <div class="nav-mobile-languages" aria-label="Website language">
+            <small>LANGUAGE</small>
+            <button type="button" data-select-language="en">EN</button>
+            <button type="button" data-select-language="hi">हिन्दी</button>
+            <button type="button" data-select-language="pa">ਪੰਜਾਬੀ</button>
+          </div>
           <a class="nav-call" href="tel:+919216107700"><i></i> +91 92161 07700</a>
         </nav>
 
-        <a class="header-cta" href="#booking">Reserve a machine <span>&nearr;</span></a>
+        <div class="header-actions">
+          <div class="nav-language">
+            <button id="languageToggle" type="button" aria-haspopup="true" aria-expanded="false"><span>EN</span><i>&darr;</i></button>
+            <div id="languagePanel" hidden>
+              <button type="button" data-select-language="en"><b>EN</b> English</button>
+              <button type="button" data-select-language="hi"><b>हि</b> हिन्दी</button>
+              <button type="button" data-select-language="pa"><b>ਪੰ</b> ਪੰਜਾਬੀ</button>
+            </div>
+          </div>
+          <a class="header-cta" href="#booking"><span data-i18n="reserveMachine">Reserve a machine</span> <i>&nearr;</i></a>
+        </div>
       </div>
     </header>
 
     <main>
       <section class="hero" id="home">
-        <div class="hero-field" aria-hidden="true"></div>
+        <div class="hero-field" id="heroField" aria-hidden="true">
+          <figure class="is-active"><img src="assets/field-01-harvesting.jpg" alt="" /></figure>
+          <figure><img src="assets/field-07-side.jpg" alt="" /></figure>
+          <figure><img src="assets/field-05-three-quarter.jpg" alt="" /></figure>
+        </div>
         <div class="hero-grid" aria-hidden="true"></div>
         <div class="hero-vignette" aria-hidden="true"></div>
         <div class="hero-noise" aria-hidden="true"></div>
+        <div class="hero-kinetic-word" aria-hidden="true">NEW HIRA</div>
 
         <div class="hero-inner">
           <div class="hero-copy reveal">
-            <div class="eyebrow light"><span></span> THE HARVEST COMMAND</div>
-            <h1>The field will not <em>wait.</em></h1>
-            <p>Put proven New Hira power behind your harvest. Choose the machine, share the field and lock your working window with Ram Chand &amp; Sons.</p>
+            <div class="eyebrow light"><span></span> <b data-i18n="heroEyebrow">INDIAN HARVEST ENGINEERING / NABHA</b></div>
+            <h1 data-i18n="heroTitle">Every field deserves<br /><em>a decisive finish.</em></h1>
+            <p data-i18n="heroCopy">Put brochure-verified New Hira power behind your harvest. Choose the machine, share the field and reserve the working window with Ram Chand &amp; Sons.</p>
             <div class="hero-actions">
-              <a class="button button-gold" href="#booking">Reserve your window <span>&nearr;</span></a>
-              <a class="button button-ghost" href="#machines">Explore the fleet <span>&darr;</span></a>
+              <a class="button button-gold" href="#booking"><span data-i18n="reserveWindow">Reserve your window</span> <i>&nearr;</i></a>
+              <a class="button button-ghost" href="#machines"><span data-i18n="exploreFleet">Explore the fleet</span> <i>&darr;</i></a>
             </div>
+            <div class="hero-proof"><span>985 / 785</span><span data-i18n="heroProofOne">Self-propelled multicrop</span><span data-i18n="heroProofTwo">Direct booking desk</span></div>
           </div>
 
           <div class="hero-product reveal" id="heroProduct">
@@ -85,35 +153,36 @@
           </div>
 
           <div class="hero-meta">
-            <div><span>OPERATION AREA</span><b>Patiala / Nabha / Punjab</b></div>
-            <div><span>MACHINE CLASS</span><b>Self-propelled multicrop</b></div>
-            <div><span>BOOKING DESK</span><b><i class="live-dot"></i> Taking requests</b></div>
+            <div><span data-i18n="operationArea">OPERATION AREA</span><b>Patiala / Nabha / Punjab</b></div>
+            <div><span data-i18n="machineClass">MACHINE CLASS</span><b data-i18n="machineClassValue">Self-propelled multicrop</b></div>
+            <div><span data-i18n="bookingDesk">BOOKING DESK</span><b><i class="live-dot"></i> <span data-i18n="takingRequests">Taking requests</span></b></div>
           </div>
+          <div class="hero-slide-index"><span id="heroSlideIndex">01</span><i></i><b>03</b></div>
         </div>
 
-        <a class="hero-scroll" href="#machines"><span></span> Scroll into the field</a>
+        <a class="hero-scroll" href="#machines"><span></span> <b data-i18n="scrollField">Scroll into the field</b></a>
       </section>
 
       <section class="crop-command" aria-label="Supported crops">
         <div class="crop-machine" aria-hidden="true">
-          <span class="crop-machine-body">NEW HIRA</span><i></i><b></b>
+          <img src="assets/cutout-985-three-quarter.png" alt="" /><span class="crop-machine-body">NEW HIRA</span><i></i><b></b>
         </div>
         <div class="crop-track">
           <div>
-            <span>WHEAT</span><i></i><span>PADDY</span><i></i><span>SUNFLOWER</span><i></i><span>SOYABEAN</span><i></i><span>GRAM</span><i></i><span>PULSES</span><i></i>
-            <span>WHEAT</span><i></i><span>PADDY</span><i></i><span>SUNFLOWER</span><i></i><span>SOYABEAN</span><i></i><span>GRAM</span><i></i><span>PULSES</span><i></i>
+            <span data-crop="wheat">WHEAT</span><i></i><span data-crop="paddy">PADDY</span><i></i><span data-crop="sunflower">SUNFLOWER</span><i></i><span data-crop="soyabean">SOYABEAN</span><i></i><span data-crop="gram">GRAM</span><i></i><span data-crop="pulses">PULSES</span><i></i>
+            <span data-crop="wheat">WHEAT</span><i></i><span data-crop="paddy">PADDY</span><i></i><span data-crop="sunflower">SUNFLOWER</span><i></i><span data-crop="soyabean">SOYABEAN</span><i></i><span data-crop="gram">GRAM</span><i></i><span data-crop="pulses">PULSES</span><i></i>
           </div>
         </div>
       </section>
 
       <section class="command-strip">
         <div class="container command-strip-inner">
-          <div class="command-intro"><span class="section-code">FAST / 01</span><strong>Start with your field.</strong><small>We will match the machine and route.</small></div>
+          <div class="command-intro"><span class="section-code">FIELD REQUEST / 01</span><strong data-i18n="startField">Start with your field.</strong><small data-i18n="matchMachine">We will match the machine and route.</small></div>
           <form class="quick-form" id="quickBookingForm">
-            <label><span>Name</span><input name="name" autocomplete="name" placeholder="Farmer / family name" required /></label>
-            <label><span>Village or district</span><input name="location" autocomplete="address-level2" placeholder="e.g. Nabha, Patiala" required /></label>
-            <label><span>Crop</span><select name="crop" required><option value="">Select crop</option><option>Wheat</option><option>Paddy</option><option>Sunflower</option><option>Soyabean</option><option>Gram</option><option>Pulses</option><option>Other</option></select></label>
-            <button class="button button-ink" type="submit">Plan my harvest <span>&nearr;</span></button>
+            <label><span data-i18n="name">Name</span><input name="name" autocomplete="name" placeholder="Farmer / family name" data-i18n-placeholder="namePlaceholder" required /></label>
+            <label><span data-i18n="villageDistrict">Village or district</span><input name="location" autocomplete="address-level2" placeholder="e.g. Nabha, Patiala" data-i18n-placeholder="locationPlaceholder" required /></label>
+            <label><span data-i18n="crop">Crop</span><select name="crop" required><option value="" data-i18n="selectCrop">Select crop</option><option value="Wheat">Wheat</option><option value="Paddy">Paddy</option><option value="Sunflower">Sunflower</option><option value="Soyabean">Soyabean</option><option value="Gram">Gram</option><option value="Pulses">Pulses</option><option value="Other">Other</option></select></label>
+            <button class="button button-ink" type="submit"><span data-i18n="planHarvest">Plan my harvest</span> <i>&nearr;</i></button>
           </form>
         </div>
       </section>
@@ -122,19 +191,42 @@
         <div class="container">
           <div class="campaign-heading reveal">
             <div>
-              <div class="eyebrow"><span></span> BUILT AROUND THE SEASON</div>
-              <h2>Industrial capacity.<br /><em>Local coordination.</em></h2>
+              <div class="eyebrow"><span></span> <b data-i18n="builtSeason">BUILT AROUND THE SEASON</b></div>
+              <h2 data-i18n="campaignTitle">Industrial capacity.<br /><em>Local coordination.</em></h2>
             </div>
-            <p>A serious harvest needs more than a machine. It needs timing, route planning and one booking desk that stays accountable from the first call to the final row.</p>
+            <p data-i18n="campaignCopy">A serious harvest needs more than a machine. It needs timing, route planning and one booking desk that stays accountable from the first call to the final row.</p>
           </div>
           <div class="campaign-grid reveal">
             <article class="campaign-card campaign-card-image">
               <img src="assets/field-01-harvesting.jpg" alt="New Hira combine harvesting a crop field" />
               <div><span>FIELD PROOF / 01</span><b>Working where it matters.</b></div>
             </article>
-            <article class="campaign-stat"><span>01 / FLEET</span><strong>02</strong><h3>Purpose-built machines</h3><p>Choose capacity or compact field agility.</p></article>
-            <article class="campaign-stat"><span>02 / CROPS</span><strong>06</strong><h3>Core crop types</h3><p>From wheat and paddy to pulses and sunflower.</p></article>
-            <article class="campaign-stat"><span>03 / RESPONSE</span><strong>24<small>h</small></strong><h3>Booking follow-up</h3><p>Direct contact through one family-run desk.</p></article>
+            <article class="campaign-stat"><span>01 / FLEET</span><strong data-counter="2" data-pad="2">00</strong><h3 data-i18n="statMachines">Brochure-documented machines</h3><p data-i18n="statMachinesCopy">Choose higher capacity or compact field agility.</p></article>
+            <article class="campaign-stat"><span>02 / CROPS</span><strong data-counter="6" data-pad="2">00</strong><h3 data-i18n="statCrops">Core crop types</h3><p data-i18n="statCropsCopy">Wheat, paddy, sunflower, soyabean, gram and pulses.</p></article>
+            <article class="campaign-stat"><span>03 / MAX CUTTER</span><strong data-counter="44" data-decimal="1">0.0<small>m</small></strong><h3 data-i18n="statCutter">Largest brochure cutter bar</h3><p>New Hira 985 / supplied brochure.</p></article>
+            <article class="campaign-stat"><span>04 / GRAIN TANK</span><strong data-counter="1800">0<small>kg</small></strong><h3 data-i18n="statTank">Maximum wheat grain tank</h3><p>New Hira 985 / supplied brochure.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="harvest-system section" id="harvest-system">
+        <div class="harvest-system-sticky">
+          <div class="harvest-system-copy reveal">
+            <span class="section-code">CROP FLOW / 02</span>
+            <h2 data-i18n="flowTitle">One continuous move.<br /><em>Four decisive actions.</em></h2>
+            <p data-i18n="flowCopy">The visual explains the working sequence: the header meets the crop, material moves through threshing and cleaning, and grain reaches the tank.</p>
+          </div>
+          <div class="harvest-theatre reveal" aria-label="Animated combine harvesting sequence">
+            <div class="theatre-sky"><span></span></div>
+            <div class="crop-bed" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <img class="theatre-machine" src="assets/cutout-985-black-reel.png" alt="New Hira 985 combine illustration moving through crop" />
+            <div class="grain-stream" aria-hidden="true"></div>
+            <div class="flow-labels">
+              <article><span>01</span><b data-i18n="flowCut">CUT</b><small data-i18n="flowCutCopy">Cutter bar meets the standing crop.</small></article>
+              <article><span>02</span><b data-i18n="flowThresh">THRESH</b><small data-i18n="flowThreshCopy">The drum separates grain from crop material.</small></article>
+              <article><span>03</span><b data-i18n="flowClean">CLEAN</b><small data-i18n="flowCleanCopy">Sieves and airflow refine the grain sample.</small></article>
+              <article><span>04</span><b data-i18n="flowCollect">COLLECT</b><small data-i18n="flowCollectCopy">Clean grain moves into the onboard tank.</small></article>
+            </div>
           </div>
         </div>
       </section>
@@ -143,18 +235,18 @@
         <div class="container">
           <div class="section-head reveal">
             <div>
-              <span class="section-code">THE FLEET / 02</span>
-              <h2>Choose your <em>edge.</em></h2>
+              <span class="section-code">THE FLEET / 03</span>
+              <h2 data-i18n="fleetTitle">Choose your <em>edge.</em></h2>
             </div>
-            <p>Specifications below are taken from the supplied New Hira brochures. Switch between both machines to find the right fit for field size, access and crop.</p>
+            <p data-i18n="fleetCopy">Specifications below are taken from the supplied New Hira brochures. Switch between both machines to find the right fit for field size, access and crop.</p>
           </div>
 
           <div class="fleet-tabs reveal" role="tablist" aria-label="New Hira models">
             <button class="fleet-tab is-active" type="button" data-model="985" role="tab" aria-selected="true">
-              <span>01</span><b>NEW HIRA 985</b><small>High-capacity workhorse</small>
+              <span>01</span><b>NEW HIRA 985</b><small data-i18n="highCapacity">High-capacity workhorse</small>
             </button>
             <button class="fleet-tab" type="button" data-model="785" role="tab" aria-selected="false">
-              <span>02</span><b>NEW HIRA 785</b><small>Agile field finisher</small>
+              <span>02</span><b>NEW HIRA 785</b><small data-i18n="agileFinisher">Agile field finisher</small>
             </button>
           </div>
 
@@ -177,8 +269,8 @@
               </div>
               <div class="fleet-spec-list" id="fleetSpecList"></div>
               <div class="fleet-actions">
-                <a class="button button-ink" href="#booking" id="fleetBook">Book this machine <span>&nearr;</span></a>
-                <button class="text-action" type="button" id="viewBrochure">View brochure proof <span>&plus;</span></button>
+                <a class="button button-ink" href="#booking" id="fleetBook"><span data-i18n="bookMachine">Book this machine</span> <i>&nearr;</i></a>
+                <button class="text-action" type="button" id="viewBrochure"><span data-i18n="viewBrochure">View brochure proof</span> <i>&plus;</i></button>
               </div>
             </div>
           </div>
@@ -189,8 +281,8 @@
         <div class="product-world-bg" aria-hidden="true"></div>
         <div class="container">
           <div class="product-world-heading reveal">
-            <div><span class="section-code">PRODUCT STAGE / 03</span><h2>Every angle.<br /><em>One unmistakable machine.</em></h2></div>
-            <p>Swipe or drag the stage. The active machine moves forward while the adjacent views remain visible in perspective.</p>
+            <div><span class="section-code">PRODUCT STAGE / 04</span><h2 data-i18n="stageTitle">Every angle.<br /><em>One unmistakable machine.</em></h2></div>
+            <p data-i18n="stageCopy">Swipe or drag the stage. The active machine moves forward while the adjacent views remain visible in true perspective.</p>
           </div>
 
           <div class="depth-carousel reveal" id="depthCarousel" tabindex="0" aria-label="New Hira 3D product carousel">
@@ -235,8 +327,8 @@
       <section class="experience section" id="experience">
         <div class="container">
           <div class="section-head reveal">
-            <div><span class="section-code">IN THE FIELD / 04</span><h2>Proof in <em>motion.</em></h2></div>
-            <p>Real New Hira 985 photographs, shown uncropped inside the active frame with cinematic side previews for the next and previous field moments.</p>
+            <div><span class="section-code">IN THE FIELD / 05</span><h2 data-i18n="fieldTitle">Proof in <em>motion.</em></h2></div>
+            <p data-i18n="fieldCopy">Your supplied New Hira 985 photographs are shown uncropped, with cinematic side previews for the next and previous field moments.</p>
           </div>
 
           <div class="field-reel reveal" id="fieldReel" tabindex="0" aria-label="New Hira field photo carousel">
@@ -264,15 +356,15 @@
         <div class="booking-backdrop" id="bookingBackdrop" aria-hidden="true"></div>
         <div class="container booking-layout">
           <div class="booking-copy reveal">
-            <div class="eyebrow light"><span></span> RESERVATION DESK / 05</div>
-            <h2>Lock the day.<br /><em>Move the harvest.</em></h2>
-            <p>Send the field details once. The request reaches the booking desk, receives a reference number and stays available in the private operations panel.</p>
+            <div class="eyebrow light"><span></span> <b data-i18n="reservationDesk">RESERVATION DESK / 06</b></div>
+            <h2 data-i18n="bookingTitle">Lock the day.<br /><em>Move the harvest.</em></h2>
+            <p data-i18n="bookingCopy">Send the field details once. The request reaches the booking desk, receives a reference number and stays available in the private operations panel.</p>
             <div class="booking-assurance">
-              <div><span>01</span><p><b>Share the field</b><small>Village, crop and acreage</small></p></div>
-              <div><span>02</span><p><b>Confirm the fit</b><small>Machine, access and timing</small></p></div>
-              <div><span>03</span><p><b>Lock the window</b><small>Direct follow-up on WhatsApp</small></p></div>
+              <div><span>01</span><p><b data-i18n="shareField">Share the field</b><small data-i18n="shareFieldCopy">Village, crop and acreage</small></p></div>
+              <div><span>02</span><p><b data-i18n="confirmFit">Confirm the fit</b><small data-i18n="confirmFitCopy">Machine, access and timing</small></p></div>
+              <div><span>03</span><p><b data-i18n="lockWindow">Lock the window</b><small data-i18n="lockWindowCopy">Direct follow-up on WhatsApp</small></p></div>
             </div>
-            <a class="booking-call" href="tel:+919216107700"><i class="live-dot"></i><span>Prefer to call?</span><b>+91 92161 07700</b></a>
+            <a class="booking-call" href="tel:+919216107700"><i class="live-dot"></i><span data-i18n="preferCall">Prefer to call?</span><b>+91 92161 07700</b></a>
           </div>
 
           <div class="booking-console reveal">
@@ -283,41 +375,41 @@
 
             <form id="bookingForm" class="booking-form">
               <section class="booking-step is-active" data-booking-step="0">
-                <span class="form-kicker">CONTACT &amp; LOCATION</span>
-                <h3>Who should we coordinate with?</h3>
+                <span class="form-kicker" data-i18n="contactLocation">CONTACT &amp; LOCATION</span>
+                <h3 data-i18n="coordinateWith">Who should we coordinate with?</h3>
                 <div class="form-grid">
-                  <label class="span-2"><span>Farmer / family name *</span><input name="name" autocomplete="name" required placeholder="Full name" /></label>
-                  <label><span>WhatsApp number *</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="10-digit mobile" /></label>
-                  <label><span>Village *</span><input name="village" autocomplete="address-level3" required placeholder="Village name" /></label>
-                  <label class="span-2"><span>District / nearby town *</span><input name="location" autocomplete="address-level2" required placeholder="Nabha, Patiala, Sangrur..." /></label>
+                  <label class="span-2"><span data-i18n="farmerName">Farmer / family name *</span><input name="name" autocomplete="name" required placeholder="Full name" data-i18n-placeholder="fullName" /></label>
+                  <label><span data-i18n="whatsappNumber">WhatsApp number *</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="10-digit mobile" data-i18n-placeholder="mobilePlaceholder" /></label>
+                  <label><span data-i18n="village">Village *</span><input name="village" autocomplete="address-level3" required placeholder="Village name" data-i18n-placeholder="villagePlaceholder" /></label>
+                  <label class="span-2"><span data-i18n="districtTown">District / nearby town *</span><input name="location" autocomplete="address-level2" required placeholder="Nabha, Patiala, Sangrur..." /></label>
                 </div>
-                <div class="form-actions"><span>Fields marked * are required</span><button class="button button-gold" type="button" data-booking-next>Crop details <b>&rarr;</b></button></div>
+                <div class="form-actions"><span data-i18n="requiredFields">Fields marked * are required</span><button class="button button-gold" type="button" data-booking-next><span data-i18n="cropDetails">Crop details</span> <b>&rarr;</b></button></div>
               </section>
 
               <section class="booking-step" data-booking-step="1" hidden>
-                <span class="form-kicker">FIELD &amp; TIMING</span>
-                <h3>Tell us what is ready to cut.</h3>
+                <span class="form-kicker" data-i18n="fieldTiming">FIELD &amp; TIMING</span>
+                <h3 data-i18n="readyCut">Tell us what is ready to cut.</h3>
                 <div class="form-grid">
-                  <label><span>Crop *</span><select name="crop" required><option value="">Select crop</option><option>Wheat</option><option>Paddy</option><option>Sunflower</option><option>Soyabean</option><option>Gram</option><option>Pulses</option><option>Other</option></select></label>
-                  <label><span>Approx. acreage *</span><input name="acreage" type="number" min="1" max="10000" inputmode="decimal" required placeholder="e.g. 18" /></label>
-                  <label><span>Preferred date *</span><input name="date" type="date" required /></label>
-                  <label><span>Date flexibility</span><select name="flexibility"><option>Exact date preferred</option><option>1-2 days flexible</option><option>3-5 days flexible</option><option>Call to discuss</option></select></label>
-                  <label class="span-2"><span>Field access</span><select name="access"><option>Normal tractor access</option><option>Narrow village road</option><option>Soft / wet approach</option><option>Unsure - please call</option></select></label>
+                  <label><span data-i18n="cropRequired">Crop *</span><select name="crop" required><option value="" data-i18n="selectCrop">Select crop</option><option value="Wheat">Wheat</option><option value="Paddy">Paddy</option><option value="Sunflower">Sunflower</option><option value="Soyabean">Soyabean</option><option value="Gram">Gram</option><option value="Pulses">Pulses</option><option value="Other">Other</option></select></label>
+                  <label><span data-i18n="acreage">Approx. acreage *</span><input name="acreage" type="number" min="1" max="10000" inputmode="decimal" required placeholder="e.g. 18" /></label>
+                  <label><span data-i18n="preferredDate">Preferred date *</span><input name="date" type="date" required /></label>
+                  <label><span data-i18n="dateFlexibility">Date flexibility</span><select name="flexibility"><option value="Exact date preferred">Exact date preferred</option><option value="1-2 days flexible">1-2 days flexible</option><option value="3-5 days flexible">3-5 days flexible</option><option value="Call to discuss">Call to discuss</option></select></label>
+                  <label class="span-2"><span data-i18n="fieldAccess">Field access</span><select name="access"><option value="Normal tractor access">Normal tractor access</option><option value="Narrow village road">Narrow village road</option><option value="Soft / wet approach">Soft / wet approach</option><option value="Unsure - please call">Unsure - please call</option></select></label>
                 </div>
-                <div class="form-actions"><button class="text-action light-action" type="button" data-booking-prev>&larr; Back</button><button class="button button-gold" type="button" data-booking-next>Machine fit <b>&rarr;</b></button></div>
+                <div class="form-actions"><button class="text-action light-action" type="button" data-booking-prev>&larr; <span data-i18n="back">Back</span></button><button class="button button-gold" type="button" data-booking-next><span data-i18n="machineFit">Machine fit</span> <b>&rarr;</b></button></div>
               </section>
 
               <section class="booking-step" data-booking-step="2" hidden>
-                <span class="form-kicker">MACHINE &amp; CONFIRMATION</span>
-                <h3>Choose your preferred machine.</h3>
+                <span class="form-kicker" data-i18n="machineConfirmation">MACHINE &amp; CONFIRMATION</span>
+                <h3 data-i18n="chooseMachine">Choose your preferred machine.</h3>
                 <div class="machine-choice">
                   <label><input type="radio" name="machine" value="New Hira 985" checked /><span><b>NEW HIRA 985</b><small>Higher capacity / 4.4 m cutter</small><img src="assets/cutout-985-three-quarter.png" alt="" /></span></label>
                   <label><input type="radio" name="machine" value="New Hira 785" /><span><b>NEW HIRA 785</b><small>Compact agility / 3.7 m cutter</small><img src="assets/cutout-785-brochure-model.png" alt="" /></span></label>
-                  <label><input type="radio" name="machine" value="Help me choose" /><span><b>HELP ME CHOOSE</b><small>We will match it to your field</small></span></label>
+                  <label><input type="radio" name="machine" value="Help me choose" /><span><b data-i18n="helpChoose">HELP ME CHOOSE</b><small data-i18n="matchField">We will match it to your field</small></span></label>
                 </div>
-                <label class="notes-label"><span>Anything the operator should know?</span><textarea name="notes" rows="3" maxlength="500" placeholder="Field landmark, access, crop condition or timing note"></textarea></label>
-                <label class="consent"><input type="checkbox" name="consent" required /><span>I agree to be contacted about this booking by phone or WhatsApp.</span></label>
-                <div class="form-actions"><button class="text-action light-action" type="button" data-booking-prev>&larr; Back</button><button class="button button-gold" type="submit" id="bookingSubmit">Send reservation <b>&nearr;</b></button></div>
+                <label class="notes-label"><span data-i18n="operatorKnow">Anything the operator should know?</span><textarea name="notes" rows="3" maxlength="500" placeholder="Field landmark, access, crop condition or timing note"></textarea></label>
+                <label class="consent"><input type="checkbox" name="consent" required /><span data-i18n="bookingConsent">I agree to be contacted about this booking by phone or WhatsApp.</span></label>
+                <div class="form-actions"><button class="text-action light-action" type="button" data-booking-prev>&larr; <span data-i18n="back">Back</span></button><button class="button button-gold" type="submit" id="bookingSubmit"><span data-i18n="sendReservation">Send reservation</span> <b>&nearr;</b></button></div>
               </section>
             </form>
 
@@ -338,11 +430,11 @@
 
       <section class="process section">
         <div class="container">
-          <div class="process-heading reveal"><span class="section-code">FROM CALL TO CROP / 06</span><h2>Clear at every <em>turn.</em></h2></div>
+          <div class="process-heading reveal"><span class="section-code">FROM CALL TO CROP / 07</span><h2 data-i18n="processTitle">Clear at every <em>turn.</em></h2></div>
           <div class="process-grid reveal">
-            <article><span>01</span><i>&plus;</i><h3>Request logged</h3><p>Your contact, field and crop enter the booking board with a unique reference.</p></article>
-            <article><span>02</span><i>&nearr;</i><h3>Route confirmed</h3><p>The desk checks machine fit, timing and travel between nearby harvests.</p></article>
-            <article><span>03</span><i>&check;</i><h3>Window reserved</h3><p>You receive direct confirmation and the operator gets the complete field brief.</p></article>
+            <article><span>01</span><i>&plus;</i><h3 data-i18n="requestLogged">Request logged</h3><p data-i18n="requestLoggedCopy">Your contact, field and crop enter the booking board with a unique reference.</p></article>
+            <article><span>02</span><i>&nearr;</i><h3 data-i18n="routeConfirmed">Route confirmed</h3><p data-i18n="routeConfirmedCopy">The desk checks machine fit, timing and travel between nearby harvests.</p></article>
+            <article><span>03</span><i>&check;</i><h3 data-i18n="windowReserved">Window reserved</h3><p data-i18n="windowReservedCopy">You receive direct confirmation and the operator gets the complete field brief.</p></article>
           </div>
         </div>
       </section>
@@ -351,8 +443,8 @@
     <footer class="site-footer">
       <div class="container footer-grid">
         <div class="footer-brand">
-          <a class="brand" href="#home"><span class="brand-emblem" aria-hidden="true"><span></span><i></i><b></b></span><span class="brand-words"><strong>NEW HIRA</strong><small>FIELDCRAFT / BOOKING DESK</small></span></a>
-          <p>Practical harvest coordination for fields around Nabha, Patiala and beyond.</p>
+          <a class="brand" href="#home"><span class="brand-emblem" aria-hidden="true"><span></span><i></i><b></b></span><span class="brand-words"><strong>NEW HIRA</strong><small>HARVEST SYSTEMS / INDIA</small></span></a>
+          <p data-i18n="footerCopy">Practical harvest coordination for fields around Nabha, Patiala and beyond.</p>
         </div>
         <div><span>EXPLORE</span><a href="#machines">Machines</a><a href="#experience">Field proof</a><a href="#booking">Book harvest</a></div>
         <div><span>CONTACT</span><a href="tel:+911765509077">01765 509077</a><a href="tel:+919217071777">+91 92170 71777</a><a href="tel:+919216107700">+91 92161 07700</a><a href="mailto:new.hira@yahoo.com">new.hira@yahoo.com</a></div>
@@ -366,22 +458,22 @@
         <button class="modal-close modal-close-light" id="leadClose" type="button" aria-label="Close registration">&times;</button>
         <div class="lead-visual">
           <img src="assets/cutout-985-three-quarter.png" alt="" />
-          <span>SEASON ALERT / 01</span>
-          <h2>Know when a machine is <em>near your field.</em></h2>
+          <span>WELCOME / 02</span>
+          <h2 data-i18n="leadVisualTitle">Make your first move<br /><em>before the crop is ready.</em></h2>
         </div>
         <div class="lead-form-wrap">
-          <span class="section-code">QUICK REGISTRATION</span>
-          <h2 id="leadTitle">Stay ahead of the <em>harvest rush.</em></h2>
-          <p>Leave a number for a callback. Your details become a contactable lead in the private booking desk.</p>
+          <span class="section-code" data-i18n="quickRegistration">QUICK REGISTRATION</span>
+          <h2 id="leadTitle" data-i18n="leadTitle">Tell us where the<br /><em>season is moving.</em></h2>
+          <p data-i18n="leadCopy">Leave a number for a callback or continue directly to the experience. Only details you submit become visible to the private booking desk.</p>
           <form id="leadForm">
-            <label><span>Your name *</span><input name="name" autocomplete="name" required placeholder="Farmer / family name" /></label>
-            <label><span>WhatsApp number *</span><input name="phone" type="tel" autocomplete="tel" required placeholder="10-digit mobile" /></label>
-            <label><span>Village / district</span><input name="location" autocomplete="address-level2" placeholder="Where is the field?" /></label>
-            <label><span>Interested in</span><select name="interest"><option>Harvest booking</option><option>New Hira 985</option><option>New Hira 785</option><option>Call me back</option></select></label>
-            <label class="consent consent-dark"><input name="consent" type="checkbox" required /><span>I agree to receive a call or WhatsApp message about harvest booking.</span></label>
-            <button class="button button-ink" type="submit">Register my interest <span>&nearr;</span></button>
+            <label><span data-i18n="yourName">Your name *</span><input name="name" autocomplete="name" required placeholder="Farmer / family name" data-i18n-placeholder="namePlaceholder" /></label>
+            <label><span data-i18n="whatsappNumber">WhatsApp number *</span><input name="phone" type="tel" autocomplete="tel" required placeholder="10-digit mobile" data-i18n-placeholder="mobilePlaceholder" /></label>
+            <label><span data-i18n="villageDistrict">Village / district</span><input name="location" autocomplete="address-level2" placeholder="Where is the field?" data-i18n-placeholder="fieldLocationPlaceholder" /></label>
+            <label><span data-i18n="interestedIn">Interested in</span><select name="interest"><option value="Harvest booking">Harvest booking</option><option value="New Hira 985">New Hira 985</option><option value="New Hira 785">New Hira 785</option><option value="Call me back">Call me back</option></select></label>
+            <label class="consent consent-dark"><input name="consent" type="checkbox" required /><span data-i18n="leadConsent">I agree to receive a call or WhatsApp message about harvest booking.</span></label>
+            <button class="button button-ink" type="submit"><span data-i18n="registerInterest">Register my interest</span> <i>&nearr;</i></button>
           </form>
-          <button class="lead-skip" id="leadSkip" type="button">Continue without registering</button>
+          <button class="lead-skip" id="leadSkip" type="button" data-i18n="continueWithout">Continue without registering</button>
         </div>
       </section>
     </div>

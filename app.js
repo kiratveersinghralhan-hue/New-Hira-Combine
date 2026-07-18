@@ -4,10 +4,87 @@ const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selec
 const CONTACT_PHONE = '919216107700';
 const API_BASE = String(window.NEW_HIRA_API_BASE || '').replace(/\/$/, '');
 const API_ROOT = API_BASE + '/api';
-const SESSION_KEY = 'new_hira_session_v17';
-const LEAD_GATE_KEY = 'new_hira_lead_gate_v17';
-const PENDING_BOOKINGS_KEY = 'new_hira_pending_bookings_v17';
-const ADMIN_TOKEN_KEY = 'new_hira_admin_session_v17';
+const SESSION_KEY = 'new_hira_session_v18';
+const LEAD_GATE_KEY = 'new_hira_lead_gate_v18';
+const PENDING_BOOKINGS_KEY = 'new_hira_pending_bookings_v18';
+const ADMIN_TOKEN_KEY = 'new_hira_admin_session_v18';
+const LANGUAGE_KEY = 'new_hira_language_v18';
+const ONBOARDING_KEY = 'new_hira_onboarding_v18';
+
+let currentLanguage = localStorage.getItem(LANGUAGE_KEY) || 'en';
+
+const TRANSLATIONS = {
+  en: {
+    introTitle: 'The season waits<br />for <em>no one.</em>',
+    introCopy: 'Step into the New Hira harvest experience.',
+    enterField: 'Enter the field', skipIntro: 'Skip introduction',
+    navMachines: 'Machines', navTechnology: 'Technology', navField: 'In the field', navBooking: 'Book harvest', navOwner: 'Owner desk', reserveMachine: 'Reserve a machine',
+    heroEyebrow: 'INDIAN HARVEST ENGINEERING / NABHA', heroTitle: 'Every field deserves<br /><em>a decisive finish.</em>', heroCopy: 'Put brochure-verified New Hira power behind your harvest. Choose the machine, share the field and reserve the working window with Ram Chand & Sons.',
+    reserveWindow: 'Reserve your window', exploreFleet: 'Explore the fleet', heroProofOne: 'Self-propelled multicrop', heroProofTwo: 'Direct booking desk',
+    operationArea: 'OPERATION AREA', machineClass: 'MACHINE CLASS', machineClassValue: 'Self-propelled multicrop', bookingDesk: 'BOOKING DESK', takingRequests: 'Taking requests', scrollField: 'Scroll into the field',
+    startField: 'Start with your field.', matchMachine: 'We will match the machine and route.', name: 'Name', namePlaceholder: 'Farmer / family name', villageDistrict: 'Village or district', locationPlaceholder: 'e.g. Nabha, Patiala', crop: 'Crop', selectCrop: 'Select crop', planHarvest: 'Plan my harvest',
+    builtSeason: 'BUILT AROUND THE SEASON', campaignTitle: 'Industrial capacity.<br /><em>Local coordination.</em>', campaignCopy: 'A serious harvest needs more than a machine. It needs timing, route planning and one booking desk that stays accountable from the first call to the final row.',
+    statMachines: 'Brochure-documented machines', statMachinesCopy: 'Choose higher capacity or compact field agility.', statCrops: 'Core crop types', statCropsCopy: 'Wheat, paddy, sunflower, soyabean, gram and pulses.', statCutter: 'Largest brochure cutter bar', statTank: 'Maximum wheat grain tank',
+    flowTitle: 'One continuous move.<br /><em>Four decisive actions.</em>', flowCopy: 'The visual explains the working sequence: the header meets the crop, material moves through threshing and cleaning, and grain reaches the tank.',
+    flowCut: 'CUT', flowCutCopy: 'Cutter bar meets the standing crop.', flowThresh: 'THRESH', flowThreshCopy: 'The drum separates grain from crop material.', flowClean: 'CLEAN', flowCleanCopy: 'Sieves and airflow refine the grain sample.', flowCollect: 'COLLECT', flowCollectCopy: 'Clean grain moves into the onboard tank.',
+    fleetTitle: 'Choose your <em>edge.</em>', fleetCopy: 'Specifications below are taken from the supplied New Hira brochures. Switch between both machines to find the right fit for field size, access and crop.', highCapacity: 'High-capacity workhorse', agileFinisher: 'Agile field finisher', bookMachine: 'Book this machine', viewBrochure: 'View brochure proof',
+    stageTitle: 'Every angle.<br /><em>One unmistakable machine.</em>', stageCopy: 'Swipe or drag the stage. The active machine moves forward while the adjacent views remain visible in true perspective.', fieldTitle: 'Proof in <em>motion.</em>', fieldCopy: 'Your supplied New Hira 985 photographs are shown uncropped, with cinematic side previews for the next and previous field moments.',
+    reservationDesk: 'RESERVATION DESK / 06', bookingTitle: 'Lock the day.<br /><em>Move the harvest.</em>', bookingCopy: 'Send the field details once. The request reaches the booking desk, receives a reference number and stays available in the private operations panel.',
+    shareField: 'Share the field', shareFieldCopy: 'Village, crop and acreage', confirmFit: 'Confirm the fit', confirmFitCopy: 'Machine, access and timing', lockWindow: 'Lock the window', lockWindowCopy: 'Direct follow-up on WhatsApp', preferCall: 'Prefer to call?',
+    contactLocation: 'CONTACT & LOCATION', coordinateWith: 'Who should we coordinate with?', farmerName: 'Farmer / family name *', whatsappNumber: 'WhatsApp number *', fullName: 'Full name', mobilePlaceholder: '10-digit mobile', village: 'Village *', villagePlaceholder: 'Village name', districtTown: 'District / nearby town *', requiredFields: 'Fields marked * are required', cropDetails: 'Crop details',
+    fieldTiming: 'FIELD & TIMING', readyCut: 'Tell us what is ready to cut.', cropRequired: 'Crop *', acreage: 'Approx. acreage *', preferredDate: 'Preferred date *', dateFlexibility: 'Date flexibility', fieldAccess: 'Field access', back: 'Back', machineFit: 'Machine fit',
+    machineConfirmation: 'MACHINE & CONFIRMATION', chooseMachine: 'Choose your preferred machine.', helpChoose: 'HELP ME CHOOSE', matchField: 'We will match it to your field', operatorKnow: 'Anything the operator should know?', bookingConsent: 'I agree to be contacted about this booking by phone or WhatsApp.', sendReservation: 'Send reservation',
+    processTitle: 'Clear at every <em>turn.</em>', requestLogged: 'Request logged', requestLoggedCopy: 'Your contact, field and crop enter the booking board with a unique reference.', routeConfirmed: 'Route confirmed', routeConfirmedCopy: 'The desk checks machine fit, timing and travel between nearby harvests.', windowReserved: 'Window reserved', windowReservedCopy: 'You receive direct confirmation and the operator gets the complete field brief.', footerCopy: 'Practical harvest coordination for fields around Nabha, Patiala and beyond.',
+    leadVisualTitle: 'Make your first move<br /><em>before the crop is ready.</em>', quickRegistration: 'QUICK REGISTRATION', leadTitle: 'Tell us where the<br /><em>season is moving.</em>', leadCopy: 'Leave a number for a callback or continue directly to the experience. Only details you submit become visible to the private booking desk.', yourName: 'Your name *', fieldLocationPlaceholder: 'Where is the field?', interestedIn: 'Interested in', leadConsent: 'I agree to receive a call or WhatsApp message about harvest booking.', registerInterest: 'Register my interest', continueWithout: 'Continue without registering'
+  },
+  hi: {
+    introTitle: 'मौसम किसी का<br /><em>इंतज़ार नहीं करता।</em>', introCopy: 'न्यू हीरा हार्वेस्ट अनुभव में आपका स्वागत है।', enterField: 'खेत में प्रवेश करें', skipIntro: 'परिचय छोड़ें',
+    navMachines: 'मशीनें', navTechnology: 'तकनीक', navField: 'खेत में', navBooking: 'कटाई बुक करें', navOwner: 'मालिक डेस्क', reserveMachine: 'मशीन बुक करें',
+    heroEyebrow: 'भारतीय हार्वेस्ट इंजीनियरिंग / नाभा', heroTitle: 'हर खेत को चाहिए<br /><em>निर्णायक फिनिश।</em>', heroCopy: 'ब्रॉशर से सत्यापित न्यू हीरा शक्ति को अपनी फसल के साथ लगाएँ। मशीन चुनें, खेत की जानकारी दें और राम चंद एंड संस के साथ कटाई का समय सुरक्षित करें।', reserveWindow: 'अपना समय सुरक्षित करें', exploreFleet: 'मशीनें देखें', heroProofOne: 'सेल्फ-प्रोपेल्ड मल्टीक्रॉप', heroProofTwo: 'सीधा बुकिंग डेस्क',
+    operationArea: 'सेवा क्षेत्र', machineClass: 'मशीन श्रेणी', machineClassValue: 'सेल्फ-प्रोपेल्ड मल्टीक्रॉप', bookingDesk: 'बुकिंग डेस्क', takingRequests: 'बुकिंग जारी है', scrollField: 'खेत की ओर स्क्रॉल करें',
+    startField: 'अपने खेत से शुरुआत करें।', matchMachine: 'हम सही मशीन और रूट तय करेंगे।', name: 'नाम', namePlaceholder: 'किसान / परिवार का नाम', villageDistrict: 'गाँव या ज़िला', locationPlaceholder: 'जैसे नाभा, पटियाला', crop: 'फसल', selectCrop: 'फसल चुनें', planHarvest: 'कटाई की योजना बनाएँ',
+    builtSeason: 'मौसम के अनुसार निर्मित', campaignTitle: 'औद्योगिक क्षमता।<br /><em>स्थानीय तालमेल।</em>', campaignCopy: 'गंभीर कटाई के लिए केवल मशीन नहीं, सही समय, रूट योजना और एक जवाबदेह बुकिंग डेस्क चाहिए।', statMachines: 'ब्रॉशर में दर्ज मशीनें', statMachinesCopy: 'अधिक क्षमता या कॉम्पैक्ट फील्ड चपलता चुनें।', statCrops: 'मुख्य फसलें', statCropsCopy: 'गेहूँ, धान, सूरजमुखी, सोयाबीन, चना और दालें।', statCutter: 'सबसे बड़ी ब्रॉशर कटर बार', statTank: 'अधिकतम गेहूँ ग्रेन टैंक',
+    flowTitle: 'एक सतत चाल।<br /><em>चार निर्णायक काम।</em>', flowCopy: 'हेडर फसल काटता है, सामग्री थ्रेशिंग और सफाई से गुजरती है और साफ अनाज टैंक में पहुँचता है।', flowCut: 'कटाई', flowCutCopy: 'कटर बार खड़ी फसल से मिलता है।', flowThresh: 'थ्रेशिंग', flowThreshCopy: 'ड्रम अनाज को फसल सामग्री से अलग करता है।', flowClean: 'सफाई', flowCleanCopy: 'छलनियाँ और हवा अनाज साफ करती हैं।', flowCollect: 'संग्रह', flowCollectCopy: 'साफ अनाज मशीन के टैंक में पहुँचता है।',
+    fleetTitle: 'अपनी <em>ताकत चुनें।</em>', fleetCopy: 'नीचे दिए सभी स्पेसिफिकेशन आपके भेजे न्यू हीरा ब्रॉशर से लिए गए हैं। खेत, पहुँच और फसल के अनुसार 985 या 785 चुनें।', highCapacity: 'उच्च क्षमता वाली मशीन', agileFinisher: 'चुस्त फील्ड फिनिशर', bookMachine: 'यह मशीन बुक करें', viewBrochure: 'ब्रॉशर प्रमाण देखें',
+    stageTitle: 'हर कोण।<br /><em>एक अलग पहचान।</em>', stageCopy: 'स्टेज को स्वाइप या ड्रैग करें। सक्रिय मशीन आगे आती है और अगली-पिछली मशीनें 3D में दिखाई देती हैं।', fieldTitle: 'काम का <em>असली प्रमाण।</em>', fieldCopy: 'आपके भेजे न्यू हीरा 985 फोटो बिना क्रॉप किए दिखाए गए हैं, दोनों ओर सिनेमैटिक प्रीव्यू के साथ।',
+    reservationDesk: 'आरक्षण डेस्क / 06', bookingTitle: 'दिन तय करें।<br /><em>कटाई आगे बढ़ाएँ।</em>', bookingCopy: 'खेत की जानकारी एक बार भेजें। अनुरोध को रेफरेंस नंबर मिलेगा और वह निजी ऑपरेशन पैनल में सुरक्षित रहेगा।', shareField: 'खेत की जानकारी', shareFieldCopy: 'गाँव, फसल और एकड़', confirmFit: 'सही मशीन', confirmFitCopy: 'मशीन, पहुँच और समय', lockWindow: 'समय सुरक्षित करें', lockWindowCopy: 'WhatsApp पर सीधा संपर्क', preferCall: 'फ़ोन करना चाहेंगे?',
+    contactLocation: 'संपर्क और स्थान', coordinateWith: 'हम किससे तालमेल करें?', farmerName: 'किसान / परिवार का नाम *', whatsappNumber: 'WhatsApp नंबर *', fullName: 'पूरा नाम', mobilePlaceholder: '10 अंकों का मोबाइल', village: 'गाँव *', villagePlaceholder: 'गाँव का नाम', districtTown: 'ज़िला / नज़दीकी शहर *', requiredFields: '* वाले फ़ील्ड आवश्यक हैं', cropDetails: 'फसल विवरण', fieldTiming: 'खेत और समय', readyCut: 'बताएँ कौन-सी फसल तैयार है।', cropRequired: 'फसल *', acreage: 'अनुमानित एकड़ *', preferredDate: 'पसंदीदा तारीख *', dateFlexibility: 'तारीख में लचीलापन', fieldAccess: 'खेत तक पहुँच', back: 'वापस', machineFit: 'मशीन चुनें', machineConfirmation: 'मशीन और पुष्टि', chooseMachine: 'अपनी पसंद की मशीन चुनें।', helpChoose: 'चुनने में मदद करें', matchField: 'हम खेत के अनुसार मशीन तय करेंगे', operatorKnow: 'ऑपरेटर को और क्या जानना चाहिए?', bookingConsent: 'मैं फ़ोन या WhatsApp द्वारा इस बुकिंग के लिए संपर्क की अनुमति देता/देती हूँ।', sendReservation: 'अनुरोध भेजें',
+    processTitle: 'हर चरण में <em>स्पष्टता।</em>', requestLogged: 'अनुरोध दर्ज', requestLoggedCopy: 'संपर्क, खेत और फसल को एक यूनिक रेफरेंस मिलता है।', routeConfirmed: 'रूट की पुष्टि', routeConfirmedCopy: 'डेस्क मशीन, समय और पास के खेतों का रूट जाँचता है।', windowReserved: 'समय आरक्षित', windowReservedCopy: 'आपको सीधी पुष्टि मिलती है और ऑपरेटर को पूरा फील्ड ब्रीफ मिलता है।', footerCopy: 'नाभा, पटियाला और आसपास के खेतों के लिए व्यावहारिक कटाई समन्वय।',
+    leadVisualTitle: 'फसल तैयार होने से पहले<br /><em>पहला कदम उठाएँ।</em>', quickRegistration: 'त्वरित पंजीकरण', leadTitle: 'बताइए मौसम<br /><em>किधर बढ़ रहा है।</em>', leadCopy: 'कॉल बैक के लिए नंबर दें या सीधे वेबसाइट पर जाएँ। केवल आपके द्वारा दी गई जानकारी निजी बुकिंग डेस्क को दिखेगी।', yourName: 'आपका नाम *', fieldLocationPlaceholder: 'खेत कहाँ है?', interestedIn: 'रुचि', leadConsent: 'मैं कटाई बुकिंग के लिए फ़ोन या WhatsApp संदेश की अनुमति देता/देती हूँ।', registerInterest: 'रुचि दर्ज करें', continueWithout: 'बिना पंजीकरण जारी रखें'
+  },
+  pa: {
+    introTitle: 'ਮੌਸਮ ਕਿਸੇ ਦੀ<br /><em>ਉਡੀਕ ਨਹੀਂ ਕਰਦਾ।</em>', introCopy: 'ਨਿਊ ਹੀਰਾ ਹਾਰਵੈਸਟ ਅਨੁਭਵ ਵਿੱਚ ਜੀ ਆਇਆਂ ਨੂੰ।', enterField: 'ਖੇਤ ਵਿੱਚ ਦਾਖਲ ਹੋਵੋ', skipIntro: 'ਪਰਿਚਯ ਛੱਡੋ',
+    navMachines: 'ਮਸ਼ੀਨਾਂ', navTechnology: 'ਤਕਨੀਕ', navField: 'ਖੇਤ ਵਿੱਚ', navBooking: 'ਵਾਢੀ ਬੁੱਕ ਕਰੋ', navOwner: 'ਮਾਲਕ ਡੈਸਕ', reserveMachine: 'ਮਸ਼ੀਨ ਬੁੱਕ ਕਰੋ',
+    heroEyebrow: 'ਭਾਰਤੀ ਹਾਰਵੈਸਟ ਇੰਜੀਨੀਅਰਿੰਗ / ਨਾਭਾ', heroTitle: 'ਹਰ ਖੇਤ ਹੱਕਦਾਰ ਹੈ<br /><em>ਪੱਕੇ ਅੰਤ ਦਾ।</em>', heroCopy: 'ਬਰੋਸ਼ਰ-ਪ੍ਰਮਾਣਿਤ ਨਿਊ ਹੀਰਾ ਤਾਕਤ ਨੂੰ ਆਪਣੀ ਫਸਲ ਨਾਲ ਜੋੜੋ। ਮਸ਼ੀਨ ਚੁਣੋ, ਖੇਤ ਦੀ ਜਾਣਕਾਰੀ ਦਿਓ ਅਤੇ ਰਾਮ ਚੰਦ ਐਂਡ ਸੰਜ਼ ਨਾਲ ਵਾਢੀ ਦਾ ਸਮਾਂ ਰਿਜ਼ਰਵ ਕਰੋ।', reserveWindow: 'ਆਪਣਾ ਸਮਾਂ ਰਿਜ਼ਰਵ ਕਰੋ', exploreFleet: 'ਮਸ਼ੀਨਾਂ ਵੇਖੋ', heroProofOne: 'ਸੈਲਫ-ਪ੍ਰੋਪੈਲਡ ਮਲਟੀਕ੍ਰਾਪ', heroProofTwo: 'ਸਿੱਧਾ ਬੁਕਿੰਗ ਡੈਸਕ',
+    operationArea: 'ਸੇਵਾ ਖੇਤਰ', machineClass: 'ਮਸ਼ੀਨ ਸ਼੍ਰੇਣੀ', machineClassValue: 'ਸੈਲਫ-ਪ੍ਰੋਪੈਲਡ ਮਲਟੀਕ੍ਰਾਪ', bookingDesk: 'ਬੁਕਿੰਗ ਡੈਸਕ', takingRequests: 'ਬੁਕਿੰਗ ਜਾਰੀ ਹੈ', scrollField: 'ਖੇਤ ਵੱਲ ਸਕ੍ਰੋਲ ਕਰੋ',
+    startField: 'ਆਪਣੇ ਖੇਤ ਤੋਂ ਸ਼ੁਰੂ ਕਰੋ।', matchMachine: 'ਅਸੀਂ ਸਹੀ ਮਸ਼ੀਨ ਅਤੇ ਰੂਟ ਮਿਲਾਵਾਂਗੇ।', name: 'ਨਾਮ', namePlaceholder: 'ਕਿਸਾਨ / ਪਰਿਵਾਰ ਦਾ ਨਾਮ', villageDistrict: 'ਪਿੰਡ ਜਾਂ ਜ਼ਿਲ੍ਹਾ', locationPlaceholder: 'ਜਿਵੇਂ ਨਾਭਾ, ਪਟਿਆਲਾ', crop: 'ਫਸਲ', selectCrop: 'ਫਸਲ ਚੁਣੋ', planHarvest: 'ਵਾਢੀ ਦੀ ਯੋਜਨਾ ਬਣਾਓ',
+    builtSeason: 'ਮੌਸਮ ਦੇ ਅਨੁਸਾਰ ਤਿਆਰ', campaignTitle: 'ਉਦਯੋਗਿਕ ਸਮਰੱਥਾ।<br /><em>ਸਥਾਨਕ ਤਾਲਮੇਲ।</em>', campaignCopy: 'ਗੰਭੀਰ ਵਾਢੀ ਲਈ ਮਸ਼ੀਨ ਦੇ ਨਾਲ ਸਹੀ ਸਮਾਂ, ਰੂਟ ਯੋਜਨਾ ਅਤੇ ਜ਼ਿੰਮੇਵਾਰ ਬੁਕਿੰਗ ਡੈਸਕ ਚਾਹੀਦਾ ਹੈ।', statMachines: 'ਬਰੋਸ਼ਰ ਵਿੱਚ ਦਰਜ ਮਸ਼ੀਨਾਂ', statMachinesCopy: 'ਵੱਧ ਸਮਰੱਥਾ ਜਾਂ ਕੰਪੈਕਟ ਫੀਲਡ ਚੁਸਤੀ ਚੁਣੋ।', statCrops: 'ਮੁੱਖ ਫਸਲਾਂ', statCropsCopy: 'ਕਣਕ, ਝੋਨਾ, ਸੂਰਜਮੁਖੀ, ਸੋਇਆਬੀਨ, ਛੋਲੇ ਅਤੇ ਦਾਲਾਂ।', statCutter: 'ਸਭ ਤੋਂ ਵੱਡੀ ਬਰੋਸ਼ਰ ਕਟਰ ਬਾਰ', statTank: 'ਵੱਧ ਤੋਂ ਵੱਧ ਕਣਕ ਗ੍ਰੇਨ ਟੈਂਕ',
+    flowTitle: 'ਇੱਕ ਲਗਾਤਾਰ ਚਾਲ।<br /><em>ਚਾਰ ਪੱਕੇ ਕੰਮ।</em>', flowCopy: 'ਹੈਡਰ ਫਸਲ ਕੱਟਦਾ ਹੈ, ਸਮੱਗਰੀ ਥ੍ਰੈਸ਼ਿੰਗ ਅਤੇ ਸਫਾਈ ਵਿੱਚੋਂ ਲੰਘਦੀ ਹੈ ਅਤੇ ਸਾਫ਼ ਅਨਾਜ ਟੈਂਕ ਵਿੱਚ ਪਹੁੰਚਦਾ ਹੈ।', flowCut: 'ਕਟਾਈ', flowCutCopy: 'ਕਟਰ ਬਾਰ ਖੜ੍ਹੀ ਫਸਲ ਨੂੰ ਕੱਟਦੀ ਹੈ।', flowThresh: 'ਥ੍ਰੈਸ਼ਿੰਗ', flowThreshCopy: 'ਡਰੰਮ ਦਾਣਾ ਫਸਲ ਤੋਂ ਵੱਖ ਕਰਦਾ ਹੈ।', flowClean: 'ਸਫਾਈ', flowCleanCopy: 'ਛਾਣਣੀਆਂ ਅਤੇ ਹਵਾ ਦਾਣਾ ਸਾਫ਼ ਕਰਦੀਆਂ ਹਨ।', flowCollect: 'ਇਕੱਠਾ', flowCollectCopy: 'ਸਾਫ਼ ਅਨਾਜ ਮਸ਼ੀਨ ਦੇ ਟੈਂਕ ਵਿੱਚ ਜਾਂਦਾ ਹੈ।',
+    fleetTitle: 'ਆਪਣੀ <em>ਤਾਕਤ ਚੁਣੋ।</em>', fleetCopy: 'ਹੇਠਾਂ ਦਿੱਤੀਆਂ ਸਾਰੀਆਂ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਤੁਹਾਡੇ ਭੇਜੇ ਨਿਊ ਹੀਰਾ ਬਰੋਸ਼ਰ ਤੋਂ ਹਨ। ਖੇਤ, ਰਸਤੇ ਅਤੇ ਫਸਲ ਮੁਤਾਬਕ 985 ਜਾਂ 785 ਚੁਣੋ।', highCapacity: 'ਵੱਧ ਸਮਰੱਥਾ ਵਾਲੀ ਮਸ਼ੀਨ', agileFinisher: 'ਚੁਸਤ ਫੀਲਡ ਫਿਨਿਸ਼ਰ', bookMachine: 'ਇਹ ਮਸ਼ੀਨ ਬੁੱਕ ਕਰੋ', viewBrochure: 'ਬਰੋਸ਼ਰ ਸਬੂਤ ਵੇਖੋ',
+    stageTitle: 'ਹਰ ਕੋਣ।<br /><em>ਇੱਕ ਵੱਖਰੀ ਪਛਾਣ।</em>', stageCopy: 'ਸਟੇਜ ਨੂੰ ਸਵਾਈਪ ਜਾਂ ਡ੍ਰੈਗ ਕਰੋ। ਸਰਗਰਮ ਮਸ਼ੀਨ ਅੱਗੇ ਅਤੇ ਅਗਲੀ-ਪਿਛਲੀ ਮਸ਼ੀਨਾਂ 3D ਵਿੱਚ ਦਿਖਦੀਆਂ ਹਨ।', fieldTitle: 'ਕੰਮ ਦਾ <em>ਅਸਲੀ ਸਬੂਤ।</em>', fieldCopy: 'ਤੁਹਾਡੇ ਭੇਜੇ ਨਿਊ ਹੀਰਾ 985 ਫੋਟੋ ਬਿਨਾਂ ਕ੍ਰਾਪ ਕੀਤੇ ਦਿਖਾਏ ਗਏ ਹਨ, ਦੋਵੇਂ ਪਾਸੇ ਸਿਨੇਮੈਟਿਕ ਪ੍ਰੀਵਿਊ ਨਾਲ।',
+    reservationDesk: 'ਰਿਜ਼ਰਵੇਸ਼ਨ ਡੈਸਕ / 06', bookingTitle: 'ਦਿਨ ਪੱਕਾ ਕਰੋ।<br /><em>ਵਾਢੀ ਅੱਗੇ ਵਧਾਓ।</em>', bookingCopy: 'ਖੇਤ ਦੀ ਜਾਣਕਾਰੀ ਇੱਕ ਵਾਰ ਭੇਜੋ। ਬੇਨਤੀ ਨੂੰ ਰੈਫਰੈਂਸ ਨੰਬਰ ਮਿਲੇਗਾ ਅਤੇ ਇਹ ਨਿੱਜੀ ਆਪਰੇਸ਼ਨ ਪੈਨਲ ਵਿੱਚ ਰਹੇਗੀ।', shareField: 'ਖੇਤ ਦੀ ਜਾਣਕਾਰੀ', shareFieldCopy: 'ਪਿੰਡ, ਫਸਲ ਅਤੇ ਏਕੜ', confirmFit: 'ਸਹੀ ਮਸ਼ੀਨ', confirmFitCopy: 'ਮਸ਼ੀਨ, ਰਸਤਾ ਅਤੇ ਸਮਾਂ', lockWindow: 'ਸਮਾਂ ਰਿਜ਼ਰਵ ਕਰੋ', lockWindowCopy: 'WhatsApp ਉੱਤੇ ਸਿੱਧਾ ਸੰਪਰਕ', preferCall: 'ਫੋਨ ਕਰਨਾ ਚਾਹੋਗੇ?',
+    contactLocation: 'ਸੰਪਰਕ ਅਤੇ ਥਾਂ', coordinateWith: 'ਅਸੀਂ ਕਿਸ ਨਾਲ ਤਾਲਮੇਲ ਕਰੀਏ?', farmerName: 'ਕਿਸਾਨ / ਪਰਿਵਾਰ ਦਾ ਨਾਮ *', whatsappNumber: 'WhatsApp ਨੰਬਰ *', fullName: 'ਪੂਰਾ ਨਾਮ', mobilePlaceholder: '10 ਅੰਕਾਂ ਦਾ ਮੋਬਾਈਲ', village: 'ਪਿੰਡ *', villagePlaceholder: 'ਪਿੰਡ ਦਾ ਨਾਮ', districtTown: 'ਜ਼ਿਲ੍ਹਾ / ਨੇੜਲਾ ਸ਼ਹਿਰ *', requiredFields: '* ਵਾਲੇ ਖੇਤਰ ਲਾਜ਼ਮੀ ਹਨ', cropDetails: 'ਫਸਲ ਵੇਰਵਾ', fieldTiming: 'ਖੇਤ ਅਤੇ ਸਮਾਂ', readyCut: 'ਦੱਸੋ ਕਿਹੜੀ ਫਸਲ ਤਿਆਰ ਹੈ।', cropRequired: 'ਫਸਲ *', acreage: 'ਅੰਦਾਜ਼ਨ ਏਕੜ *', preferredDate: 'ਪਸੰਦੀਦਾ ਤਾਰੀਖ *', dateFlexibility: 'ਤਾਰੀਖ ਵਿੱਚ ਲਚਕ', fieldAccess: 'ਖੇਤ ਦਾ ਰਸਤਾ', back: 'ਪਿੱਛੇ', machineFit: 'ਮਸ਼ੀਨ ਚੁਣੋ', machineConfirmation: 'ਮਸ਼ੀਨ ਅਤੇ ਪੁਸ਼ਟੀ', chooseMachine: 'ਆਪਣੀ ਪਸੰਦ ਦੀ ਮਸ਼ੀਨ ਚੁਣੋ।', helpChoose: 'ਚੋਣ ਵਿੱਚ ਮਦਦ ਕਰੋ', matchField: 'ਅਸੀਂ ਖੇਤ ਮੁਤਾਬਕ ਮਸ਼ੀਨ ਚੁਣਾਂਗੇ', operatorKnow: 'ਆਪਰੇਟਰ ਨੂੰ ਹੋਰ ਕੀ ਪਤਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ?', bookingConsent: 'ਮੈਂ ਇਸ ਬੁਕਿੰਗ ਲਈ ਫੋਨ ਜਾਂ WhatsApp ਰਾਹੀਂ ਸੰਪਰਕ ਲਈ ਸਹਿਮਤ ਹਾਂ।', sendReservation: 'ਬੇਨਤੀ ਭੇਜੋ',
+    processTitle: 'ਹਰ ਪੜਾਅ ਵਿੱਚ <em>ਸਪਸ਼ਟਤਾ।</em>', requestLogged: 'ਬੇਨਤੀ ਦਰਜ', requestLoggedCopy: 'ਸੰਪਰਕ, ਖੇਤ ਅਤੇ ਫਸਲ ਨੂੰ ਇਕ ਵੱਖਰਾ ਰੈਫਰੈਂਸ ਮਿਲਦਾ ਹੈ।', routeConfirmed: 'ਰੂਟ ਦੀ ਪੁਸ਼ਟੀ', routeConfirmedCopy: 'ਡੈਸਕ ਮਸ਼ੀਨ, ਸਮਾਂ ਅਤੇ ਨੇੜਲੇ ਖੇਤਾਂ ਦਾ ਰੂਟ ਜਾਂਚਦਾ ਹੈ।', windowReserved: 'ਸਮਾਂ ਰਿਜ਼ਰਵ', windowReservedCopy: 'ਤੁਹਾਨੂੰ ਸਿੱਧੀ ਪੁਸ਼ਟੀ ਅਤੇ ਆਪਰੇਟਰ ਨੂੰ ਪੂਰਾ ਫੀਲਡ ਵੇਰਵਾ ਮਿਲਦਾ ਹੈ।', footerCopy: 'ਨਾਭਾ, ਪਟਿਆਲਾ ਅਤੇ ਆਲੇ-ਦੁਆਲੇ ਦੇ ਖੇਤਾਂ ਲਈ ਵਰਤੋਂਯੋਗ ਵਾਢੀ ਤਾਲਮੇਲ।',
+    leadVisualTitle: 'ਫਸਲ ਤਿਆਰ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ<br /><em>ਪਹਿਲਾ ਕਦਮ ਚੁੱਕੋ।</em>', quickRegistration: 'ਤੁਰੰਤ ਰਜਿਸਟ੍ਰੇਸ਼ਨ', leadTitle: 'ਦੱਸੋ ਮੌਸਮ<br /><em>ਕਿੱਧਰ ਵਧ ਰਿਹਾ ਹੈ।</em>', leadCopy: 'ਕਾਲ ਬੈਕ ਲਈ ਨੰਬਰ ਦਿਓ ਜਾਂ ਸਿੱਧੇ ਵੈੱਬਸਾਈਟ ਉੱਤੇ ਜਾਓ। ਸਿਰਫ਼ ਤੁਹਾਡੇ ਦਿੱਤੇ ਵੇਰਵੇ ਨਿੱਜੀ ਬੁਕਿੰਗ ਡੈਸਕ ਨੂੰ ਦਿਸਣਗੇ।', yourName: 'ਤੁਹਾਡਾ ਨਾਮ *', fieldLocationPlaceholder: 'ਖੇਤ ਕਿੱਥੇ ਹੈ?', interestedIn: 'ਦਿਲਚਸਪੀ', leadConsent: 'ਮੈਂ ਵਾਢੀ ਬੁਕਿੰਗ ਲਈ ਫੋਨ ਜਾਂ WhatsApp ਸੁਨੇਹੇ ਲਈ ਸਹਿਮਤ ਹਾਂ।', registerInterest: 'ਦਿਲਚਸਪੀ ਦਰਜ ਕਰੋ', continueWithout: 'ਬਿਨਾਂ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਜਾਰੀ ਰੱਖੋ'
+  }
+};
+
+const CROP_LABELS = {
+  en: { wheat: 'WHEAT', paddy: 'PADDY', sunflower: 'SUNFLOWER', soyabean: 'SOYABEAN', gram: 'GRAM', pulses: 'PULSES', Other: 'Other' },
+  hi: { wheat: 'गेहूँ', paddy: 'धान', sunflower: 'सूरजमुखी', soyabean: 'सोयाबीन', gram: 'चना', pulses: 'दालें', Other: 'अन्य' },
+  pa: { wheat: 'ਕਣਕ', paddy: 'ਝੋਨਾ', sunflower: 'ਸੂਰਜਮੁਖੀ', soyabean: 'ਸੋਇਆਬੀਨ', gram: 'ਛੋਲੇ', pulses: 'ਦਾਲਾਂ', Other: 'ਹੋਰ' }
+};
+
+const MODEL_TRANSLATIONS = {
+  hi: {
+    '985': { eyebrow: 'उच्च क्षमता वाला वर्कहॉर्स', description: 'कम समय में अधिक उपज—चौड़ी कटर बार, पाँच स्ट्रॉ वॉकर और 1,800 किग्रा गेहूँ ग्रेन टैंक के साथ।', specs: ['प्रभावी कटर', 'थ्रेशिंग ड्रम', 'वर्किंग चौड़ाई', 'फ्यूल टैंक', 'ग्राउंड क्लियरेंस', 'व्हील बेस'] },
+    '785': { eyebrow: 'चुस्त फील्ड फिनिशर', description: 'सुगम खेत पहुँच, कम टर्निंग रेडियस और बदलती परिस्थितियों में भरोसेमंद काम के लिए कॉम्पैक्ट मल्टीक्रॉप कंबाइन।', specs: ['प्रभावी कटर', 'थ्रेशिंग ड्रम', 'वर्किंग चौड़ाई', 'फ्यूल टैंक', 'ग्राउंड क्लियरेंस', 'व्हील बेस'] }
+  },
+  pa: {
+    '985': { eyebrow: 'ਵੱਧ ਸਮਰੱਥਾ ਵਾਲਾ ਵਰਕਹੌਰਸ', description: 'ਘੱਟ ਸਮੇਂ ਵਿੱਚ ਵੱਧ ਪੈਦਾਵਾਰ—ਚੌੜੀ ਕਟਰ ਬਾਰ, ਪੰਜ ਸਟਰਾਅ ਵਾਕਰ ਅਤੇ 1,800 ਕਿਲੋ ਕਣਕ ਗ੍ਰੇਨ ਟੈਂਕ ਨਾਲ।', specs: ['ਪ੍ਰਭਾਵੀ ਕਟਰ', 'ਥ੍ਰੈਸ਼ਿੰਗ ਡਰੰਮ', 'ਵਰਕਿੰਗ ਚੌੜਾਈ', 'ਫਿਊਲ ਟੈਂਕ', 'ਗ੍ਰਾਊਂਡ ਕਲੀਅਰੈਂਸ', 'ਵ੍ਹੀਲ ਬੇਸ'] },
+    '785': { eyebrow: 'ਚੁਸਤ ਫੀਲਡ ਫਿਨਿਸ਼ਰ', description: 'ਸੌਖੀ ਖੇਤ ਪਹੁੰਚ, ਛੋਟੇ ਟਰਨਿੰਗ ਰੇਡੀਅਸ ਅਤੇ ਬਦਲਦੇ ਹਾਲਾਤਾਂ ਵਿੱਚ ਭਰੋਸੇਯੋਗ ਕੰਮ ਲਈ ਕੰਪੈਕਟ ਮਲਟੀਕ੍ਰਾਪ ਕੰਬਾਈਨ।', specs: ['ਪ੍ਰਭਾਵੀ ਕਟਰ', 'ਥ੍ਰੈਸ਼ਿੰਗ ਡਰੰਮ', 'ਵਰਕਿੰਗ ਚੌੜਾਈ', 'ਫਿਊਲ ਟੈਂਕ', 'ਗ੍ਰਾਊਂਡ ਕਲੀਅਰੈਂਸ', 'ਵ੍ਹੀਲ ਬੇਸ'] }
+  }
+};
 
 const MODELS = {
   '985': {
@@ -47,6 +124,68 @@ const MODELS = {
     ]
   }
 };
+
+const OPTION_LABELS = {
+  hi: {
+    Wheat: 'गेहूँ', Paddy: 'धान', Sunflower: 'सूरजमुखी', Soyabean: 'सोयाबीन', Gram: 'चना', Pulses: 'दालें', Other: 'अन्य',
+    'Exact date preferred': 'सटीक तारीख पसंद है', '1-2 days flexible': '1-2 दिन लचीला', '3-5 days flexible': '3-5 दिन लचीला', 'Call to discuss': 'फ़ोन पर बात करें',
+    'Normal tractor access': 'सामान्य ट्रैक्टर रास्ता', 'Narrow village road': 'संकरी गाँव की सड़क', 'Soft / wet approach': 'नरम / गीला रास्ता', 'Unsure - please call': 'पता नहीं - कृपया फ़ोन करें',
+    'Harvest booking': 'कटाई बुकिंग', 'Call me back': 'मुझे फ़ोन करें'
+  },
+  pa: {
+    Wheat: 'ਕਣਕ', Paddy: 'ਝੋਨਾ', Sunflower: 'ਸੂਰਜਮੁਖੀ', Soyabean: 'ਸੋਇਆਬੀਨ', Gram: 'ਛੋਲੇ', Pulses: 'ਦਾਲਾਂ', Other: 'ਹੋਰ',
+    'Exact date preferred': 'ਪੱਕੀ ਤਾਰੀਖ ਚਾਹੀਦੀ ਹੈ', '1-2 days flexible': '1-2 ਦਿਨ ਲਚਕ', '3-5 days flexible': '3-5 ਦਿਨ ਲਚਕ', 'Call to discuss': 'ਫੋਨ ਉੱਤੇ ਗੱਲ ਕਰੋ',
+    'Normal tractor access': 'ਆਮ ਟਰੈਕਟਰ ਰਸਤਾ', 'Narrow village road': 'ਤੰਗ ਪਿੰਡ ਦੀ ਸੜਕ', 'Soft / wet approach': 'ਨਰਮ / ਗਿੱਲਾ ਰਸਤਾ', 'Unsure - please call': 'ਪਤਾ ਨਹੀਂ - ਕਿਰਪਾ ਕਰਕੇ ਫੋਨ ਕਰੋ',
+    'Harvest booking': 'ਵਾਢੀ ਬੁਕਿੰਗ', 'Call me back': 'ਮੈਨੂੰ ਫੋਨ ਕਰੋ'
+  }
+};
+
+function localizedModel(model) {
+  const base = MODELS[model];
+  const local = MODEL_TRANSLATIONS[currentLanguage]?.[model];
+  if (!local) return base;
+  return {
+    ...base,
+    eyebrow: local.eyebrow,
+    description: local.description,
+    specs: base.specs.map((spec, index) => [local.specs[index] || spec[0], spec[1]])
+  };
+}
+
+function applyLanguage(language, track = false) {
+  const next = ['en', 'hi', 'pa'].includes(language) ? language : 'en';
+  currentLanguage = next;
+  localStorage.setItem(LANGUAGE_KEY, next);
+  document.documentElement.lang = next;
+  const dictionary = TRANSLATIONS[next] || TRANSLATIONS.en;
+  $$('select option').forEach((option) => {
+    if (!option.dataset.originalLabel) option.dataset.originalLabel = option.textContent.trim();
+  });
+  $$('[data-i18n]').forEach((element) => {
+    const value = dictionary[element.dataset.i18n];
+    if (value != null) element.innerHTML = value;
+  });
+  $$('[data-i18n-placeholder]').forEach((element) => {
+    const value = dictionary[element.dataset.i18nPlaceholder];
+    if (value != null) element.placeholder = value.replace(/<[^>]+>/g, '');
+  });
+  $$('[data-crop]').forEach((element) => {
+    const label = CROP_LABELS[next]?.[element.dataset.crop];
+    if (label) element.textContent = label;
+  });
+  $$('select option').forEach((option) => {
+    const original = option.dataset.originalLabel;
+    if (next === 'en') option.textContent = original;
+    else if (OPTION_LABELS[next]?.[option.value]) option.textContent = OPTION_LABELS[next][option.value];
+    else if (OPTION_LABELS[next]?.[original]) option.textContent = OPTION_LABELS[next][original];
+  });
+  const languageCode = $('#languageToggle span');
+  if (languageCode) languageCode.textContent = next === 'en' ? 'EN' : next === 'hi' ? 'हि' : 'ਪੰ';
+  const activeModel = $('#fleetStage')?.dataset.model || '985';
+  if ($('#fleetStage')) updateFleet(activeModel, false);
+  showBookingStep(bookingStep, false);
+  if (track) trackEvent('language_changed', { language: next });
+}
 
 const adminState = {
   token: sessionStorage.getItem(ADMIN_TOKEN_KEY) || '',
@@ -170,6 +309,217 @@ function setupLoader() {
   window.setTimeout(finish, 2400);
 }
 
+function setupOnboarding() {
+  const loader = $('#siteLoader');
+  const count = $('#loaderCount');
+  const languageGate = $('#languageGate');
+  const leadModal = $('#leadModal');
+  const intro = $('#brandIntro');
+  let value = 0;
+  let finishedLoading = false;
+  let introTimer = 0;
+  let introStarted = false;
+  let onboardingComplete = false;
+
+  applyLanguage(currentLanguage, false);
+
+  const countTimer = window.setInterval(() => {
+    value = Math.min(98, value + Math.max(1, Math.ceil((100 - value) / 8)));
+    if (count) count.textContent = String(value).padStart(2, '0');
+  }, 75);
+
+  const completeExperience = () => {
+    if (onboardingComplete) return;
+    onboardingComplete = true;
+    window.clearTimeout(introTimer);
+    intro?.classList.add('is-leaving');
+    window.setTimeout(() => {
+      if (intro) intro.hidden = true;
+      document.body.classList.remove('onboarding-active', 'modal-open');
+      document.body.classList.add('is-ready');
+      sessionStorage.setItem(ONBOARDING_KEY, String(Date.now()));
+      document.dispatchEvent(new Event('newhira:ready'));
+      trackEvent('intro_completed', { language: currentLanguage });
+    }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 520 : 950);
+  };
+
+  const startIntro = () => {
+    if (introStarted) return;
+    introStarted = true;
+    if (leadModal) leadModal.hidden = true;
+    document.body.classList.remove('modal-open');
+    if (!intro) return completeExperience();
+    intro.hidden = false;
+    requestAnimationFrame(() => intro.classList.add('is-playing'));
+    const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 3600 : 5200;
+    introTimer = window.setTimeout(completeExperience, duration);
+    trackEvent('intro_started', { language: currentLanguage });
+  };
+
+  const closeLead = (reason) => {
+    localStorage.setItem(LEAD_GATE_KEY, String(Date.now()));
+    if (reason) trackEvent(reason, { language: currentLanguage });
+    startIntro();
+  };
+
+  const openLead = () => {
+    if (!leadModal) return startIntro();
+    leadModal.hidden = false;
+    document.body.classList.add('modal-open');
+    trackEvent('lead_gate_shown', { language: currentLanguage, onboarding: true });
+    window.setTimeout(() => $('#leadForm input[name="name"]')?.focus({ preventScroll: true }), 320);
+  };
+
+  const leaveLanguageGate = () => {
+    if (!languageGate) return openLead();
+    languageGate.classList.add('is-leaving');
+    window.setTimeout(() => {
+      languageGate.hidden = true;
+      languageGate.classList.remove('is-leaving');
+      openLead();
+    }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 320 : 720);
+  };
+
+  $$('[data-select-language]', languageGate || document).forEach((button) => {
+    button.addEventListener('click', () => {
+      applyLanguage(button.dataset.selectLanguage, true);
+      leaveLanguageGate();
+    });
+  });
+
+  $('#leadClose')?.addEventListener('click', () => closeLead('lead_gate_closed'));
+  $('#leadSkip')?.addEventListener('click', () => closeLead('lead_gate_skipped'));
+  leadModal?.addEventListener('click', (event) => {
+    if (event.target === leadModal) closeLead('lead_gate_closed');
+  });
+
+  $('#leadForm')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const values = Object.fromEntries(new FormData(form).entries());
+    values.phone = cleanPhone(values.phone);
+    values.source = 'welcome_registration_' + currentLanguage;
+    if (values.phone.length !== 10) {
+      form.elements.phone.setCustomValidity(currentLanguage === 'hi' ? 'सही 10 अंकों का मोबाइल नंबर दर्ज करें।' : currentLanguage === 'pa' ? 'ਸਹੀ 10 ਅੰਕਾਂ ਦਾ ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ।' : 'Enter a valid 10-digit mobile number.');
+      form.elements.phone.reportValidity();
+      form.elements.phone.addEventListener('input', () => form.elements.phone.setCustomValidity(''), { once: true });
+      return;
+    }
+    const button = $('button[type="submit"]', form);
+    button.disabled = true;
+    const original = button.innerHTML;
+    button.textContent = currentLanguage === 'hi' ? 'पंजीकरण हो रहा है...' : currentLanguage === 'pa' ? 'ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਹੋ ਰਹੀ ਹੈ...' : 'Registering...';
+    try {
+      await api('/leads', { method: 'POST', body: values });
+      showToast(currentLanguage === 'hi' ? 'पंजीकरण सेव हो गया।' : currentLanguage === 'pa' ? 'ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਸੇਵ ਹੋ ਗਈ।' : 'Registration saved. The booking desk can now contact you.');
+    } catch (error) {
+      showToast(currentLanguage === 'hi' ? 'ऑनलाइन सेवा अभी जुड़ी नहीं है; आप बुकिंग या WhatsApp जारी रख सकते हैं।' : currentLanguage === 'pa' ? 'ਆਨਲਾਈਨ ਸੇਵਾ ਹਾਲੇ ਨਹੀਂ ਜੁੜੀ; ਤੁਸੀਂ ਬੁਕਿੰਗ ਜਾਂ WhatsApp ਜਾਰੀ ਰੱਖ ਸਕਦੇ ਹੋ।' : 'Registration service is not connected yet. You can continue to booking or WhatsApp.');
+    }
+    trackEvent('lead_submitted', { interest: values.interest, language: currentLanguage });
+    button.disabled = false;
+    button.innerHTML = original;
+    closeLead();
+  });
+
+  $('#introEnter')?.addEventListener('click', completeExperience);
+  $('#introSkip')?.addEventListener('click', completeExperience);
+
+  const finishLoader = () => {
+    if (finishedLoading) return;
+    finishedLoading = true;
+    window.clearInterval(countTimer);
+    if (count) count.textContent = '100';
+    window.setTimeout(() => {
+      loader?.classList.add('is-hidden');
+      if (languageGate) {
+        languageGate.hidden = false;
+        languageGate.classList.add('is-entering');
+        window.setTimeout(() => languageGate.classList.remove('is-entering'), 900);
+      } else {
+        openLead();
+      }
+    }, 210);
+  };
+
+  if (document.readyState === 'complete') window.setTimeout(finishLoader, 700);
+  else window.addEventListener('load', () => window.setTimeout(finishLoader, 700), { once: true });
+  window.setTimeout(finishLoader, 2100);
+}
+
+function setupLanguageMenu() {
+  const toggle = $('#languageToggle');
+  const panel = $('#languagePanel');
+  const close = () => {
+    if (!panel || !toggle) return;
+    panel.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+  };
+  toggle?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    const open = panel.hidden;
+    panel.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+  $$('.nav-language [data-select-language], .nav-mobile-languages [data-select-language]').forEach((button) => button.addEventListener('click', () => {
+    applyLanguage(button.dataset.selectLanguage, true);
+    close();
+  }));
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.nav-language')) close();
+  });
+}
+
+function setupHeroCinema() {
+  const slides = $$('#heroField figure');
+  if (slides.length < 2) return;
+  let active = 0;
+  const index = $('#heroSlideIndex');
+  const go = (next) => {
+    active = (next + slides.length) % slides.length;
+    slides.forEach((slide, slideIndex) => slide.classList.toggle('is-active', slideIndex === active));
+    if (index) index.textContent = String(active + 1).padStart(2, '0');
+  };
+  const timer = window.setInterval(() => go(active + 1), 6500);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) window.clearInterval(timer);
+  }, { once: true });
+}
+
+function setupCounters() {
+  const counters = $$('[data-counter]');
+  const animate = (element) => {
+    if (element.dataset.counted === '1') return;
+    element.dataset.counted = '1';
+    const target = Number(element.dataset.counter || 0);
+    const decimal = Number(element.dataset.decimal || 0);
+    const pad = Number(element.dataset.pad || 0);
+    const suffix = $('small', element)?.outerHTML || '';
+    const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 950 : 1450;
+    const started = performance.now();
+    const frame = (now) => {
+      const progress = Math.min(1, (now - started) / duration);
+      const eased = 1 - Math.pow(1 - progress, 4);
+      const raw = Math.round(target * eased);
+      let label;
+      if (decimal) label = (raw / Math.pow(10, decimal)).toFixed(decimal);
+      else label = Math.round(raw).toLocaleString('en-IN');
+      if (pad && !decimal) label = label.padStart(pad, '0');
+      element.innerHTML = label + suffix;
+      if (progress < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  };
+  if (!('IntersectionObserver' in window)) return counters.forEach(animate);
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      animate(entry.target);
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: .35 });
+  counters.forEach((counter) => observer.observe(counter));
+}
+
 function setupNavigation() {
   const toggle = $('#menuToggle');
   const nav = $('#siteNav');
@@ -223,11 +573,9 @@ function setupReveal() {
   }
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('is-visible');
-      observer.unobserve(entry.target);
+      entry.target.classList.toggle('is-visible', entry.isIntersecting);
     });
-  }, { threshold: .1, rootMargin: '0px 0px -8% 0px' });
+  }, { threshold: .08, rootMargin: '4% 0px -7% 0px' });
   items.forEach((item, index) => {
     item.style.setProperty('--reveal-delay', Math.min(index % 4, 3) * 80 + 'ms');
     observer.observe(item);
@@ -251,7 +599,7 @@ function setupSectionAnalytics() {
 }
 
 function updateHero(model) {
-  const data = MODELS[model];
+  const data = localizedModel(model);
   const product = $('#heroProduct');
   if (!data || !product) return;
   product.classList.add('is-changing');
@@ -274,7 +622,7 @@ function updateHero(model) {
 function setupHero() {
   $$('[data-hero-model]').forEach((button) => button.addEventListener('click', () => updateHero(button.dataset.heroModel)));
   const product = $('#heroProduct');
-  if (!product || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!product) return;
   product.addEventListener('pointermove', (event) => {
     if (event.pointerType === 'touch') return;
     const rect = product.getBoundingClientRect();
@@ -292,7 +640,7 @@ function setupHero() {
 }
 
 function updateFleet(model, track = true) {
-  const data = MODELS[model];
+  const data = localizedModel(model);
   const stage = $('#fleetStage');
   if (!data || !stage) return;
   stage.classList.add('is-changing');
@@ -527,7 +875,7 @@ function setupCarousels() {
 
 let bookingStep = 0;
 
-function showBookingStep(index) {
+function showBookingStep(index, track = true) {
   const steps = $$('.booking-step');
   bookingStep = Math.max(0, Math.min(steps.length - 1, index));
   steps.forEach((step, stepIndex) => {
@@ -536,8 +884,10 @@ function showBookingStep(index) {
     step.classList.toggle('is-active', active);
   });
   $$('.booking-stepper i').forEach((item, itemIndex) => item.classList.toggle('is-active', itemIndex <= bookingStep));
-  $('#bookingStepLabel').textContent = 'STEP ' + String(bookingStep + 1).padStart(2, '0') + ' OF 03';
-  trackEvent('booking_step_view', { step: bookingStep + 1 });
+  const stepWord = currentLanguage === 'hi' ? 'चरण' : currentLanguage === 'pa' ? 'ਪੜਾਅ' : 'STEP';
+  const ofWord = currentLanguage === 'hi' ? 'में से' : currentLanguage === 'pa' ? 'ਵਿੱਚੋਂ' : 'OF';
+  $('#bookingStepLabel').textContent = stepWord + ' ' + String(bookingStep + 1).padStart(2, '0') + ' ' + ofWord + ' 03';
+  if (track) trackEvent('booking_step_view', { step: bookingStep + 1, language: currentLanguage });
 }
 
 function validateStep(step) {
@@ -592,7 +942,7 @@ async function submitBooking(event) {
   if (!validateStep(finalStep)) return;
   const submit = $('#bookingSubmit');
   submit.disabled = true;
-  submit.textContent = 'Sending reservation...';
+  submit.textContent = currentLanguage === 'hi' ? 'अनुरोध भेजा जा रहा है...' : currentLanguage === 'pa' ? 'ਬੇਨਤੀ ਭੇਜੀ ਜਾ ਰਹੀ ਹੈ...' : 'Sending reservation...';
   const values = Object.fromEntries(new FormData(form).entries());
   values.phone = cleanPhone(values.phone);
   values.source = 'website';
@@ -616,13 +966,13 @@ async function submitBooking(event) {
   $('#bookingSuccess').hidden = false;
   $('#bookingReference').textContent = booking.reference;
   $('#bookingSuccessCopy').textContent = shared
-    ? 'The request is saved in the private booking desk. Confirm once on WhatsApp so the team can reply in the same conversation.'
-    : 'The Cloudflare booking service is not connected on this host yet. Your request is prepared locally; send it on WhatsApp to reach the desk now.';
+    ? (currentLanguage === 'hi' ? 'अनुरोध निजी बुकिंग डेस्क में सेव है। उसी बातचीत में जवाब पाने के लिए WhatsApp पर एक बार पुष्टि करें।' : currentLanguage === 'pa' ? 'ਬੇਨਤੀ ਨਿੱਜੀ ਬੁਕਿੰਗ ਡੈਸਕ ਵਿੱਚ ਸੇਵ ਹੈ। ਉਸੇ ਗੱਲਬਾਤ ਵਿੱਚ ਜਵਾਬ ਲਈ WhatsApp ਉੱਤੇ ਇੱਕ ਵਾਰ ਪੁਸ਼ਟੀ ਕਰੋ।' : 'The request is saved in the private booking desk. Confirm once on WhatsApp so the team can reply in the same conversation.')
+    : (currentLanguage === 'hi' ? 'इस होस्ट पर Cloudflare बुकिंग सेवा अभी नहीं जुड़ी। अनुरोध तैयार है; डेस्क तक पहुँचाने के लिए WhatsApp पर भेजें।' : currentLanguage === 'pa' ? 'ਇਸ ਹੋਸਟ ਉੱਤੇ Cloudflare ਬੁਕਿੰਗ ਸੇਵਾ ਹਾਲੇ ਨਹੀਂ ਜੁੜੀ। ਬੇਨਤੀ ਤਿਆਰ ਹੈ; ਡੈਸਕ ਤੱਕ ਭੇਜਣ ਲਈ WhatsApp ਵਰਤੋ।' : 'The Cloudflare booking service is not connected on this host yet. Your request is prepared locally; send it on WhatsApp to reach the desk now.');
   $('#bookingWhatsApp').href = 'https://wa.me/' + CONTACT_PHONE + '?text=' + encodeURIComponent(bookingMessage(booking));
   trackEvent('booking_submitted', { crop: booking.crop, machine: booking.machine, shared });
   showToast(shared ? 'Reservation saved. Reference ' + booking.reference : 'Reservation prepared. Please finish on WhatsApp.');
   submit.disabled = false;
-  submit.innerHTML = 'Send reservation <b>&nearr;</b>';
+  submit.innerHTML = '<span data-i18n="sendReservation">' + (TRANSLATIONS[currentLanguage]?.sendReservation || TRANSLATIONS.en.sendReservation) + '</span> <b>&nearr;</b>';
 }
 
 function setupBooking() {
@@ -1108,9 +1458,7 @@ function setupGlobalEscape() {
       $('#brochureModal').hidden = true;
       setModalState(false);
     } else if (!$('#leadModal').hidden) {
-      $('#leadModal').hidden = true;
-      localStorage.setItem(LEAD_GATE_KEY, String(Date.now()));
-      setModalState(false);
+      $('#leadSkip')?.click();
     } else if (!$('#deskModal').hidden) {
       closeDesk();
     }
@@ -1118,17 +1466,19 @@ function setupGlobalEscape() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  setupLoader();
+  setupOnboarding();
   $('#year').textContent = new Date().getFullYear();
   setupNavigation();
+  setupLanguageMenu();
   setupScrollEffects();
   setupReveal();
   setupSectionAnalytics();
   setupHero();
+  setupHeroCinema();
+  setupCounters();
   setupFleet();
   setupBrochure();
   setupBooking();
-  setupLeadGate();
   setupDesk();
   setupGlobalEscape();
   await loadPublicMedia();
