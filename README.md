@@ -1,85 +1,24 @@
-# New Hira Harvest Booking
+# New Hira Harvest Booking - flat upload release 18.5
 
-Responsive New Hira advertisement, field-booking system and private owner desk for Ram Chand & Sons.
+This repository layout is intentionally folder-free for GitHub browser uploads. All website files, machine images, the local Three.js runtime and the Cloudflare Worker live directly in the repository root.
 
-## Release 18.3
+## Upload
 
-Release 18.3 adds a locally bundled Three.js product theatre, exact 985/785 model switching, responsive WebGL performance controls, and a final mobile composition pass for the header, language drawer, intro, hero, crop-flow machine and specification units.
+Read `UPLOAD-ALL-FILES.md`. Select every extracted file and upload them together through GitHub. Do not upload the ZIP itself.
 
-- Precise desktop, tablet and mobile header/hero layouts with no overlapping copy, machine controls or field metadata.
-- Responsive registration, booking and owner-desk interfaces.
-- English, Hindi and Punjabi onboarding.
-- New Hira 985 and 785 machine stages, brochure facts, crop-flow animation and two perspective carousels.
-- D1-backed bookings, leads, visitor events and owner analytics.
-- R2-backed owner photo/video library.
-- WhatsApp confirmation fallback if the API is temporarily unavailable.
-- Cloudflare-safe batched schema initialization and a diagnostic health route.
-- Only `public/` is exposed as static content; backend source and configuration are not public assets.
+## Cloudflare
 
-## Repository structure
-
-```text
-new-hira-booking/
-|-- public/
-|   |-- assets/
-|   |-- vendor/ (local Three.js runtime and license)
-|   |-- index.html
-|   |-- styles.css
-|   |-- app.js
-|   `-- fieldcraft-3d.js
-|-- cloudflare/
-|   |-- worker.js
-|   |-- schema.sql
-|   `-- SETUP.md
-|-- package.json
-|-- wrangler.jsonc
-|-- index.html (GitHub Pages preview redirect)
-|-- .gitignore
-`-- README.md
-```
-
-## Cloudflare deployment
-
-GitHub is the source repository. Cloudflare Workers is the live host and API runtime.
-
-The small root `index.html` only redirects a GitHub Pages preview into `public/`. Cloudflare ignores that redirect file and serves `public/index.html` directly.
-
-1. Replace the old repository contents with this release.
-2. In Cloudflare use root directory `/`, no build command, and deploy command `npx wrangler deploy`.
-3. Keep the D1 binding named `DB` and R2 binding named `MEDIA`.
-4. Add encrypted secrets `ADMIN_PIN`, `ADMIN_SESSION_SECRET` and `RATE_LIMIT_SECRET`.
-5. Deploy and open `/api/health` on the workers.dev address.
+- Root directory: `/`
+- Build command: blank
+- Deploy command: `npx wrangler deploy`
+- D1 binding: `DB`
+- R2 binding: `MEDIA`
+- Static assets directory: repository root, filtered by `.assetsignore`
 
 Expected health response:
 
 ```json
-{"ok":true,"service":"new-hira-fieldcraft","version":"18.3-worker","database":"ready","media":"ready"}
+{"ok":true,"service":"new-hira-fieldcraft","version":"18.5-worker","database":"ready","media":"ready"}
 ```
 
-See [cloudflare/SETUP.md](cloudflare/SETUP.md) for the exact dashboard sequence and troubleshooting.
-
-## Local development
-
-Use Node.js 22 or newer:
-
-```powershell
-npm install
-npm run dev
-```
-
-Open `http://localhost:8787`. Local private values belong in a root `.dev.vars` file and must never be committed.
-
-The WebGL product theatre is progressive: supported browsers receive the interactive 3D field scene, while older or constrained devices retain the complete background-free machine visual and all booking functions.
-
-## Security
-
-The owner PIN and session secrets are not stored in public HTML, JavaScript, documentation or GitHub configuration. The Worker reads them only from encrypted Cloudflare secrets. Uploaded site assets receive restrictive security headers from the Worker.
-
-## Verified brochure facts
-
-- New Hira 985: 4.4 m cutter bar, 4.28 m effective cutter width, 1,800 kg wheat grain tank and 5 straw walkers.
-- New Hira 785: 3.7 m cutter bar, 3.6 m effective cutter width, 1,600 kg wheat grain tank and 4 straw walkers.
-- Supported crops: wheat, paddy, sunflower, soyabean, gram and pulses.
-- Ram Chand & Sons, Patiala Road, Nabha, Punjab 147201.
-
-The current cache marker is `20260819-worker-v183`.
+Private values remain Cloudflare encrypted secrets and are not included in this repository.

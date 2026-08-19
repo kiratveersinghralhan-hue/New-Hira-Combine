@@ -1,12 +1,12 @@
 {
   "name": "new-hira-harvest-booking",
-  "version": "18.3.0",
+  "version": "18.5.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "check:js": "node --check public/app.js && node --check public/fieldcraft-3d.js && node --check cloudflare/worker.js",
+    "check:js": "node --check app.js && node --check fieldcraft-3d.js && node --check worker.js",
     "check:deploy": "wrangler deploy --dry-run"
   },
   "engines": {
