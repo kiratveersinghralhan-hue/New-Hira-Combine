@@ -2,7 +2,9 @@
 
 Responsive New Hira advertisement, field-booking system and private owner desk for Ram Chand & Sons.
 
-## Release 18.2
+## Release 18.3
+
+Release 18.3 adds a locally bundled Three.js product theatre, exact 985/785 model switching, responsive WebGL performance controls, and a final mobile composition pass for the header, language drawer, intro, hero, crop-flow machine and specification units.
 
 - Precise desktop, tablet and mobile header/hero layouts with no overlapping copy, machine controls or field metadata.
 - Responsive registration, booking and owner-desk interfaces.
@@ -20,9 +22,11 @@ Responsive New Hira advertisement, field-booking system and private owner desk f
 new-hira-booking/
 |-- public/
 |   |-- assets/
+|   |-- vendor/ (local Three.js runtime and license)
 |   |-- index.html
 |   |-- styles.css
-|   `-- app.js
+|   |-- app.js
+|   `-- fieldcraft-3d.js
 |-- cloudflare/
 |   |-- worker.js
 |   |-- schema.sql
@@ -49,7 +53,7 @@ The small root `index.html` only redirects a GitHub Pages preview into `public/`
 Expected health response:
 
 ```json
-{"ok":true,"service":"new-hira-fieldcraft","version":"18.2-worker","database":"ready","media":"ready"}
+{"ok":true,"service":"new-hira-fieldcraft","version":"18.3-worker","database":"ready","media":"ready"}
 ```
 
 See [cloudflare/SETUP.md](cloudflare/SETUP.md) for the exact dashboard sequence and troubleshooting.
@@ -65,6 +69,8 @@ npm run dev
 
 Open `http://localhost:8787`. Local private values belong in a root `.dev.vars` file and must never be committed.
 
+The WebGL product theatre is progressive: supported browsers receive the interactive 3D field scene, while older or constrained devices retain the complete background-free machine visual and all booking functions.
+
 ## Security
 
 The owner PIN and session secrets are not stored in public HTML, JavaScript, documentation or GitHub configuration. The Worker reads them only from encrypted Cloudflare secrets. Uploaded site assets receive restrictive security headers from the Worker.
@@ -76,4 +82,4 @@ The owner PIN and session secrets are not stored in public HTML, JavaScript, doc
 - Supported crops: wheat, paddy, sunflower, soyabean, gram and pulses.
 - Ram Chand & Sons, Patiala Road, Nabha, Punjab 147201.
 
-The current cache marker is `20260718-worker-v182`.
+The current cache marker is `20260819-worker-v183`.
